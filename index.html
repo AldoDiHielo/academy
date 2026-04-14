@@ -264,7 +264,7 @@
             {a: "Ward", b: "round"}
         ]
     };
-    // Base de datos para Quiz 5 (Matching) - Expandida a 15 pares
+// Base de datos para Quiz 5 (Matching)
     database.B2_Matching = [
         { a: "Vital", b: "signs" },
         { a: "Blood", b: "pressure" },
@@ -301,13 +301,8 @@
     function selectBranch(branch) {
         currentBranch = branch;
         const header = document.getElementById('app-header');
-        if(branch === 'medical') {
-            header.style.backgroundColor = "var(--medical-blue)";
-            document.getElementById('lvl-title').innerText = "Medical English Levels";
-        } else {
-            header.style.backgroundColor = "var(--primary)";
-            document.getElementById('lvl-title').innerText = "General English Levels";
-        }
+        header.style.backgroundColor = (branch === 'medical') ? "var(--medical-blue)" : "var(--primary)";
+        document.getElementById('lvl-title').innerText = (branch === 'medical') ? "Medical English Levels" : "General English Levels";
         showScreen('screen-levels');
     }
 
@@ -315,7 +310,7 @@
         const container = document.getElementById('quiz-list-container');
         container.innerHTML = "";
         
-        const quizzes = [
+        const activeQuizzes = [
             {id: "B2_MC", name: "Quiz 1", sub: "Multiple Choice"},
             {id: "B2_Writing", name: "Quiz 2", sub: "Writing Skills"},
             {id: "B2_Stones", name: "Quiz 3", sub: "Stones vs Eggshells"},
@@ -323,7 +318,8 @@
             {id: "B2_Matching", name: "Quiz 5", sub: "Collocations (Columns)"}
         ];
 
-        quizzes.forEach(q => {
+        // Generar Quizzes Activos
+        activeQuizzes.forEach(q => {
             const card = document.createElement('div');
             card.className = 'level-card';
             card.innerHTML = `${q.name}<br><small>${q.sub}</small>`;
@@ -335,6 +331,15 @@
             };
             container.appendChild(card);
         });
+
+        // Generar los "Coming Soon" automáticamente
+        for(let i=6; i<=10; i++) {
+            const soon = document.createElement('div');
+            soon.className = 'level-card locked';
+            soon.innerHTML = `Quiz ${i}<br><small>Coming soon...</small>`;
+            container.appendChild(soon);
+        }
+
         showScreen('screen-quiz-list');
     }
 
@@ -343,7 +348,6 @@
         showScreen('screen-quiz-list');
     }
 
-    // --- LÓGICA DE QUIZ (MC, Writing, Stones) ---
     function startQuiz() {
         index = 0; score = 0;
         showScreen('screen-quiz');
@@ -354,25 +358,20 @@
         const data = database[mode][index];
         const qText = document.getElementById('q-text');
         const box = document.getElementById('options-box');
-        
         qText.className = (mode === "B2_Stones") ? "flashcard-text" : "question";
         qText.innerText = (mode === "B2_Stones") ? data.q : (index + 1) + ". " + data.q;
-
         box.innerHTML = "";
         document.getElementById('feedback-box').classList.add('hidden');
         document.getElementById('btn-continue').classList.add('hidden');
 
         if(mode === "B2_Writing") {
-            box.innerHTML = `
-                <input type="text" id="ans-in" class="writing-input" placeholder="Write your answer...">
-                <button class="main-btn" id="chk-btn" onclick="checkWriting()">Check</button>`;
+            box.innerHTML = `<input type="text" id="ans-in" class="writing-input" placeholder="Write..."><button class="main-btn" id="chk-btn" onclick="checkWriting()">Check</button>`;
             document.getElementById('ans-in').onkeypress = (e) => { if(e.key==='Enter') checkWriting(); };
             setTimeout(() => document.getElementById('ans-in').focus(), 100);
         } else {
             data.o.forEach((opt, i) => {
                 const d = document.createElement('div');
                 d.className = 'option';
-                d.style.textAlign = (mode === "B2_Stones") ? "center" : "left";
                 d.innerText = opt;
                 d.onclick = () => checkMC(i, d);
                 box.appendChild(d);
@@ -392,17 +391,7 @@
     function checkWriting() {
         const val = document.getElementById('ans-in').value.toLowerCase().trim();
         const data = database[mode][index];
-        const input = document.getElementById('ans-in');
-        
-        if(val === data.a.toLowerCase().trim()) {
-            input.style.borderColor = "var(--success)";
-            score++;
-        } else {
-            input.style.borderColor = "var(--danger)";
-            const msg = document.createElement('p');
-            msg.innerHTML = `Correct: <b style="color:var(--success)">${data.a}</b>`;
-            document.getElementById('options-box').appendChild(msg);
-        }
+        if(val === data.a.toLowerCase().trim()) { score++; }
         document.getElementById('chk-btn').disabled = true;
         showFeedback(data.r);
     }
@@ -420,7 +409,6 @@
         else finishModule();
     }
 
-    // --- MEMORY GAME ---
     function startMemory() {
         showScreen('screen-memory');
         matchedCount = 0; flippedCards = [];
@@ -428,8 +416,10 @@
         const board = document.getElementById('memory-board');
         board.innerHTML = "";
         
+        // Usar solo los primeros 10 pares para mejor UX
+        let subset = database.B2_Memory.slice(0, 10);
         let cards = [];
-        database.B2_Memory.forEach((item, i) => {
+        subset.forEach((item, i) => {
             cards.push({ text: item.v, pairId: i });
             cards.push({ text: item.m, pairId: i });
         });
@@ -439,9 +429,7 @@
             const card = document.createElement('div');
             card.className = 'memory-card';
             card.dataset.id = cardData.pairId;
-            card.innerHTML = `
-                <div class="card-face card-front">?</div>
-                <div class="card-back card-face">${cardData.text}</div>`;
+            card.innerHTML = `<div class="card-face card-front">?</div><div class="card-back card-face">${cardData.text}</div>`;
             card.onclick = () => flipCard(card);
             board.appendChild(card);
         });
@@ -460,40 +448,28 @@
         if (c1.dataset.id === c2.dataset.id) {
             c1.classList.add('matched'); c2.classList.add('matched');
             matchedCount++;
-            if (matchedCount === database.B2_Memory.length) {
-                clearInterval(timerInterval);
-                setTimeout(() => { alert("Excellent Memory!"); finishModule(true); }, 500);
-            }
+            if (matchedCount === 10) { clearInterval(timerInterval); setTimeout(() => { alert("Excellent!"); finishModule(true); }, 500); }
         } else {
             c1.classList.remove('flipped'); c2.classList.remove('flipped');
         }
         flippedCards = [];
     }
 
-    // --- MATCHING COLUMNS (Quiz 5) ---
     function startMatching() {
         showScreen('screen-matching');
         matchingScore = 0; selectedLeft = null;
-        const colL = document.getElementById('col-left');
-        const colR = document.getElementById('col-right');
-        colL.innerHTML = "<h3>Prefix / Verb</h3>";
-        colR.innerHTML = "<h3>Suffix / Noun</h3>";
+        const colL = document.getElementById('col-left'), colR = document.getElementById('col-right');
+        colL.innerHTML = "<h3>Prefix / Verb</h3>"; colR.innerHTML = "<h3>Suffix / Noun</h3>";
 
         let leftItems = database.B2_Matching.map((item, i) => ({ text: item.a, id: i }));
         let rightItems = database.B2_Matching.map((item, i) => ({ text: item.b, id: i }));
-        
-        leftItems.sort(() => Math.random() - 0.5);
-        rightItems.sort(() => Math.random() - 0.5);
+        leftItems.sort(() => Math.random() - 0.5); rightItems.sort(() => Math.random() - 0.5);
 
         leftItems.forEach(item => {
             const div = document.createElement('div');
             div.className = 'match-item';
             div.innerText = item.text;
-            div.onclick = () => {
-                document.querySelectorAll('#col-left .match-item').forEach(i => i.classList.remove('selected'));
-                div.classList.add('selected');
-                selectedLeft = item.id;
-            };
+            div.onclick = () => { document.querySelectorAll('#col-left .match-item').forEach(i => i.classList.remove('selected')); div.classList.add('selected'); selectedLeft = item.id; };
             colL.appendChild(div);
         });
 
@@ -507,13 +483,9 @@
                     div.classList.add('matched-pair');
                     document.querySelector('#col-left .selected').classList.add('matched-pair');
                     document.querySelector('#col-left .selected').classList.remove('selected');
-                    matchingScore++;
-                    selectedLeft = null;
+                    matchingScore++; selectedLeft = null;
                     if(matchingScore === database.B2_Matching.length) setTimeout(() => finishModule(true), 500);
-                } else {
-                    div.style.background = "#ffcccc";
-                    setTimeout(() => div.style.background = "", 500);
-                }
+                } else { div.style.background = "#ffcccc"; setTimeout(() => div.style.background = "", 500); }
             };
             colR.appendChild(div);
         });
@@ -524,8 +496,7 @@
         let time = seconds;
         const display = document.getElementById('time-left');
         timerInterval = setInterval(() => {
-            let m = Math.floor(time / 60);
-            let s = time % 60;
+            let m = Math.floor(time / 60), s = time % 60;
             display.innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
             if (--time < 0) { clearInterval(timerInterval); alert("Time is over!"); goBackToList(); }
         }, 1000);
