@@ -264,6 +264,25 @@
             {a: "Ward", b: "round"}
         ]
     };
+    // Base de datos para Quiz 5 (Matching) - Expandida a 15 pares
+    database.B2_Matching = [
+        { a: "Vital", b: "signs" },
+        { a: "Blood", b: "pressure" },
+        { a: "Heart", b: "rate" },
+        { a: "Chest", b: "pain" },
+        { a: "Informed", b: "consent" },
+        { a: "Surgical", b: "procedure" },
+        { a: "Physical", b: "examination" },
+        { a: "Medical", b: "history" },
+        { a: "Adverse", b: "reaction" },
+        { a: "Immune", b: "system" },
+        { a: "General", b: "anesthesia" },
+        { a: "Family", b: "practitioner" },
+        { a: "Blood", b: "sample" },
+        { a: "Chronic", b: "condition" },
+        { a: "Shortness", b: "of breath" }
+    ];
+
     let user = "", mode = "", index = 0, score = 0, currentBranch = "general";
     let flippedCards = [], matchedCount = 0, timerInterval = null;
     let selectedLeft = null, matchingScore = 0;
@@ -324,7 +343,7 @@
         showScreen('screen-quiz-list');
     }
 
-    // --- QUIZ LOGIC (MC, Writing, Stones) ---
+    // --- LÓGICA DE QUIZ (MC, Writing, Stones) ---
     function startQuiz() {
         index = 0; score = 0;
         showScreen('screen-quiz');
@@ -345,7 +364,7 @@
 
         if(mode === "B2_Writing") {
             box.innerHTML = `
-                <input type="text" id="ans-in" style="width:100%; padding:15px; margin-bottom:10px; border-radius:8px; border:2px solid #ddd; box-sizing:border-box;" placeholder="Write your answer...">
+                <input type="text" id="ans-in" class="writing-input" placeholder="Write your answer...">
                 <button class="main-btn" id="chk-btn" onclick="checkWriting()">Check</button>`;
             document.getElementById('ans-in').onkeypress = (e) => { if(e.key==='Enter') checkWriting(); };
             setTimeout(() => document.getElementById('ans-in').focus(), 100);
@@ -405,7 +424,7 @@
     function startMemory() {
         showScreen('screen-memory');
         matchedCount = 0; flippedCards = [];
-        startTimer(180); // 180 segundos solicitados
+        startTimer(180);
         const board = document.getElementById('memory-board');
         board.innerHTML = "";
         
@@ -457,8 +476,8 @@
         matchingScore = 0; selectedLeft = null;
         const colL = document.getElementById('col-left');
         const colR = document.getElementById('col-right');
-        colL.innerHTML = "<h3>Verb / Adj</h3>";
-        colR.innerHTML = "<h3>Noun / Phrase</h3>";
+        colL.innerHTML = "<h3>Prefix / Verb</h3>";
+        colR.innerHTML = "<h3>Suffix / Noun</h3>";
 
         let leftItems = database.B2_Matching.map((item, i) => ({ text: item.a, id: i }));
         let rightItems = database.B2_Matching.map((item, i) => ({ text: item.b, id: i }));
