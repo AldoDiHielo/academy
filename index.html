@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DiHielo English Academy</title>
-    <link rel="icon" href="favicon.png" type="image/png">
     <style>
         :root {
             --primary: #2c3e50;
@@ -14,330 +13,509 @@
             --success: #27ae60;
             --bg: #f8f9fa;
             --white: #ffffff;
-            --locked: #f1f1f1;
-            --text-muted: #7f8c8d;
+            --locked: #e0e0e0;
+            --danger: #e74c3c;
         }
- 
+
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        header { background: var(--primary); color: white; width: 100%; padding: 1.5rem 0; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: background 0.4s; }
-        header img { max-width: 80px; margin-bottom: 5px; display: block; margin-left: auto; margin-right: auto; }
-        .siglas-logo { font-weight: 900; font-size: 2rem; letter-spacing: -2px; opacity: 0.9; }
-        .container { width: 90%; max-width: 850px; margin: 2rem 0; background: var(--white); padding: 2.5rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+
+        header { background: var(--primary); color: white; width: 100%; padding: 1.5rem 0; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: background 0.5s; }
+        #main-logo { max-width: 100px; margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto; border-radius: 50%; }
+        
+        .container { width: 90%; max-width: 850px; margin: 2rem 0; background: var(--white); padding: 2.5rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); position: relative; }
         .hidden { display: none; }
-        .landing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
-        .branch-card { padding: 40px 20px; text-align: center; border-radius: 15px; cursor: pointer; transition: 0.3s; color: white; font-weight: bold; }
-        .branch-card.medical { background: var(--medical-blue); }
-        .branch-card.general { background: var(--general-gold); }
-        .branch-card:hover { transform: translateY(-5px); filter: brightness(1.1); }
-        .level-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; margin-top: 20px; }
-        .level-card { padding: 20px; text-align: center; border: 2px solid #eee; border-radius: 12px; cursor: pointer; transition: 0.3s; font-weight: bold; }
-        .level-card:hover:not(.locked) { border-color: var(--accent); color: var(--accent); }
-        .level-card.locked { background: var(--locked); color: var(--text-muted); cursor: not-allowed; opacity: 0.7; }
-        .quiz-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border: 1px solid #eee; margin-bottom: 10px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
-        .quiz-item:hover { background: #f9f9f9; border-color: var(--accent); }
-        .quiz-item.completed::after { content: '✓'; color: var(--success); font-weight: bold; font-size: 1.2rem; }
-        .btn-nav { background: #eee; color: var(--primary); border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-bottom: 20px; font-weight: 600; }
-        .option { padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; }
-        .correct { background: #d4edda; color: #155724; border-color: var(--success); }
-        .wrong { background: #f8d7da; color: #721c24; border-color: #f5c6cb; }
-        button.primary { background: var(--accent); color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; }
-        .matching-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .match-item { padding: 12px; border: 2px solid #eee; border-radius: 8px; cursor: pointer; text-align: center; margin-bottom: 8px; font-weight: bold; }
-        .match-item.selected { border-color: var(--accent); background: #e3f2fd; }
-        .match-item.locked-success { background: var(--success); color: white; cursor: default; }
-        .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .memory-card { height: 100px; position: relative; transform-style: preserve-3d; transition: 0.5s; cursor: pointer; }
+
+        /* Navigation */
+        .btn-back { background: #95a5a6 !important; width: auto !important; padding: 8px 15px !important; margin-bottom: 20px; font-size: 0.9rem !important; color: white; border: none; border-radius: 5px; cursor: pointer; display: inline-block; }
+
+        /* Grids */
+        .level-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; }
+        .level-card { padding: 20px; text-align: center; border: 2px solid #eee; border-radius: 10px; cursor: pointer; transition: all 0.3s; font-weight: bold; }
+        .level-card:hover:not(.locked) { border-color: var(--accent); color: var(--accent); transform: translateY(-3px); }
+        .level-card.locked { background: var(--locked); color: #999; cursor: not-allowed; border-color: #ddd; }
+
+        /* Quiz UI */
+        .flashcard-text { font-size: 2.4rem; text-align: center; margin: 30px 0; color: var(--primary); font-weight: bold; }
+        .question { font-size: 1.2rem; margin-bottom: 20px; color: var(--primary); font-weight: 600; line-height: 1.4; }
+        .option { padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .option:hover { background: #f0f7ff; border-color: var(--accent); }
+        .correct { background: #d4edda !important; color: #155724; border-color: var(--success) !important; }
+        .wrong { background: #f8d7da !important; color: #721c24; border-color: #f5c6cb !important; }
+        .rationale { padding: 15px; background: #eef2f7; border-left: 5px solid var(--accent); margin: 15px 0; font-size: 0.95rem; }
+
+        /* Games */
+        .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; perspective: 1000px; }
+        .memory-card { height: 100px; position: relative; transform-style: preserve-3d; transition: transform 0.5s; cursor: pointer; }
         .memory-card.flipped { transform: rotateY(180deg); }
-        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; text-align: center; border-radius: 8px; }
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; text-align: center; padding: 5px; border-radius: 8px; font-size: 0.75rem; box-sizing: border-box; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .card-front { background: var(--accent); color: white; font-size: 1.5rem; }
-        .card-back { background: white; color: var(--primary); border: 2px solid var(--accent); transform: rotateY(180deg); font-size: 0.8rem; }
+        .card-back { background: white; color: var(--primary); border: 2px solid var(--accent); transform: rotateY(180deg); }
+        .memory-card.matched .card-back { background: var(--success); color: white; border-color: var(--success); }
+
+        .matching-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .match-item { padding: 12px; border: 2px solid #eee; border-radius: 8px; cursor: pointer; text-align: center; margin-bottom: 8px; font-weight: bold; transition: 0.2s; }
+        .match-item.selected { border-color: var(--accent); background: #e3f2fd; }
+        .match-item.matched-pair { background: var(--success); color: white; cursor: default; border-color: var(--success); }
+
+        #timer-box { font-size: 1.2rem; font-weight: bold; color: var(--danger); text-align: right; margin-bottom: 15px; }
+        #progress-bar { width: 100%; height: 8px; background: #eee; border-radius: 4px; margin-bottom: 20px; }
+        #progress-fill { height: 100%; background: var(--success); width: 0%; border-radius: 4px; transition: 0.3s; }
+        
+        button.main-btn { background: var(--accent); color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; font-size: 1.1rem; }
     </style>
 </head>
 <body>
+
 <header id="app-header">
-    <img src="logo.png" alt="" id="header-logo" onerror="this.style.display='none'">
-    <div class="siglas-logo">A.D.</div>
-    <h1 id="header-title">DiHielo English Academy</h1>
+    <img src="logo.png" alt="DiHielo Logo" id="main-logo" onerror="this.style.display='none'">
+    <h1 id="app-title">DiHielo English Academy</h1>
 </header>
+
 <div class="container" id="screen-login">
-    <h2 style="text-align:center">Welcome</h2>
-    <input type="text" id="student-name" style="width:100%; padding:15px; margin-bottom:20px; border-radius:8px; border:1px solid #ddd; box-sizing:border-box;" placeholder="Student Name">
-    <button class="primary" onclick="login()">Enter</button>
+    <h2>Student Access</h2>
+    <input type="text" id="student-name" style="width:100%; padding:15px; margin-bottom:20px; border-radius:8px; border:2px solid #ddd; box-sizing:border-box;" placeholder="Enter your full name">
+    <button class="main-btn" onclick="login()">Enter Platform</button>
 </div>
-<div class="container hidden" id="screen-landing">
-    <h2>Hello, <span id="user-display"></span></h2>
-    <div class="landing-grid">
-        <div class="branch-card medical" onclick="selectBranch('medical')">MEDICAL ENGLISH</div>
-        <div class="branch-card general" onclick="selectBranch('general')">GENERAL ENGLISH</div>
+
+<div class="container hidden" id="screen-branch">
+    <button class="btn-back" onclick="showScreen('screen-login')">← Logout</button>
+    <h2>Choose your Path</h2>
+    <div class="level-grid">
+        <div class="level-card" onclick="selectBranch('medical')" style="background: var(--medical-blue); color: white;">MEDICAL ENGLISH</div>
+        <div class="level-card" onclick="selectBranch('general')" style="background: var(--general-gold); color: white;">GENERAL ENGLISH</div>
     </div>
 </div>
+
 <div class="container hidden" id="screen-levels">
-    <button class="btn-nav" onclick="showScreen('screen-landing')">← Back</button>
+    <button class="btn-back" onclick="showScreen('screen-branch')">← Back</button>
     <h2 id="lvl-title">Select Level</h2>
     <div class="level-grid">
         <div class="level-card locked">A1</div><div class="level-card locked">A2</div><div class="level-card locked">B1</div>
-        <div class="level-card" onclick="goToQuizzes('B2')">B2</div>
+        <div class="level-card" onclick="showQuizzes('B2')" style="border-color: var(--success); color: var(--success);">B2</div>
         <div class="level-card locked">C1</div><div class="level-card locked">C2</div>
     </div>
 </div>
+
 <div class="container hidden" id="screen-quiz-list">
-    <button class="btn-nav" onclick="showScreen('screen-levels')">← Back</button>
-    <h2 id="list-title">B2 Modules</h2>
-    <div id="quiz-list-container"></div>
+    <button class="btn-back" onclick="showScreen('screen-levels')">← Back</button>
+    <h2 id="quiz-list-title">Practice Modules</h2>
+    <div id="quiz-list-container" class="level-grid"></div>
 </div>
+
 <div class="container hidden" id="screen-quiz">
-    <button class="btn-nav" onclick="showScreen('screen-quiz-list')">← Exit</button>
-    <div id="q-text" style="font-size: 1.1rem; margin-bottom: 15px; font-weight: bold;"></div>
+    <button class="btn-back" onclick="goBackToList()">← Exit Quiz</button>
+    <div id="progress-bar"><div id="progress-fill"></div></div>
+    <div id="q-text" class="question"></div>
     <div id="options-box"></div>
-    <div id="feedback-box" class="hidden" style="margin-top:15px; padding:15px; background:#e3f2fd; border-radius:8px"></div>
-    <button id="btn-continue" class="hidden primary" onclick="nextQuestion()" style="margin-top:15px">Next</button>
+    <div id="feedback-box" class="hidden rationale"></div>
+    <button id="btn-continue" class="hidden main-btn" onclick="nextQuestion()" style="margin-top:20px">Continue</button>
 </div>
+
 <div class="container hidden" id="screen-memory">
-    <button class="btn-nav" onclick="showScreen('screen-quiz-list')">← Exit</button>
+    <button class="btn-back" onclick="goBackToList()">← Exit</button>
+    <div id="timer-box">Time Left: <span id="time-left">03:00</span></div>
     <div id="memory-board" class="memory-grid"></div>
 </div>
+
 <div class="container hidden" id="screen-matching">
-    <button class="btn-nav" onclick="showScreen('screen-quiz-list')">← Exit</button>
-    <div class="matching-container"><div id="col-left"></div><div id="col-right"></div></div>
+    <button class="btn-back" onclick="goBackToList()">← Exit</button>
+    <div class="matching-container">
+        <div id="col-left"></div>
+        <div id="col-right"></div>
+    </div>
 </div>
+
 <div class="container hidden" id="screen-results">
-    <h2 style="text-align:center">Complete!</h2>
-    <div id="final-score" style="text-align:center; font-size:3rem; margin:20px 0"></div>
-    <button class="primary" onclick="showScreen('screen-quiz-list')">Continue</button>
+    <h2>Module Complete!</h2>
+    <div id="final-score-display" style="font-size: 2.5rem; margin: 20px 0;"></div>
+    <button class="main-btn" onclick="showScreen('screen-quiz-list')">Back to Modules</button>
 </div>
+
 <script>
-    const quizData = [
-        {id: 1, lvl: "B2", branch: "general", type: "MC", name: "Grammar: Narrative Tenses", data: [
-            {q: "I __________ English for years before I moved to London.", o: ["learned", "had been learning", "was learning"], a: 1, r: "Past Perfect Continuous for a duration before a past point."},
-            {q: "She __________ when the phone rang.", o: ["slept", "was sleeping", "had slept"], a: 1, r: "Past Continuous for an action interrupted by a shorter action."},
-            {q: "By the time we arrived, the movie __________.", o: ["started", "was starting", "had started"], a: 2, r: "Past Perfect for an action completed before another past action."},
-            {q: "We __________ along the beach when we saw the dolphin.", o: ["walked", "were walking", "had walked"], a: 1, r: "Continuous action in the past."},
-            {q: "I __________ the report before the meeting began.", o: ["finished", "was finishing", "had finished"], a: 2, r: "Completion before another event."}
-        ]},
-        {id: 2, lvl: "B2", branch: "general", type: "Writing", name: "Writing: Future Perfect", data: [
-            {q: "By next year, I __________ (finish) the course.", a: "will have finished", r: "will have + past participle."},
-            {q: "By 8 PM tonight, they __________ (arrive) home.", a: "will have arrived", r: "Action completed by a future time."},
-            {q: "She __________ (save) enough money by June.", a: "will have saved", r: "Future completion."},
-            {q: "We __________ (eat) dinner before you get here.", a: "will have eaten", r: "Future Perfect logic."},
-            {q: "In 20 years, technology __________ (change) everything.", a: "will have changed", r: "Long term future completion."}
-        ]},
-        {id: 3, lvl: "B2", branch: "medical", type: "MC", name: "Quiz 3: Stones vs Eggshells", data: [
-            {q: "Look after", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Inseparable: 'Look after the patient'."},
-            {q: "Check in", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Separable: 'Check the patient in'."},
-            {q: "Take over", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Separable: 'Take the shifts over'."},
-            {q: "Get over", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Inseparable: 'Get over the illness'."},
-            {q: "Give up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Separable: 'Give smoking up'."},
-            {q: "Go through", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Inseparable: 'Go through the results'."},
-            {q: "Call off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Separable: 'Call the surgery off'."},
-            {q: "Run into", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Inseparable: 'Run into a colleague'."}
-        ]},
-        {id: 4, lvl: "B2", branch: "medical", type: "Memory", name: "Quiz 4: Phrasal Verbs Memory", pairs: [
-            {v: "Rule out", m: "To eliminate a possibility"},
+    const database = {
+        "B2_MC": [
+            {q: "By the time the surgeon arrived, the nurses __________ the patient.", o: ["had already prepared", "have already prepared", "already prepared"], a: 0, r: "Past Perfect is for an action completed before another past action."},
+            {q: "If I __________ more attention, I would be able to answer this now.", o: ["paid", "had paid", "would have paid"], a: 1, r: "Mixed conditional: Past condition, present result."},
+            {q: "I need to __________ on the latest research.", o: ["brush up", "look for", "take in"], a: 0, r: "'Brush up on' means to refresh knowledge."},
+            {q: "The operating room __________ at the moment.", o: ["is repairing", "is being repaired", "has been repaired"], a: 1, r: "Present Continuous Passive is for ongoing actions."},
+            {q: "The specialist is very experienced __________ dealing with complex cases.", o: ["at", "with", "in"], a: 2, r: "'Experienced' collocates with 'in'."},
+            {q: "I suggest that he __________ a break.", o: ["take", "takes", "to take"], a: 0, r: "Subjunctive mood after 'suggest' uses base form."},
+            {q: "__________ the weather was terrible, the supplies arrived.", o: ["Despite", "Despite the fact that", "In spite of"], a: 1, r: "Followed by a full clause."},
+            {q: "We need to see __________ with our colleagues.", o: ["eye to eye", "face to face", "hand to hand"], a: 0, r: "Agree completely."},
+            {q: "I'm not used to __________ such long shifts.", o: ["work", "working", "be working"], a: 1, r: "'Be used to' + gerund."},
+            {q: "John told me he __________ call me the following day.", o: ["will", "would", "calls"], a: 1, r: "Reported speech backshifts 'will' to 'would'."},
+            {q: "I wish I __________ so much money last year.", o: ["didn't spend", "hadn't spent", "wouldn't spend"], a: 1, r: "Past regret uses Past Perfect."},
+            {q: "The manager __________ to give everyone a bonus.", o: ["suggested", "promised", "admitted"], a: 1, r: "'Promise' + to-infinitive."},
+            {q: "If the ambulance __________ earlier, they could have saved him.", o: ["arrived", "had arrived", "would arrive"], a: 1, r: "Third conditional (If + Past Perfect)."},
+            {q: "I found the medical conference very __________.", o: ["enlightening", "enlightened", "enlighten"], a: 0, r: "Adjective describing the event."},
+            {q: "The doctor needs to __________ a decision immediately.", o: ["do", "make", "get"], a: 1, r: "Collocation: 'make a decision'."},
+            {q: "Hardly __________ the door when the phone rang.", o: ["I had opened", "had I opened", "did I open"], a: 1, r: "Inversion: auxiliary before subject."},
+            {q: "The doctor __________ to have discovered a new variant.", o: ["claims", "suggests", "denies"], a: 0, r: "'Claim' for asserting facts."},
+            {q: "If we __________ the equipment yesterday, we could start today.", o: ["received", "had received", "would receive"], a: 1, r: "Mixed conditional."},
+            {q: "You __________ better see a specialist about that cough.", o: ["would", "should", "had"], a: 2, r: "'Had better' for strong advice."},
+            {q: "The patient is believed __________ from a rare condition.", o: ["to suffer", "to be suffering", "suffering"], a: 1, r: "Passive reporting structure."},
+            {q: "No sooner __________ the hospital than my pager went off.", o: ["I had left", "had I left", "did I leave"], a: 1, r: "Inversion with 'No sooner'."},
+            {q: "I'm not accustomed __________ such high levels of stress.", o: ["to handle", "to handling", "handling"], a: 1, r: "'Accustomed to' + gerund."},
+            {q: "She's very __________ on specializing in cardiology.", o: ["keen", "fond", "interested"], a: 0, r: "'Keen on'."},
+            {q: "The surgery was put __________ until the patient stabilized.", o: ["off", "out", "away"], a: 0, r: "'Put off' = postpone."},
+            {q: "I wish I __________ more during the lecture.", o: ["focused", "had focused", "would focus"], a: 1, r: "Past regret."},
+            {q: "By the end of the year, she __________ her residency.", o: ["will finish", "will have finished", "finishes"], a: 1, r: "Future Perfect."},
+            {q: "The laboratory, __________ was renovated, is top-notch.", o: ["which", "that", "whose"], a: 0, r: "Non-defining relative clause."},
+            {q: "I'd rather you __________ smoke in the waiting area.", o: ["don't", "didn't", "not"], a: 1, r: "'Would rather' + subject + Past Simple."},
+            {q: "The medicine needs __________ with food.", o: ["to take", "to be taken", "taking"], a: 1, r: "Passive infinitive."},
+            {q: "Seldom __________ such a dedicated medical team.", o: ["have I seen", "I have seen", "did I saw"], a: 0, r: "Inversion after 'Seldom'."}
+        ],
+        "B2_Writing": [
+            {q: "By next summer, I __________ (finish) my master's degree.", a: "will have finished", r: "Future Perfect."},
+            {q: "I'd rather you __________ (not / smoke) in the house.", a: "didn't smoke", r: "Would rather + subject + Past Simple."},
+            {q: "Seldom __________ (we / see) such a beautiful sunset.", a: "have we seen", r: "Inversion after 'Seldom'."},
+            {q: "If I had known you were coming, I __________ (bake) a cake.", a: "would have baked", r: "Third Conditional."},
+            {q: "I'm looking forward to __________ (meet) your family.", a: "meeting", r: "'To' as a preposition + gerund."},
+            {q: "The boss suggested __________ (postpone) the meeting.", a: "postponing", r: "'Suggest' + gerund."},
+            {q: "He is believed __________ (be) very rich.", a: "to be", r: "Passive reporting structure."},
+            {q: "I wish I __________ (not / eat) so much chocolate yesterday.", a: "hadn't eaten", r: "Regret about the past."},
+            {q: "It's high time you __________ (start) looking for a job.", a: "started", r: "It's high time + Past Simple."},
+            {q: "Hardly __________ (the plane / land) when it started to rain.", a: "had the plane landed", r: "Inversion with 'Hardly'."},
+            {q: "I was used to __________ (drive) on the left.", a: "driving", r: "'Be used to' + gerund."},
+            {q: "No sooner __________ (I / arrive) home than it rained.", a: "had I arrived", r: "Inversion with 'No sooner'."},
+            {q: "You __________ (had) better call her now.", a: "had", r: "'Had better' structure."},
+            {q: "The house __________ (clean) by the time we got back.", a: "had been cleaned", r: "Past Perfect Passive."},
+            {q: "Suppose you __________ (win) the lottery, what would you do?", a: "won", r: "Second conditional (imaginary)."},
+            {q: "I don't mind __________ (wait) for you.", a: "waiting", r: "'Mind' + gerund."},
+            {q: "The information __________ (be) very helpful.", a: "is", r: "'Information' is always singular."},
+            {q: "We've run __________ (of) coffee.", a: "out of", r: "Phrasal verb: to have none left."},
+            {q: "If only I __________ (can / speak) French!", a: "could speak", r: "Wish about ability."},
+            {q: "The thief admitted __________ (steal) the jewelry.", a: "stealing", r: "'Admit' + gerund."},
+            {q: "You shouldn't have __________ (tell) him.", a: "told", r: "Should have + past participle."},
+            {q: "I'm not accustomed to __________ (be / treat) like this.", a: "being treated", r: "Passive gerund."},
+            {q: "The project, __________ (which) was led by Sarah, was a success.", a: "which", r: "Non-defining relative clause."},
+            {q: "He tried to avoid __________ (answer) my question.", a: "answering", r: "'Avoid' + gerund."},
+            {q: "Unless you __________ (study) harder, you'll fail.", a: "study", r: "Unless + present simple."},
+            {q: "I forgot __________ (lock) the door.", a: "to lock", r: "Forget + to-infinitive (didn't do it)."},
+            {q: "The news __________ (be) shocking.", a: "was", r: "'News' is singular."},
+            {q: "By the time we arrive, the movie __________ (start).", a: "will have started", r: "Future Perfect."},
+            {q: "It was a mistake __________ (not / take) the map.", a: "not to take", r: "Negative infinitive."},
+            {q: "I'd rather __________ (stay) home tonight.", a: "stay", r: "'Would rather' (no subject change) + bare infinitive."}
+        ],
+        "B2_Stones": [
+            {q: "Look after", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: 'Look after the patient'."},
+            {q: "Turn off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: 'Turn the light off'."},
+            {q: "Run into", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: 'Run into a friend'."},
+            {q: "Pick up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: 'Pick the meds up'."},
+            {q: "Get over", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: 'Get over the flu'."},
+            {q: "Bring up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: 'Bring the topic up'."},
+            {q: "Come across", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: 'Come across an old photo'."},
+            {q: "Call off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: 'Call the surgery off'."},
+            {q: "Deal with", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: 'Deal with the pain'."},
+            {q: "Fill out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: 'Fill the form out'."},
+            {q: "Take off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: 'Take your mask off'."},
+            {q: "Put away", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: 'Put the tools away'."},
+            {q: "Hand in", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: 'Hand the report in'."},
+            {q: "Give up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: 'Give smoking up'."},
+            {q: "Throw away", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: 'Throw the trash away'."},
+            {q: "Look up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: 'Look the word up'."},
+            {q: "Put on", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: 'Put your scrubs on'."},
+            {q: "Back up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: 'Back your data up'."},
+            {q: "Cut off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: 'Cut the oxygen off'."},
+            {q: "Cheer up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: 'Cheer the patient up'."},
+            {q: "Figure out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: 'Figure the dose out'."},
+            {q: "Leave out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: 'Leave no one out'."},
+            {q: "Point out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: 'Point the error out'."},
+            {q: "Look into", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: 'Look into the symptoms'."},
+            {q: "Wait on", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: 'Wait on the doctor'."},
+            {q: "Depend on", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: 'Depend on the results'."},
+            {q: "Stand by", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: 'Stand by the protocol'."},
+            {q: "Care for", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: 'Care for the elderly'."},
+            {q: "Break into", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: 'Break into the cabinet'."},
+            {q: "Believe in", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: 'Believe in science'."}
+        ],
+        "B2_Memory": [
+            {v: "Brush up on", m: "To improve or refresh knowledge"},
+            {v: "Carry out", m: "To perform or complete a task"},
+            {v: "Come down with", m: "To become sick with something"},
             {v: "Pass out", m: "To lose consciousness"},
-            {v: "Carry out", m: "To perform a task"},
-            {v: "Bring up", m: "To mention a topic"},
-            {v: "Go over", m: "To review something"},
-            {v: "Put off", m: "To postpone"},
-            {v: "Break down", m: "To stop functioning"},
-            {v: "Look into", m: "To investigate"}
-        ]},
-        {id: 5, lvl: "B2", branch: "medical", type: "Matching", name: "Quiz 5: Medical Collocations", pairs: [
+            {v: "Look into", m: "To investigate or examine"},
+            {v: "Put off", m: "To postpone or delay"},
+            {v: "Rule out", m: "To eliminate a possibility"},
+            {v: "Set back", m: "To delay progress"},
+            {v: "Think over", m: "To consider carefully"},
+            {v: "Back up", m: "To support or confirm"},
+            {v: "Take over", m: "To assume control"},
+            {v: "Call off", m: "To cancel an event"},
+            {v: "Go through", m: "To experience/examine"},
+            {v: "Run out of", m: "To have none left"},
+            {v: "Find out", m: "To discover information"}
+        ],
+        "B2_Matching": [
             {a: "Take", b: "a medical history"},
             {a: "Stabbing", b: "pain"},
             {a: "Make", b: "a full recovery"},
-            {a: "Catch", b: "a cold"},
             {a: "Undergo", b: "surgery"},
             {a: "Run", b: "some tests"},
             {a: "Slight", b: "discomfort"},
             {a: "Relieve", b: "the symptoms"},
-            {a: "Vitals", b: "signs"},
-            {a: "Informed", b: "consent"}
-        ]}
-    ];
-
-    let user = "", currentBranch = "", currentLvl = "", currentQuiz = null, currentIdx = 0, score = 0;
-    let selectedLeft = null, selectedRight = null, matchedCount = 0;
-    let progress = JSON.parse(localStorage.getItem('dihielo_progress')) || {};
+            {a: "Vital", b: "signs"},
+            {a: "Informed", b: "consent"},
+            {a: "Intensive", b: "care unit"},
+            {a: "Blood", b: "pressure"},
+            {a: "Chronic", b: "condition"},
+            {a: "General", b: "anesthetic"},
+            {a: "Waiting", b: "list"},
+            {a: "Ward", b: "round"}
+        ]
+    };
+    let user = "", mode = "", index = 0, score = 0, currentBranch = "general";
+    let flippedCards = [], matchedCount = 0, timerInterval = null;
+    let selectedLeft = null, matchingScore = 0;
 
     function showScreen(id) {
         document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
         document.getElementById(id).classList.remove('hidden');
-        window.scrollTo(0,0);
     }
 
     function login() {
         user = document.getElementById('student-name').value;
-        if(!user) return;
-        document.getElementById('user-display').innerText = user;
-        showScreen('screen-landing');
+        if(!user) return alert("Please enter your name");
+        showScreen('screen-branch');
     }
 
     function selectBranch(branch) {
         currentBranch = branch;
         const header = document.getElementById('app-header');
-        const title = document.getElementById('header-title');
-        header.style.background = branch === 'medical' ? "var(--medical-blue)" : "var(--general-gold)";
-        title.innerText = branch === 'medical' ? "Dr. DiHielo Medical English Academy" : "DiHielo English Academy";
+        if(branch === 'medical') {
+            header.style.backgroundColor = "var(--medical-blue)";
+            document.getElementById('lvl-title').innerText = "Medical English Levels";
+        } else {
+            header.style.backgroundColor = "var(--primary)";
+            document.getElementById('lvl-title').innerText = "General English Levels";
+        }
         showScreen('screen-levels');
     }
 
-    function goToQuizzes(lvl) {
-        currentLvl = lvl;
-        renderQuizList();
+    function showQuizzes(lvl) {
+        const container = document.getElementById('quiz-list-container');
+        container.innerHTML = "";
+        
+        const quizzes = [
+            {id: "B2_MC", name: "Quiz 1", sub: "Multiple Choice"},
+            {id: "B2_Writing", name: "Quiz 2", sub: "Writing Skills"},
+            {id: "B2_Stones", name: "Quiz 3", sub: "Stones vs Eggshells"},
+            {id: "B2_Memory", name: "Quiz 4", sub: "Memory Match"},
+            {id: "B2_Matching", name: "Quiz 5", sub: "Collocations (Columns)"}
+        ];
+
+        quizzes.forEach(q => {
+            const card = document.createElement('div');
+            card.className = 'level-card';
+            card.innerHTML = `${q.name}<br><small>${q.sub}</small>`;
+            card.onclick = () => { 
+                mode = q.id; 
+                if(mode === "B2_Memory") startMemory();
+                else if(mode === "B2_Matching") startMatching();
+                else startQuiz(); 
+            };
+            container.appendChild(card);
+        });
         showScreen('screen-quiz-list');
     }
 
-    function renderQuizList() {
-        const container = document.getElementById('quiz-list-container');
-        container.innerHTML = "";
-        const list = quizData.filter(q => q.lvl === currentLvl && (currentBranch === 'medical' || q.branch === 'general'));
-        
-        list.forEach(q => {
-            const item = document.createElement('div');
-            item.className = `quiz-item ${progress[q.id] ? "completed" : ""}`;
-            item.innerHTML = `<span>${q.name}</span>`;
-            item.onclick = () => startQuiz(q);
-            container.appendChild(item);
-        });
-
-        for(let i=list.length+1; i<=20; i++) {
-            const empty = document.createElement('div');
-            empty.className = "quiz-item";
-            empty.style.opacity = "0.4";
-            empty.innerHTML = `<span style="color:#999">Quiz ${i}: Coming Soon...</span>`;
-            container.appendChild(empty);
-        }
+    function goBackToList() {
+        clearInterval(timerInterval);
+        showScreen('screen-quiz-list');
     }
 
-    function startQuiz(quiz) {
-        currentQuiz = quiz; currentIdx = 0; score = 0;
-        if(quiz.type === "Memory") startMemory();
-        else if(quiz.type === "Matching") startMatching();
-        else { showScreen('screen-quiz'); renderQuestion(); }
+    // --- QUIZ LOGIC (MC, Writing, Stones) ---
+    function startQuiz() {
+        index = 0; score = 0;
+        showScreen('screen-quiz');
+        renderQuiz();
     }
 
-    function renderQuestion() {
-        const q = currentQuiz.data[currentIdx];
-        document.getElementById('q-text').innerText = q.q;
+    function renderQuiz() {
+        const data = database[mode][index];
+        const qText = document.getElementById('q-text');
         const box = document.getElementById('options-box');
+        
+        qText.className = (mode === "B2_Stones") ? "flashcard-text" : "question";
+        qText.innerText = (mode === "B2_Stones") ? data.q : (index + 1) + ". " + data.q;
+
         box.innerHTML = "";
         document.getElementById('feedback-box').classList.add('hidden');
         document.getElementById('btn-continue').classList.add('hidden');
 
-        if(currentQuiz.type === "Writing") {
+        if(mode === "B2_Writing") {
             box.innerHTML = `
-                <input type="text" id="ans-w" style="width:100%; padding:15px; margin-bottom:15px; border:1px solid #ddd; border-radius:8px; box-sizing:border-box;">
-                <button class="primary" onclick="checkW()">Check Answer</button>
-            `;
+                <input type="text" id="ans-in" style="width:100%; padding:15px; margin-bottom:10px; border-radius:8px; border:2px solid #ddd; box-sizing:border-box;" placeholder="Write your answer...">
+                <button class="main-btn" id="chk-btn" onclick="checkWriting()">Check</button>`;
+            document.getElementById('ans-in').onkeypress = (e) => { if(e.key==='Enter') checkWriting(); };
+            setTimeout(() => document.getElementById('ans-in').focus(), 100);
         } else {
-            q.o.forEach((opt, i) => {
-                const d = document.createElement('div'); d.className = 'option'; d.innerText = opt;
-                d.onclick = () => {
-                    document.querySelectorAll('.option').forEach(el => el.onclick = null);
-                    if(i === q.a) { d.classList.add('correct'); score++; }
-                    else { d.classList.add('wrong'); box.children[q.a].classList.add('correct'); }
-                    finishStep(q.r);
-                };
+            data.o.forEach((opt, i) => {
+                const d = document.createElement('div');
+                d.className = 'option';
+                d.style.textAlign = (mode === "B2_Stones") ? "center" : "left";
+                d.innerText = opt;
+                d.onclick = () => checkMC(i, d);
                 box.appendChild(d);
             });
         }
+        document.getElementById('progress-fill').style.width = (index/database[mode].length*100) + "%";
     }
 
-    function checkW() {
-        const val = document.getElementById('ans-w').value.trim().toLowerCase();
-        const q = currentQuiz.data[currentIdx];
-        const btn = document.querySelector('#options-box button');
-        btn.disabled = true;
-        if(val === q.a.toLowerCase()) {
-            document.getElementById('ans-w').style.borderColor = "var(--success)";
+    function checkMC(i, el) {
+        const data = database[mode][index];
+        document.querySelectorAll('.option').forEach(o => o.onclick = null);
+        if(i === data.a) { el.classList.add('correct'); score++; }
+        else { el.classList.add('wrong'); document.querySelectorAll('.option')[data.a].classList.add('correct'); }
+        showFeedback(data.r);
+    }
+
+    function checkWriting() {
+        const val = document.getElementById('ans-in').value.toLowerCase().trim();
+        const data = database[mode][index];
+        const input = document.getElementById('ans-in');
+        
+        if(val === data.a.toLowerCase().trim()) {
+            input.style.borderColor = "var(--success)";
             score++;
         } else {
-            document.getElementById('ans-w').style.borderColor = "var(--danger)";
+            input.style.borderColor = "var(--danger)";
+            const msg = document.createElement('p');
+            msg.innerHTML = `Correct: <b style="color:var(--success)">${data.a}</b>`;
+            document.getElementById('options-box').appendChild(msg);
         }
-        finishStep(q.r);
+        document.getElementById('chk-btn').disabled = true;
+        showFeedback(data.r);
     }
 
-    function finishStep(r) {
+    function showFeedback(r) {
         const fb = document.getElementById('feedback-box');
-        fb.innerText = r; fb.classList.remove('hidden');
+        fb.innerText = r;
+        fb.classList.remove('hidden');
         document.getElementById('btn-continue').classList.remove('hidden');
     }
 
     function nextQuestion() {
-        currentIdx++;
-        if(currentIdx < currentQuiz.data.length) renderQuestion();
-        else finishQuiz();
+        index++;
+        if(index < database[mode].length) renderQuiz();
+        else finishModule();
     }
 
+    // --- MEMORY GAME ---
     function startMemory() {
         showScreen('screen-memory');
-        matchedCount = 0; selectedLeft = null;
-        let cards = [];
-        currentQuiz.pairs.forEach((p, i) => { cards.push({t: p.v, id: i}, {t: p.m, id: i}); });
-        cards.sort(() => Math.random() - 0.5);
+        matchedCount = 0; flippedCards = [];
+        startTimer(180); // 180 segundos solicitados
         const board = document.getElementById('memory-board');
         board.innerHTML = "";
-        cards.forEach(c => {
-            const div = document.createElement('div'); div.className = 'memory-card';
-            div.dataset.id = c.id;
-            div.innerHTML = `<div class="card-face card-front">?</div><div class="card-back card-face">${c.t}</div>`;
-            div.onclick = () => {
-                if(div.classList.contains('flipped') || selectedLeft) return;
-                div.classList.add('flipped');
-                const flipped = document.querySelectorAll('.memory-card.flipped:not(.matched)');
-                if(flipped.length === 2) {
-                    selectedLeft = true;
-                    if(flipped[0].dataset.id === flipped[1].dataset.id) {
-                        flipped.forEach(f => { f.classList.add('matched'); f.style.pointerEvents = "none"; });
-                        matchedCount++; selectedLeft = false;
-                        if(matchedCount === currentQuiz.pairs.length) setTimeout(finishQuiz, 800);
-                    } else {
-                        setTimeout(() => { flipped.forEach(f => f.classList.remove('flipped')); selectedLeft = false; }, 1000);
-                    }
-                }
-            };
-            board.appendChild(div);
+        
+        let cards = [];
+        database.B2_Memory.forEach((item, i) => {
+            cards.push({ text: item.v, pairId: i });
+            cards.push({ text: item.m, pairId: i });
+        });
+        cards.sort(() => Math.random() - 0.5);
+        
+        cards.forEach(cardData => {
+            const card = document.createElement('div');
+            card.className = 'memory-card';
+            card.dataset.id = cardData.pairId;
+            card.innerHTML = `
+                <div class="card-face card-front">?</div>
+                <div class="card-back card-face">${cardData.text}</div>`;
+            card.onclick = () => flipCard(card);
+            board.appendChild(card);
         });
     }
 
-    function startMatching() {
-        showScreen('screen-matching');
-        const lBox = document.getElementById('col-left');
-        const rBox = document.getElementById('col-right');
-        lBox.innerHTML = ""; rBox.innerHTML = ""; matchedCount = 0;
-        let lefts = [...currentQuiz.pairs].sort(() => Math.random() - 0.5);
-        let rights = [...currentQuiz.pairs].sort(() => Math.random() - 0.5);
-        lefts.forEach(p => {
-            const d = document.createElement('div'); d.className='match-item'; d.innerText=p.a;
-            d.onclick = () => { if(selectedLeft) selectedLeft.el.classList.remove('selected'); selectedLeft={el:d, val:p.b}; d.classList.add('selected'); checkM(); };
-            lBox.appendChild(d);
-        });
-        rights.forEach(p => {
-            const d = document.createElement('div'); d.className='match-item'; d.innerText=p.b;
-            d.onclick = () => { if(selectedRight) selectedRight.el.classList.remove('selected'); selectedRight={el:d, val:p.b}; d.classList.add('selected'); checkM(); };
-            rBox.appendChild(d);
-        });
-    }
-
-    function checkM() {
-        if(selectedLeft && selectedRight) {
-            if(selectedLeft.val === selectedRight.val) {
-                selectedLeft.el.classList.add('locked-success'); selectedRight.el.classList.add('locked-success');
-                selectedLeft.el.onclick = null; selectedRight.el.onclick = null;
-                matchedCount++; if(matchedCount === currentQuiz.pairs.length) setTimeout(finishQuiz, 800);
-            } else {
-                const a=selectedLeft.el, b=selectedRight.el;
-                setTimeout(() => { a.classList.remove('selected'); b.classList.remove('selected'); }, 400);
-            }
-            selectedLeft = null; selectedRight = null;
+    function flipCard(card) {
+        if (flippedCards.length < 2 && !card.classList.contains('flipped') && !card.classList.contains('matched')) {
+            card.classList.add('flipped');
+            flippedCards.push(card);
+            if (flippedCards.length === 2) setTimeout(checkMatch, 700);
         }
     }
 
-    function finishQuiz() {
-        progress[currentQuiz.id] = true;
-        localStorage.setItem('dihielo_progress', JSON.stringify(progress));
+    function checkMatch() {
+        const [c1, c2] = flippedCards;
+        if (c1.dataset.id === c2.dataset.id) {
+            c1.classList.add('matched'); c2.classList.add('matched');
+            matchedCount++;
+            if (matchedCount === database.B2_Memory.length) {
+                clearInterval(timerInterval);
+                setTimeout(() => { alert("Excellent Memory!"); finishModule(true); }, 500);
+            }
+        } else {
+            c1.classList.remove('flipped'); c2.classList.remove('flipped');
+        }
+        flippedCards = [];
+    }
+
+    // --- MATCHING COLUMNS (Quiz 5) ---
+    function startMatching() {
+        showScreen('screen-matching');
+        matchingScore = 0; selectedLeft = null;
+        const colL = document.getElementById('col-left');
+        const colR = document.getElementById('col-right');
+        colL.innerHTML = "<h3>Verb / Adj</h3>";
+        colR.innerHTML = "<h3>Noun / Phrase</h3>";
+
+        let leftItems = database.B2_Matching.map((item, i) => ({ text: item.a, id: i }));
+        let rightItems = database.B2_Matching.map((item, i) => ({ text: item.b, id: i }));
+        
+        leftItems.sort(() => Math.random() - 0.5);
+        rightItems.sort(() => Math.random() - 0.5);
+
+        leftItems.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'match-item';
+            div.innerText = item.text;
+            div.onclick = () => {
+                document.querySelectorAll('#col-left .match-item').forEach(i => i.classList.remove('selected'));
+                div.classList.add('selected');
+                selectedLeft = item.id;
+            };
+            colL.appendChild(div);
+        });
+
+        rightItems.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'match-item';
+            div.innerText = item.text;
+            div.onclick = () => {
+                if(selectedLeft === null) return;
+                if(item.id === selectedLeft) {
+                    div.classList.add('matched-pair');
+                    document.querySelector('#col-left .selected').classList.add('matched-pair');
+                    document.querySelector('#col-left .selected').classList.remove('selected');
+                    matchingScore++;
+                    selectedLeft = null;
+                    if(matchingScore === database.B2_Matching.length) setTimeout(() => finishModule(true), 500);
+                } else {
+                    div.style.background = "#ffcccc";
+                    setTimeout(() => div.style.background = "", 500);
+                }
+            };
+            colR.appendChild(div);
+        });
+    }
+
+    function startTimer(seconds) {
+        clearInterval(timerInterval);
+        let time = seconds;
+        const display = document.getElementById('time-left');
+        timerInterval = setInterval(() => {
+            let m = Math.floor(time / 60);
+            let s = time % 60;
+            display.innerText = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+            if (--time < 0) { clearInterval(timerInterval); alert("Time is over!"); goBackToList(); }
+        }, 1000);
+    }
+
+    function finishModule(isGame = false) {
         showScreen('screen-results');
-        document.getElementById('final-score').innerText = (currentQuiz.type === "MC" || currentQuiz.type === "Writing") ? `${score}/${currentQuiz.data.length}` : "Done!";
+        const finalScore = isGame ? "COMPLETED" : `${score} / ${database[mode].length}`;
+        document.getElementById('final-score-display').innerText = `${user}: ${finalScore}`;
     }
 </script>
 </body>
