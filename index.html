@@ -18,182 +18,151 @@
             --text-muted: #7f8c8d;
         }
  
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
- 
-        header {
-            background: var(--primary);
-            color: white;
-            width: 100%;
-            padding: 1.5rem 0;
-            text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: background 0.4s;
-        }
-
-        header h1 { margin: 10px 0 0; font-size: 1.4rem; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        header { background: var(--primary); color: white; width: 100%; padding: 1.5rem 0; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: background 0.4s; }
+        header img { max-width: 80px; margin-bottom: 5px; display: block; margin-left: auto; margin-right: auto; }
         .siglas-logo { font-weight: 900; font-size: 2rem; letter-spacing: -2px; opacity: 0.9; }
- 
-        .container {
-            width: 90%;
-            max-width: 850px;
-            margin: 2rem 0;
-            background: var(--white);
-            padding: 2.5rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-        }
- 
+        .container { width: 90%; max-width: 850px; margin: 2rem 0; background: var(--white); padding: 2.5rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
         .hidden { display: none; }
-
-        /* LANDING & BRANCHES */
         .landing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
-        .branch-card {
-            padding: 40px 20px;
-            text-align: center;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: 0.3s;
-            color: white;
-            font-weight: bold;
-        }
+        .branch-card { padding: 40px 20px; text-align: center; border-radius: 15px; cursor: pointer; transition: 0.3s; color: white; font-weight: bold; }
         .branch-card.medical { background: var(--medical-blue); }
         .branch-card.general { background: var(--general-gold); }
         .branch-card:hover { transform: translateY(-5px); filter: brightness(1.1); }
-
-        /* LEVELS GRID */
-        .level-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-        .level-card {
-            padding: 20px;
-            text-align: center;
-            border: 2px solid #eee;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: 0.3s;
-            font-weight: bold;
-        }
+        .level-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; margin-top: 20px; }
+        .level-card { padding: 20px; text-align: center; border: 2px solid #eee; border-radius: 12px; cursor: pointer; transition: 0.3s; font-weight: bold; }
         .level-card:hover:not(.locked) { border-color: var(--accent); color: var(--accent); }
         .level-card.locked { background: var(--locked); color: var(--text-muted); cursor: not-allowed; opacity: 0.7; }
-
-        /* QUIZ LIST */
-        .quiz-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            border: 1px solid #eee;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
+        .quiz-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border: 1px solid #eee; margin-bottom: 10px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
         .quiz-item:hover { background: #f9f9f9; border-color: var(--accent); }
         .quiz-item.completed::after { content: '✓'; color: var(--success); font-weight: bold; font-size: 1.2rem; }
-
-        .btn-nav {
-            background: #eee;
-            color: var(--primary);
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-
-        /* QUIZ COMPONENTS */
+        .btn-nav { background: #eee; color: var(--primary); border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-bottom: 20px; font-weight: 600; }
         .option { padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; }
         .correct { background: #d4edda; color: #155724; border-color: var(--success); }
         .wrong { background: #f8d7da; color: #721c24; border-color: #f5c6cb; }
         button.primary { background: var(--accent); color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; }
+        .matching-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .match-item { padding: 12px; border: 2px solid #eee; border-radius: 8px; cursor: pointer; text-align: center; margin-bottom: 8px; font-weight: bold; }
+        .match-item.selected { border-color: var(--accent); background: #e3f2fd; }
+        .match-item.locked-success { background: var(--success); color: white; cursor: default; }
+        .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .memory-card { height: 100px; position: relative; transform-style: preserve-3d; transition: 0.5s; cursor: pointer; }
+        .memory-card.flipped { transform: rotateY(180deg); }
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; text-align: center; border-radius: 8px; }
+        .card-front { background: var(--accent); color: white; font-size: 1.5rem; }
+        .card-back { background: white; color: var(--primary); border: 2px solid var(--accent); transform: rotateY(180deg); font-size: 0.8rem; }
     </style>
 </head>
 <body>
- 
 <header id="app-header">
+    <img src="logo.png" alt="" id="header-logo" onerror="this.style.display='none'">
     <div class="siglas-logo">A.D.</div>
     <h1 id="header-title">DiHielo English Academy</h1>
 </header>
- 
 <div class="container" id="screen-login">
-    <h2 style="text-align:center">Welcome back</h2>
+    <h2 style="text-align:center">Welcome</h2>
     <input type="text" id="student-name" style="width:100%; padding:15px; margin-bottom:20px; border-radius:8px; border:1px solid #ddd; box-sizing:border-box;" placeholder="Student Name">
-    <button class="primary" onclick="login()">Enter Platform</button>
+    <button class="primary" onclick="login()">Enter</button>
 </div>
- 
 <div class="container hidden" id="screen-landing">
     <h2>Hello, <span id="user-display"></span></h2>
-    <p>Select your academy branch:</p>
     <div class="landing-grid">
         <div class="branch-card medical" onclick="selectBranch('medical')">MEDICAL ENGLISH</div>
         <div class="branch-card general" onclick="selectBranch('general')">GENERAL ENGLISH</div>
     </div>
 </div>
-
 <div class="container hidden" id="screen-levels">
-    <button class="btn-nav" onclick="showScreen('screen-landing')">← Back to Branches</button>
+    <button class="btn-nav" onclick="showScreen('screen-landing')">← Back</button>
     <h2 id="lvl-title">Select Level</h2>
     <div class="level-grid">
-        <div class="level-card locked">A1</div>
-        <div class="level-card locked">A2</div>
-        <div class="level-card locked">B1</div>
+        <div class="level-card locked">A1</div><div class="level-card locked">A2</div><div class="level-card locked">B1</div>
         <div class="level-card" onclick="goToQuizzes('B2')">B2</div>
-        <div class="level-card locked">C1</div>
-        <div class="level-card locked">C2</div>
+        <div class="level-card locked">C1</div><div class="level-card locked">C2</div>
     </div>
 </div>
- 
 <div class="container hidden" id="screen-quiz-list">
-    <button class="btn-nav" onclick="showScreen('screen-levels')">← Back to Levels</button>
+    <button class="btn-nav" onclick="showScreen('screen-levels')">← Back</button>
     <h2 id="list-title">B2 Modules</h2>
     <div id="quiz-list-container"></div>
 </div>
- 
 <div class="container hidden" id="screen-quiz">
-    <button class="btn-nav" onclick="showScreen('screen-quiz-list')">← Exit Quiz</button>
-    <div id="q-text" style="font-size: 1.2rem; margin-bottom: 20px; font-weight: 600;"></div>
+    <button class="btn-nav" onclick="showScreen('screen-quiz-list')">← Exit</button>
+    <div id="q-text" style="font-size: 1.1rem; margin-bottom: 15px; font-weight: bold;"></div>
     <div id="options-box"></div>
-    <div id="feedback-box" class="hidden" style="margin-top:20px; padding:15px; background:#f0f7ff; border-radius:8px"></div>
-    <button id="btn-continue" class="hidden primary" onclick="nextQuestion()" style="margin-top:20px">Next</button>
+    <div id="feedback-box" class="hidden" style="margin-top:15px; padding:15px; background:#e3f2fd; border-radius:8px"></div>
+    <button id="btn-continue" class="hidden primary" onclick="nextQuestion()" style="margin-top:15px">Next</button>
 </div>
-
+<div class="container hidden" id="screen-memory">
+    <button class="btn-nav" onclick="showScreen('screen-quiz-list')">← Exit</button>
+    <div id="memory-board" class="memory-grid"></div>
+</div>
+<div class="container hidden" id="screen-matching">
+    <button class="btn-nav" onclick="showScreen('screen-quiz-list')">← Exit</button>
+    <div class="matching-container"><div id="col-left"></div><div id="col-right"></div></div>
+</div>
 <div class="container hidden" id="screen-results">
-    <h2 style="text-align:center">Well done!</h2>
+    <h2 style="text-align:center">Complete!</h2>
     <div id="final-score" style="text-align:center; font-size:3rem; margin:20px 0"></div>
-    <button class="primary" onclick="showScreen('screen-quiz-list')">Return to Dashboard</button>
+    <button class="primary" onclick="showScreen('screen-quiz-list')">Continue</button>
 </div>
- 
 <script>
     const quizData = [
-        {id: 1, lvl: "B2", branch: "general", name: "Grammar: Narrative Tenses", data: [
-            {q: "I __________ English for years before I moved to London.", o: ["learned", "had been learning", "was learning"], a: 1, r: "Past Perfect Continuous for a duration before a past point."}
+        {id: 1, lvl: "B2", branch: "general", type: "MC", name: "Grammar: Narrative Tenses", data: [
+            {q: "I __________ English for years before I moved to London.", o: ["learned", "had been learning", "was learning"], a: 1, r: "Past Perfect Continuous for a duration before a past point."},
+            {q: "She __________ when the phone rang.", o: ["slept", "was sleeping", "had slept"], a: 1, r: "Past Continuous for an action interrupted by a shorter action."},
+            {q: "By the time we arrived, the movie __________.", o: ["started", "was starting", "had started"], a: 2, r: "Past Perfect for an action completed before another past action."},
+            {q: "We __________ along the beach when we saw the dolphin.", o: ["walked", "were walking", "had walked"], a: 1, r: "Continuous action in the past."},
+            {q: "I __________ the report before the meeting began.", o: ["finished", "was finishing", "had finished"], a: 2, r: "Completion before another event."}
         ]},
-        {id: 2, lvl: "B2", branch: "medical", name: "Stones vs Eggshells", data: [
-            {q: "Look after", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: 'Look after the patient', not 'Look the patient after'."}
+        {id: 2, lvl: "B2", branch: "general", type: "Writing", name: "Writing: Future Perfect", data: [
+            {q: "By next year, I __________ (finish) the course.", a: "will have finished", r: "will have + past participle."},
+            {q: "By 8 PM tonight, they __________ (arrive) home.", a: "will have arrived", r: "Action completed by a future time."},
+            {q: "She __________ (save) enough money by June.", a: "will have saved", r: "Future completion."},
+            {q: "We __________ (eat) dinner before you get here.", a: "will have eaten", r: "Future Perfect logic."},
+            {q: "In 20 years, technology __________ (change) everything.", a: "will have changed", r: "Long term future completion."}
         ]},
-        {id: 3, lvl: "B2", branch: "medical", name: "Vocabulary: Admission Note", data: [
-            {q: "Patient __________ with acute abdominal pain.", o: ["presents", "presents self", "presenting"], a: 0, r: "Standard medical phrasing: 'Patient presents with...'"}
+        {id: 3, lvl: "B2", branch: "medical", type: "MC", name: "Quiz 3: Stones vs Eggshells", data: [
+            {q: "Look after", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Inseparable: 'Look after the patient'."},
+            {q: "Check in", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Separable: 'Check the patient in'."},
+            {q: "Take over", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Separable: 'Take the shifts over'."},
+            {q: "Get over", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Inseparable: 'Get over the illness'."},
+            {q: "Give up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Separable: 'Give smoking up'."},
+            {q: "Go through", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Inseparable: 'Go through the results'."},
+            {q: "Call off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Separable: 'Call the surgery off'."},
+            {q: "Run into", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Inseparable: 'Run into a colleague'."}
+        ]},
+        {id: 4, lvl: "B2", branch: "medical", type: "Memory", name: "Quiz 4: Phrasal Verbs Memory", pairs: [
+            {v: "Rule out", m: "To eliminate a possibility"},
+            {v: "Pass out", m: "To lose consciousness"},
+            {v: "Carry out", m: "To perform a task"},
+            {v: "Bring up", m: "To mention a topic"},
+            {v: "Go over", m: "To review something"},
+            {v: "Put off", m: "To postpone"},
+            {v: "Break down", m: "To stop functioning"},
+            {v: "Look into", m: "To investigate"}
+        ]},
+        {id: 5, lvl: "B2", branch: "medical", type: "Matching", name: "Quiz 5: Medical Collocations", pairs: [
+            {a: "Take", b: "a medical history"},
+            {a: "Stabbing", b: "pain"},
+            {a: "Make", b: "a full recovery"},
+            {a: "Catch", b: "a cold"},
+            {a: "Undergo", b: "surgery"},
+            {a: "Run", b: "some tests"},
+            {a: "Slight", b: "discomfort"},
+            {a: "Relieve", b: "the symptoms"},
+            {a: "Vitals", b: "signs"},
+            {a: "Informed", b: "consent"}
         ]}
     ];
 
     let user = "", currentBranch = "", currentLvl = "", currentQuiz = null, currentIdx = 0, score = 0;
+    let selectedLeft = null, selectedRight = null, matchedCount = 0;
     let progress = JSON.parse(localStorage.getItem('dihielo_progress')) || {};
 
     function showScreen(id) {
         document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
         document.getElementById(id).classList.remove('hidden');
+        window.scrollTo(0,0);
     }
 
     function login() {
@@ -207,19 +176,13 @@
         currentBranch = branch;
         const header = document.getElementById('app-header');
         const title = document.getElementById('header-title');
-        if(branch === 'medical') {
-            header.style.background = "var(--medical-blue)";
-            title.innerText = "Dr. DiHielo Medical English Academy";
-        } else {
-            header.style.background = "var(--general-gold)";
-            title.innerText = "DiHielo English Academy";
-        }
+        header.style.background = branch === 'medical' ? "var(--medical-blue)" : "var(--general-gold)";
+        title.innerText = branch === 'medical' ? "Dr. DiHielo Medical English Academy" : "DiHielo English Academy";
         showScreen('screen-levels');
     }
 
     function goToQuizzes(lvl) {
         currentLvl = lvl;
-        document.getElementById('list-title').innerText = `${lvl} - Learning Modules`;
         renderQuizList();
         showScreen('screen-quiz-list');
     }
@@ -227,32 +190,30 @@
     function renderQuizList() {
         const container = document.getElementById('quiz-list-container');
         container.innerHTML = "";
-        // Regla: General sale en ambos, Medical solo en Medical.
         const list = quizData.filter(q => q.lvl === currentLvl && (currentBranch === 'medical' || q.branch === 'general'));
         
         list.forEach(q => {
             const item = document.createElement('div');
-            const isDone = progress[q.id] ? "completed" : "";
-            item.className = `quiz-item ${isDone}`;
+            item.className = `quiz-item ${progress[q.id] ? "completed" : ""}`;
             item.innerHTML = `<span>${q.name}</span>`;
             item.onclick = () => startQuiz(q);
             container.appendChild(item);
         });
 
-        // Simulación de "espacios por llenar"
-        for(let i=1; i<=5; i++) {
+        for(let i=list.length+1; i<=20; i++) {
             const empty = document.createElement('div');
             empty.className = "quiz-item";
             empty.style.opacity = "0.4";
-            empty.innerHTML = `<span style="color:#999 italic">Coming Soon...</span>`;
+            empty.innerHTML = `<span style="color:#999">Quiz ${i}: Coming Soon...</span>`;
             container.appendChild(empty);
         }
     }
 
     function startQuiz(quiz) {
         currentQuiz = quiz; currentIdx = 0; score = 0;
-        showScreen('screen-quiz');
-        renderQuestion();
+        if(quiz.type === "Memory") startMemory();
+        else if(quiz.type === "Matching") startMatching();
+        else { showScreen('screen-quiz'); renderQuestion(); }
     }
 
     function renderQuestion() {
@@ -263,29 +224,120 @@
         document.getElementById('feedback-box').classList.add('hidden');
         document.getElementById('btn-continue').classList.add('hidden');
 
-        q.o.forEach((opt, i) => {
-            const d = document.createElement('div'); d.className = 'option'; d.innerText = opt;
-            d.onclick = () => {
-                document.querySelectorAll('.option').forEach(el => el.onclick = null);
-                if(i === q.a) { d.classList.add('correct'); score++; }
-                else { d.classList.add('wrong'); box.children[q.a].classList.add('correct'); }
-                document.getElementById('feedback-box').innerText = q.r;
-                document.getElementById('feedback-box').classList.remove('hidden');
-                document.getElementById('btn-continue').classList.remove('hidden');
-            };
-            box.appendChild(d);
-        });
+        if(currentQuiz.type === "Writing") {
+            box.innerHTML = `
+                <input type="text" id="ans-w" style="width:100%; padding:15px; margin-bottom:15px; border:1px solid #ddd; border-radius:8px; box-sizing:border-box;">
+                <button class="primary" onclick="checkW()">Check Answer</button>
+            `;
+        } else {
+            q.o.forEach((opt, i) => {
+                const d = document.createElement('div'); d.className = 'option'; d.innerText = opt;
+                d.onclick = () => {
+                    document.querySelectorAll('.option').forEach(el => el.onclick = null);
+                    if(i === q.a) { d.classList.add('correct'); score++; }
+                    else { d.classList.add('wrong'); box.children[q.a].classList.add('correct'); }
+                    finishStep(q.r);
+                };
+                box.appendChild(d);
+            });
+        }
+    }
+
+    function checkW() {
+        const val = document.getElementById('ans-w').value.trim().toLowerCase();
+        const q = currentQuiz.data[currentIdx];
+        const btn = document.querySelector('#options-box button');
+        btn.disabled = true;
+        if(val === q.a.toLowerCase()) {
+            document.getElementById('ans-w').style.borderColor = "var(--success)";
+            score++;
+        } else {
+            document.getElementById('ans-w').style.borderColor = "var(--danger)";
+        }
+        finishStep(q.r);
+    }
+
+    function finishStep(r) {
+        const fb = document.getElementById('feedback-box');
+        fb.innerText = r; fb.classList.remove('hidden');
+        document.getElementById('btn-continue').classList.remove('hidden');
     }
 
     function nextQuestion() {
         currentIdx++;
         if(currentIdx < currentQuiz.data.length) renderQuestion();
-        else {
-            progress[currentQuiz.id] = true;
-            localStorage.setItem('dihielo_progress', JSON.stringify(progress));
-            showScreen('screen-results');
-            document.getElementById('final-score').innerText = `${score} / ${currentQuiz.data.length}`;
+        else finishQuiz();
+    }
+
+    function startMemory() {
+        showScreen('screen-memory');
+        matchedCount = 0; selectedLeft = null;
+        let cards = [];
+        currentQuiz.pairs.forEach((p, i) => { cards.push({t: p.v, id: i}, {t: p.m, id: i}); });
+        cards.sort(() => Math.random() - 0.5);
+        const board = document.getElementById('memory-board');
+        board.innerHTML = "";
+        cards.forEach(c => {
+            const div = document.createElement('div'); div.className = 'memory-card';
+            div.dataset.id = c.id;
+            div.innerHTML = `<div class="card-face card-front">?</div><div class="card-back card-face">${c.t}</div>`;
+            div.onclick = () => {
+                if(div.classList.contains('flipped') || selectedLeft) return;
+                div.classList.add('flipped');
+                const flipped = document.querySelectorAll('.memory-card.flipped:not(.matched)');
+                if(flipped.length === 2) {
+                    selectedLeft = true;
+                    if(flipped[0].dataset.id === flipped[1].dataset.id) {
+                        flipped.forEach(f => { f.classList.add('matched'); f.style.pointerEvents = "none"; });
+                        matchedCount++; selectedLeft = false;
+                        if(matchedCount === currentQuiz.pairs.length) setTimeout(finishQuiz, 800);
+                    } else {
+                        setTimeout(() => { flipped.forEach(f => f.classList.remove('flipped')); selectedLeft = false; }, 1000);
+                    }
+                }
+            };
+            board.appendChild(div);
+        });
+    }
+
+    function startMatching() {
+        showScreen('screen-matching');
+        const lBox = document.getElementById('col-left');
+        const rBox = document.getElementById('col-right');
+        lBox.innerHTML = ""; rBox.innerHTML = ""; matchedCount = 0;
+        let lefts = [...currentQuiz.pairs].sort(() => Math.random() - 0.5);
+        let rights = [...currentQuiz.pairs].sort(() => Math.random() - 0.5);
+        lefts.forEach(p => {
+            const d = document.createElement('div'); d.className='match-item'; d.innerText=p.a;
+            d.onclick = () => { if(selectedLeft) selectedLeft.el.classList.remove('selected'); selectedLeft={el:d, val:p.b}; d.classList.add('selected'); checkM(); };
+            lBox.appendChild(d);
+        });
+        rights.forEach(p => {
+            const d = document.createElement('div'); d.className='match-item'; d.innerText=p.b;
+            d.onclick = () => { if(selectedRight) selectedRight.el.classList.remove('selected'); selectedRight={el:d, val:p.b}; d.classList.add('selected'); checkM(); };
+            rBox.appendChild(d);
+        });
+    }
+
+    function checkM() {
+        if(selectedLeft && selectedRight) {
+            if(selectedLeft.val === selectedRight.val) {
+                selectedLeft.el.classList.add('locked-success'); selectedRight.el.classList.add('locked-success');
+                selectedLeft.el.onclick = null; selectedRight.el.onclick = null;
+                matchedCount++; if(matchedCount === currentQuiz.pairs.length) setTimeout(finishQuiz, 800);
+            } else {
+                const a=selectedLeft.el, b=selectedRight.el;
+                setTimeout(() => { a.classList.remove('selected'); b.classList.remove('selected'); }, 400);
+            }
+            selectedLeft = null; selectedRight = null;
         }
+    }
+
+    function finishQuiz() {
+        progress[currentQuiz.id] = true;
+        localStorage.setItem('dihielo_progress', JSON.stringify(progress));
+        showScreen('screen-results');
+        document.getElementById('final-score').innerText = (currentQuiz.type === "MC" || currentQuiz.type === "Writing") ? `${score}/${currentQuiz.data.length}` : "Done!";
     }
 </script>
 </body>
