@@ -26,7 +26,7 @@
         .option { background: #f8f9fa; border: 2px solid #eee; padding: 1rem; margin: 0.8rem 0; border-radius: 10px; cursor: pointer; text-align: left; }
         .option.correct { background: #d4edda; border-color: var(--success); color: #155724; }
         .option.wrong { background: #f8d7da; border-color: var(--danger); color: #721c24; }
-        .abs-input { width: 100px; border: none; border-bottom: 2px solid var(--secondary); background: transparent; text-align: center; font-weight: bold; color: var(--primary); outline: none; }
+        .abs-input { width: 120px; border: none; border-bottom: 2px solid var(--secondary); background: transparent; text-align: center; font-weight: bold; color: var(--primary); outline: none; margin: 0 5px; padding: 2px; }
         .article-box { text-align: justify; line-height: 1.6; background: #fdfdfd; padding: 25px; border-left: 5px solid var(--secondary); margin-bottom: 20px; font-size: 0.95rem; max-height: 300px; overflow-y: auto; }
         .word-bank { background: #eef2f3; padding: 15px; border-radius: 8px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px; border: 1px dashed var(--secondary); }
         .word-item { background: var(--white); padding: 5px 12px; border-radius: 5px; font-size: 0.85rem; font-weight: bold; color: var(--secondary); }
@@ -89,19 +89,19 @@
     const database = {
         B2_MC: [
             { q: "The patient's condition _______ significantly since she started the new treatment.", o: ["improves", "has improved", "had improved", "is improving"], a: 1, r: "Present Perfect for actions starting in the past continuing to now." },
-            { q: "If the surgeon _______ more time, the procedure would have been less risky.", o: ["has", "had had", "would have", "had"], a: 1, r: "Third Conditional: If + past perfect, would have + past participle." },
-            { q: "The _______ of the virus was faster than the medical team anticipated.", o: ["breakout", "outbreak", "breakdown", "breakthrough"], a: 1, r: "'Outbreak' is the sudden start of a disease." },
-            { q: "Patients _______ follow the dosage instructions to avoid adverse effects.", o: ["might", "must", "could", "would"], a: 1, r: "'Must' indicates strong obligation." },
-            { q: "By the time the specialist arrived, the nurse _______ the patient.", o: ["stabilized", "has stabilized", "had stabilized", "is stabilizing"], a: 2, r: "Past Perfect for an action completed before another in the past." }
+            { q: "If the surgeon _______ more time, the procedure would have been less risky.", o: ["has", "had had", "would have", "had"], a: 1, r: "Third Conditional structure." },
+            { q: "The _______ of the virus was faster than the medical team anticipated.", o: ["breakout", "outbreak", "breakdown", "breakthrough"], a: 1, r: "'Outbreak' is for diseases." },
+            { q: "Patients _______ follow the dosage instructions to avoid adverse effects.", o: ["might", "must", "could", "would"], a: 1, r: "Must for strong obligation." },
+            { q: "By the time the specialist arrived, the nurse _______ the patient.", o: ["stabilized", "has stabilized", "had stabilized", "is stabilizing"], a: 2, r: "Past Perfect for the first of two past actions." }
         ],
         B2_Writing: [
             { q: "Rewrite using 'UNLESS': If you don't take the antibiotics, you won't get better.", a: "Unless you take the antibiotics, you won't get better.", r: "'Unless' = 'if not'." },
-            { q: "Rewrite in Passive Voice: The doctor is performing the surgery now.", a: "The surgery is being performed by the doctor now.", r: "Present Continuous Passive: am/is/are + being + past participle." },
-            { q: "Change to Reported Speech: 'I have a headache,' said the patient.", a: "The patient said that he had a headache.", r: "Backshift: Present Simple becomes Past Simple." }
+            { q: "Rewrite in Passive Voice: The doctor is performing the surgery now.", a: "The surgery is being performed by the doctor now.", r: "Present Continuous Passive." },
+            { q: "Change to Reported Speech: 'I have a headache,' said the patient.", a: "The patient said that he had a headache.", r: "Backshift: Present to Past." }
         ],
         B2_Stones: [
-            { q: "Direct: 'You are wrong about the symptoms.' (Soften it)", o: ["I'm afraid I might disagree.", "You are mistaken.", "That's not true."], a: 0, r: "'I'm afraid...' softens disagreement." },
-            { q: "Direct: 'Give me the report now.' (Soften it)", o: ["I need it now.", "I was wondering if you could provide the report?", "Send the report."], a: 1, r: "'I was wondering if...' is a polite Eggshell phrase." }
+            { q: "Direct: 'You are wrong about the symptoms.'", o: ["I'm afraid I might disagree.", "You are mistaken.", "Wrong."], a: 0, r: "Softer approach." },
+            { q: "Direct: 'Give me the report now.'", o: ["I need it now.", "I was wondering if you could provide the report?", "Send it."], a: 1, r: "Polite request." }
         ],
         B2_Memory: [
             { v: "Stethoscope", m: "Auscultation" }, { v: "Scalpel", m: "Incision" },
@@ -119,8 +119,8 @@
         ],
         B2_Abstraction: {
             article: `The prevalence of Type 2 Diabetes Mellitus (T2DM) remains a global health priority. While pharmacological interventions like Metformin are standard, long-term remission is rarely achieved through monotherapy. This study evaluates the MET-LIFE Protocol, a 24-month randomized controlled trial involving 1,200 participants, which integrates high-intensity interval training (HIIT), a plant-based ketogenic diet, and standardized pharmacological support...`,
-            summary: "The MET-LIFE study was conducted to address T2DM, a condition for which single-drug treatment is (1) __________ achieved long-term results. Unlike standard care, this protocol (2) __________ a specific exercise regimen known as (3) __________ with a nutritional plan. A central pillar of the trial was (4) __________, which refers to the organism's (5) __________ to alternate between different energy substrates. Regarding the outcomes, the experimental group (6) __________ a 1.8% decrease in HbA1c levels. It is (7) __________ noting that nearly half of these patients reached a state of (8) __________, meaning they no longer required drugs. The researchers (9) __________ that lifestyle changes must be applied with (10) __________ to successfully reverse metabolic impairment.",
-            answers: ["rarely", "integrated", "HIIT", "metabolic flexibility", "ability", "showed", "worth", "partial remission", "concluded", "rigor"]
+            summary: "The MET-LIFE study was conducted to address T2DM, a condition for which single-drug treatment (1) __________ long-term results. Unlike standard care, this protocol (2) __________ a specific exercise regimen known as (3) __________ with a nutritional plan. A central pillar of the trial was (4) __________, which refers to the organism's (5) __________ to alternate between different energy substrates. Regarding the outcomes, the experimental group (6) __________ a 1.8% decrease in HbA1c levels. It is (7) __________ noting that nearly half of these patients reached a state of (8) __________, meaning they no longer required drugs. The researchers (9) __________ that lifestyle changes must be applied with (10) __________ to successfully reverse metabolic impairment.",
+            answers: ["rarely achieves", "integrated", "HIIT", "metabolic flexibility", "ability", "showed", "worth", "partial remission", "concluded", "rigor"]
         },
         B2_WordBank: {
             bank: ["was admitted", "had been experiencing", "reported", "had taken", "referred", "had occurred", "had subsided", "was noted", "being", "was scheduled"],
@@ -187,7 +187,27 @@
         let txt = data.summary; data.answers.forEach((_, i) => { txt = txt.replace(`(${i+1}) __________`, `<input type="text" class="abs-input" id="abs-${i}">`); });
         document.getElementById('options-box').innerHTML = `<div class="article-box">${data.article}</div><div style="text-align:left; line-height:2;">${txt}</div><button class="main-btn" onclick="checkAbs()">Verify</button>`;
     }
-    function checkAbs() { let h = 0; database.B2_Abstraction.answers.forEach((a, i) => { const el = document.getElementById(`abs-${i}`); if(el.value.toLowerCase().trim() === a.toLowerCase()) { el.style.color="var(--success)"; h++; } else { el.style.color="var(--danger)"; el.title="Key: "+a; } }); score = h; finishModule(true); }
+
+    function checkAbs() {
+        let h = 0;
+        const data = database.B2_Abstraction;
+        data.answers.forEach((a, i) => {
+            const el = document.getElementById(`abs-${i}`);
+            const userAns = el.value.toLowerCase().trim();
+            if(userAns === a.toLowerCase()) {
+                el.style.color = "var(--success)";
+                el.style.borderBottomColor = "var(--success)";
+                h++;
+            } else {
+                el.style.color = "var(--danger)";
+                el.style.borderBottomColor = "var(--danger)";
+                el.value = userAns + " (" + a + ")"; 
+                el.style.width = "auto"; 
+            }
+        });
+        score = h;
+        setTimeout(() => { finishModule(true); }, 5000); 
+    }
 
     function startWordBank() {
         showScreen('screen-quiz'); const data = database.B2_WordBank;
@@ -195,7 +215,27 @@
         let txt = data.text; data.answers.forEach((_, i) => { txt = txt.replace(`(${i+1}) __________`, `<input type="text" class="abs-input" id="wb-${i}">`); });
         document.getElementById('options-box').innerHTML = `<div class="word-bank">${bank}</div><div style="text-align:left; line-height:2;">${txt}</div><button class="main-btn" onclick="checkWB()">Check Note</button>`;
     }
-    function checkWB() { let h = 0; database.B2_WordBank.answers.forEach((a, i) => { const el = document.getElementById(`wb-${i}`); if(el.value.toLowerCase().trim() === a.toLowerCase()) { el.style.color="var(--success)"; h++; } else { el.style.color="var(--danger)"; el.title="Key: "+a; } }); score = h; finishModule(true); }
+
+    function checkWB() {
+        let h = 0;
+        const data = database.B2_WordBank;
+        data.answers.forEach((a, i) => {
+            const el = document.getElementById(`wb-${i}`);
+            const userAns = el.value.toLowerCase().trim();
+            if(userAns === a.toLowerCase()) {
+                el.style.color = "var(--success)";
+                el.style.borderBottomColor = "var(--success)";
+                h++;
+            } else {
+                el.style.color = "var(--danger)";
+                el.style.borderBottomColor = "var(--danger)";
+                el.value = userAns + " (" + a + ")";
+                el.style.width = "auto";
+            }
+        });
+        score = h;
+        setTimeout(() => { finishModule(true); }, 5000);
+    }
 
     function startMemory() {
         showScreen('screen-memory'); matchedCount = 0; flippedCards = []; startTimer(180);
