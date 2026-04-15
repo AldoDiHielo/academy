@@ -87,28 +87,113 @@
     </div>
     <script>
     const database = {
-        B2_MC: [
-            { q: "The patient's condition _______ significantly since she started the new treatment.", o: ["improves", "has improved", "had improved", "is improving"], a: 1, r: "Present Perfect for actions starting in the past continuing to now." },
-            { q: "If the surgeon _______ more time, the procedure would have been less risky.", o: ["has", "had had", "would have", "had"], a: 1, r: "Third Conditional structure." },
-            { q: "The _______ of the virus was faster than the medical team anticipated.", o: ["breakout", "outbreak", "breakdown", "breakthrough"], a: 1, r: "'Outbreak' is for diseases." },
-            { q: "Patients _______ follow the dosage instructions to avoid adverse effects.", o: ["might", "must", "could", "would"], a: 1, r: "Must for strong obligation." },
-            { q: "By the time the specialist arrived, the nurse _______ the patient.", o: ["stabilized", "has stabilized", "had stabilized", "is stabilizing"], a: 2, r: "Past Perfect for the first of two past actions." }
+        "B2_MC": [
+            {q: "By the time the surgeon arrived, the nurses __________ the patient.", o: ["had already prepared", "have already prepared", "already prepared"], a: 0, r: "Past Perfect is for an action completed before another past action."},
+            {q: "If I __________ more attention, I would be able to answer this now.", o: ["paid", "had paid", "would have paid"], a: 1, r: "Mixed conditional: Past condition, present result."},
+            {q: "I need to __________ on the latest research.", o: ["brush up", "look for", "take in"], a: 0, r: "'Brush up on' means to refresh knowledge."},
+            {q: "The operating room __________ at the moment.", o: ["is repairing", "is being repaired", "has been repaired"], a: 1, r: "Present Continuous Passive is for ongoing actions."},
+            {q: "The specialist is very experienced __________ dealing with complex cases.", o: ["at", "with", "in"], a: 2, r: "'Experienced' collocates with 'in'."},
+            {q: "I suggest that he __________ a break.", o: ["take", "takes", "to take"], a: 0, r: "Subjunctive mood after 'suggest' uses base form."},
+            {q: "__________ the weather was terrible, the supplies arrived.", o: ["Despite", "Despite the fact that", "In spite of"], a: 1, r: "Followed by a full clause."},
+            {q: "We need to see __________ with our colleagues.", o: ["eye to eye", "face to face", "hand to hand"], a: 0, r: "Agree completely."},
+            {q: "I'm not used to __________ such long shifts.", o: ["work", "working", "be working"], a: 1, r: "'Be used to' + gerund."},
+            {q: "John told me he __________ call me the following day.", o: ["will", "would", "calls"], a: 1, r: "Reported speech backshifts 'will' to 'would'."},
+            {q: "I wish I __________ so much money last year.", o: ["didn't spend", "hadn't spent", "wouldn't spend"], a: 1, r: "Past regret uses Past Perfect."},
+            {q: "The manager __________ to give everyone a bonus.", o: ["suggested", "promised", "admitted"], a: 1, r: "'Promise' + to-infinitive."},
+            {q: "If the ambulance __________ earlier, they could have saved him.", o: ["arrived", "had arrived", "would arrive"], a: 1, r: "Third conditional (If + Past Perfect)."},
+            {q: "I found the medical conference very __________.", o: ["enlightening", "enlightened", "enlighten"], a: 0, r: "Adjective describing the event."},
+            {q: "The doctor needs to __________ a decision immediately.", o: ["do", "make", "get"], a: 1, r: "Collocation: 'make a decision'."},
+            {q: "Hardly __________ the door when the phone rang.", o: ["I had opened", "had I opened", "did I open"], a: 1, r: "Inversion: auxiliary before subject."},
+            {q: "The doctor __________ to have discovered a new variant.", o: ["claims", "suggests", "denies"], a: 0, r: "'Claim' for asserting facts."},
+            {q: "If we __________ the equipment yesterday, we could start today.", o: ["received", "had received", "would receive"], a: 1, r: "Mixed conditional."},
+            {q: "You __________ better see a specialist about that cough.", o: ["would", "should", "had"], a: 2, r: "'Had better' for strong advice."},
+            {q: "The patient is believed __________ from a rare condition.", o: ["to suffer", "to be suffering", "suffering"], a: 1, r: "Passive reporting structure."},
+            {q: "No sooner __________ the hospital than my pager went off.", o: ["I had left", "had I left", "did I leave"], a: 1, r: "Inversion with 'No sooner'."},
+            {q: "I'm not accustomed __________ such high levels of stress.", o: ["to handle", "to handling", "handling"], a: 1, r: "'Accustomed to' + gerund."},
+            {q: "She's very __________ on specializing in cardiology.", o: ["keen", "fond", "interested"], a: 0, r: "'Keen on'."},
+            {q: "The surgery was put __________ until the patient stabilized.", o: ["off", "out", "away"], a: 0, r: "'Put off' = postpone."},
+            {q: "I wish I __________ more during the lecture.", o: ["focused", "had focused", "would focus"], a: 1, r: "Past regret."},
+            {q: "By the end of the year, she __________ her residency.", o: ["will finish", "will have finished", "finishes"], a: 1, r: "Future Perfect."},
+            {q: "The laboratory, __________ was renovated, is top-notch.", o: ["which", "that", "whose"], a: 0, r: "Non-defining relative clause."},
+            {q: "I'd rather you __________ smoke in the waiting area.", o: ["don't", "didn't", "not"], a: 1, r: "'Would rather' + subject + Past Simple."},
+            {q: "The medicine needs __________ with food.", o: ["to take", "to be taken", "taking"], a: 1, r: "Passive infinitive."},
+            {q: "Seldom __________ such a dedicated medical team.", o: ["have I seen", "I have seen", "did I saw"], a: 0, r: "Inversion after 'Seldom'."}
         ],
-        B2_Writing: [
-            { q: "Rewrite using 'UNLESS': If you don't take the antibiotics, you won't get better.", a: "Unless you take the antibiotics, you won't get better.", r: "'Unless' = 'if not'." },
-            { q: "Rewrite in Passive Voice: The doctor is performing the surgery now.", a: "The surgery is being performed by the doctor now.", r: "Present Continuous Passive." },
-            { q: "Change to Reported Speech: 'I have a headache,' said the patient.", a: "The patient said that he had a headache.", r: "Backshift: Present to Past." }
+        "B2_Writing": [
+            {q: "By next summer, I __________ (finish) my master's degree.", a: "will have finished", r: "Future Perfect."},
+            {q: "I'd rather you __________ (not / smoke) in the house.", a: "didn't smoke", r: "Would rather + subject + Past Simple."},
+            {q: "Seldom __________ (we / see) such a beautiful sunset. (Present prefect)", a: "have we seen", r: "Inversion after 'Seldom'."},
+            {q: "If I had known you were coming, I __________ (bake) a cake.", a: "would have baked", r: "Third Conditional."},
+            {q: "I'm looking forward to __________ (meet) your family.", a: "meeting", r: "'To' as a preposition + gerund."},
+            {q: "The boss suggested __________ (postpone) the meeting.", a: "postponing", r: "'Suggest' + gerund."},
+            {q: "He is believed __________ (be) very rich.", a: "to be", r: "Passive reporting structure."},
+            {q: "I wish I __________ (not / eat) so much chocolate yesterday.", a: "had hadn't eaten", r: "Regret about the past."},
+            {q: "It's high time you __________ (start) looking for a job.", a: "started", r: "It's high time + Past Simple."},
+            {q: "Hardly __________ (the plane / land) when it started to rain.", a: "had the plane landed", r: "Inversion with 'Hardly'."},
+            {q: "I was used to __________ (drive) on the left.", a: "driving", r: "'Be used to' + gerund."},
+            {q: "No sooner __________ (I / arrive) home than it rained.", a: "had I arrived", r: "Inversion with 'No sooner'."},
+            {q: "You __________ (had) better call her now.", a: "had", r: "'Had better' structure."},
+            {q: "The house __________ (clean) by the time we got back. (Passive voice)", a: "had been cleaned", r: "Past Perfect Passive."},
+            {q: "Suppose you __________ (win) the lottery, what would you do?", a: "won", r: "Second conditional (imaginary)."},
+            {q: "I don't mind __________ (wait) for you.", a: "waiting", r: "'Mind' + gerund."},
+            {q: "The information __________ (be) very helpful. (Present tense)", a: "is", r: "'Information' is always singular."},
+            {q: "We've run __________ (out) of coffee.", a: "out of", r: "Phrasal verb: to have none left."},
+            {q: "If only I __________ (can / speak) French!", a: "could speak", r: "Wish about ability."},
+            {q: "The thief admitted __________ (steal) the jewelry.", a: "stealing", r: "'Admit' + gerund."},
+            {q: "You shouldn't have __________ (tell) him.", a: "told", r: "Should have + past participle."},
+            {q: "I'm not accustomed to __________ (be / treat) like this.", a: "being treated", r: "Passive gerund."},
+            {q: "The project, __________ (which / no pronoun) was led by Sarah, was a success.", a: "which", r: "Non-defining relative clause."},
+            {q: "He tried to avoid __________ (answer) my question.", a: "answering", r: "'Avoid' + gerund."},
+            {q: "Unless you __________ (study) harder, you'll fail.", a: "study", r: "Unless + present simple."},
+            {q: "I forgot __________ (lock) the door.", a: "to lock", r: "Forget + to-infinitive (didn't do it)."},
+            {q: "The news __________ (be) shocking. (Past simple)", a: "was", r: "'News' is singular."},
+            {q: "By the time we arrive, the movie __________ (start).", a: "will have started", r: "Future Perfect."},
+            {q: "It was a mistake __________ (not / take) the map before we left.", a: "not to take", r: "Negative infinitive."},
+            {q: "I'd rather __________ (stay) home tonight.", a: "stay", r: "'Would rather' (no subject change) + bare infinitive."}
         ],
-        B2_Stones: [
-            { q: "Direct: 'You are wrong about the symptoms.'", o: ["I'm afraid I might disagree.", "You are mistaken.", "Wrong."], a: 0, r: "Softer approach." },
-            { q: "Direct: 'Give me the report now.'", o: ["I need it now.", "I was wondering if you could provide the report?", "Send it."], a: 1, r: "Polite request." }
+        "B2_Stones": [
+            {q: "Look after", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Look the baby after'."},
+            {q: "Turn off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Turn the light off'."},
+            {q: "Run into", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Run my friend into'."},
+            {q: "Pick up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Pick it up'."},
+            {q: "Get over", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Get the breakup over'."},
+            {q: "Bring up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Bring it up'."},
+            {q: "Come across", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Come an old friend across'."},
+            {q: "Call off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Call it off'."},
+            {q: "Deal with", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Deal the issue with'."},
+            {q: "Fill out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Fill it out'."},
+            {q: "Take off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Take your shoes off'."},
+            {q: "Put away", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Put your clothes away'."},
+            {q: "Hand in", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Hand your essay in'."},
+            {q: "Give up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Give it up'."},
+            {q: "Throw away", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Throw those old papers away'."},
+            {q: "Look up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Look the word up'."},
+            {q: "Put on", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Put your coat on'."},
+            {q: "Back up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Back your files up'."},
+            {q: "Cut off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Cut the power off'."},
+            {q: "Cheer up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Cheer her up'."},
+            {q: "Figure out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Figure it out'."},
+            {q: "Leave out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Leave details out'."},
+            {q: "Point out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Point the mistake out'."},
+            {q: "Look into", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Look into the matter'."},
+            {q: "Wait on", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Wait on someone'."},
+            {q: "Depend on", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Depend on them'."},
+            {q: "Stand by", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Stand by me'."},
+            {q: "Care for", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Care for pets'."},
+            {q: "Break into", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Break into a house'."},
+            {q: "Believe in", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Believe in ghosts'."}
         ],
-        B2_Memory: [
-            { v: "Stethoscope", m: "Auscultation" }, { v: "Scalpel", m: "Incision" },
-            { v: "Sphygmomanometer", m: "Blood Pressure" }, { v: "Syringe", m: "Injection" },
-            { v: "Thermometer", m: "Temperature" }, { v: "Otoscope", m: "Ear Exam" },
-            { v: "Reflex Hammer", m: "Neurology" }, { v: "Tongs", m: "Forceps" },
-            { v: "Gauze", m: "Dressing" }, { v: "Scrubs", m: "Attire" }
+        "B2_Memory": [
+            {v: "Brush up on", m: "To improve or refresh knowledge"},
+            {v: "Carry out", m: "To perform or complete a task"},
+            {v: "Come down with", m: "To become sick with something"},
+            {v: "Pass out", m: "To lose consciousness"},
+            {v: "Look into", m: "To investigate or examine"},
+            {v: "Put off", m: "To postpone or delay"},
+            {v: "Rule out", m: "To eliminate a possibility"},
+            {v: "Set back", m: "To delay progress"},
+            {v: "Think over", m: "To consider carefully"},
+            {v: "Back up", m: "To support or confirm"}
         ],
         B2_Matching: [
             { a: "Vital", b: "signs" }, { a: "Blood", b: "pressure" }, { a: "Heart", b: "rate" },
@@ -118,7 +203,7 @@
             { a: "Blood", b: "sample" }, { a: "Chronic", b: "condition" }, { a: "Shortness", b: "of breath" }
         ],
         B2_Abstraction: {
-            article: `The prevalence of Type 2 Diabetes Mellitus (T2DM) remains a global health priority. While pharmacological interventions like Metformin are standard, long-term remission is rarely achieved through monotherapy. This study evaluates the MET-LIFE Protocol, a 24-month randomized controlled trial involving 1,200 participants, which integrates high-intensity interval training (HIIT), a plant-based ketogenic diet, and standardized pharmacological support...`,
+            article: `The prevalence of Type 2 Diabetes Mellitus (T2DM) remains a global health priority. While pharmacological interventions like Metformin are standard, long-term remission is rarely achieved through monotherapy. This study evaluates the MET-LIFE Protocol, a 24-month randomized controlled trial involving 1,200 participants, which integrates high-intensity interval training (HIIT), a plant-based ketogenic diet, and standardized pharmacological support including continuous glucose monitoring to evaluate metabolic flexibility.`,
             summary: "The MET-LIFE study was conducted to address T2DM, a condition for which single-drug treatment (1) __________ long-term results. Unlike standard care, this protocol (2) __________ a specific exercise regimen known as (3) __________ with a nutritional plan. A central pillar of the trial was (4) __________, which refers to the organism's (5) __________ to alternate between different energy substrates. Regarding the outcomes, the experimental group (6) __________ a 1.8% decrease in HbA1c levels. It is (7) __________ noting that nearly half of these patients reached a state of (8) __________, meaning they no longer required drugs. The researchers (9) __________ that lifestyle changes must be applied with (10) __________ to successfully reverse metabolic impairment.",
             answers: ["rarely achieves", "integrated", "HIIT", "metabolic flexibility", "ability", "showed", "worth", "partial remission", "concluded", "rigor"]
         },
@@ -129,20 +214,23 @@
         }
     };
 
-    let user = "", mode = "", index = 0, score = 0, currentBranch = "general";
+    let user = "", mode = "", index = 0, score = 0;
     let flippedCards = [], matchedCount = 0, timerInterval = null, selectedLeft = null, matchingScore = 0;
 
     function login() { user = document.getElementById('student-name').value; if(!user) return alert("Enter name"); showScreen('screen-branch'); }
-    function selectBranch(b) { currentBranch = b; showQuizzes(); }
+    function selectBranch(b) { showQuizzes(); }
     function showScreen(id) { document.querySelectorAll('.container').forEach(c => c.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
     
     function showQuizzes() {
         const container = document.getElementById('quiz-list-container'); container.innerHTML = "";
         const active = [
-            {id: "B2_MC", name: "Quiz 1", sub: "MC"}, {id: "B2_Writing", name: "Quiz 2", sub: "Writing"},
-            {id: "B2_Stones", name: "Quiz 3", sub: "Softening"}, {id: "B2_Memory", name: "Quiz 4", sub: "Memory"},
-            {id: "B2_Matching", name: "Quiz 5", sub: "Matching"}, {id: "B2_Abstraction", name: "Quiz 6", sub: "Abstraction"},
-            {id: "B2_WordBank", name: "Quiz 7", sub: "Reporting"}
+            {id: "B2_MC", name: "Quiz 1", sub: "Multiple Choice"}, 
+            {id: "B2_Writing", name: "Quiz 2", sub: "Sentence Writing"},
+            {id: "B2_Stones", name: "Quiz 3", sub: "Stone vs Eggshell (Phrasals)"}, 
+            {id: "B2_Memory", name: "Quiz 4", sub: "Medical Phrasal Memory"},
+            {id: "B2_Matching", name: "Quiz 5", sub: "Clinical Collocations"}, 
+            {id: "B2_Abstraction", name: "Quiz 6", sub: "Note Abstraction & Synthesis"},
+            {id: "B2_WordBank", name: "Quiz 7", sub: "Clinical Case Reporting"}
         ];
         active.forEach(q => {
             const d = document.createElement('div'); d.className = 'level-card'; d.innerHTML = `<strong>${q.name}</strong><br>${q.sub}`;
@@ -185,56 +273,34 @@
     function startAbstraction() {
         showScreen('screen-quiz'); const data = database.B2_Abstraction;
         let txt = data.summary; data.answers.forEach((_, i) => { txt = txt.replace(`(${i+1}) __________`, `<input type="text" class="abs-input" id="abs-${i}">`); });
-        document.getElementById('options-box').innerHTML = `<div class="article-box">${data.article}</div><div style="text-align:left; line-height:2;">${txt}</div><button class="main-btn" onclick="checkAbs()">Verify</button>`;
+        document.getElementById('options-box').innerHTML = `<div class="article-box"><strong>Reference Article:</strong><br>${data.article}</div><div style="text-align:left; line-height:2.5;">${txt}</div><button class="main-btn" onclick="checkAbs()">Verify Summary</button>`;
     }
 
     function checkAbs() {
-        let h = 0;
-        const data = database.B2_Abstraction;
+        let h = 0; const data = database.B2_Abstraction;
         data.answers.forEach((a, i) => {
-            const el = document.getElementById(`abs-${i}`);
-            const userAns = el.value.toLowerCase().trim();
-            if(userAns === a.toLowerCase()) {
-                el.style.color = "var(--success)";
-                el.style.borderBottomColor = "var(--success)";
-                h++;
-            } else {
-                el.style.color = "var(--danger)";
-                el.style.borderBottomColor = "var(--danger)";
-                el.value = userAns + " (" + a + ")"; 
-                el.style.width = "auto"; 
-            }
+            const el = document.getElementById(`abs-${i}`); const userAns = el.value.toLowerCase().trim();
+            if(userAns === a.toLowerCase()) { el.style.color = "var(--success)"; el.style.borderBottomColor = "var(--success)"; h++; } 
+            else { el.style.color = "var(--danger)"; el.style.borderBottomColor = "var(--danger)"; el.value = userAns + " (" + a + ")"; el.style.width = "auto"; }
         });
-        score = h;
-        setTimeout(() => { finishModule(true); }, 5000); 
+        score = h; setTimeout(() => { finishModule(true); }, 5000); 
     }
 
     function startWordBank() {
         showScreen('screen-quiz'); const data = database.B2_WordBank;
         let bank = data.bank.map(w => `<span class="word-item">${w}</span>`).join("");
         let txt = data.text; data.answers.forEach((_, i) => { txt = txt.replace(`(${i+1}) __________`, `<input type="text" class="abs-input" id="wb-${i}">`); });
-        document.getElementById('options-box').innerHTML = `<div class="word-bank">${bank}</div><div style="text-align:left; line-height:2;">${txt}</div><button class="main-btn" onclick="checkWB()">Check Note</button>`;
+        document.getElementById('options-box').innerHTML = `<div class="word-bank">${bank}</div><div style="text-align:left; line-height:2.5;">${txt}</div><button class="main-btn" onclick="checkWB()">Check Note</button>`;
     }
 
     function checkWB() {
-        let h = 0;
-        const data = database.B2_WordBank;
+        let h = 0; const data = database.B2_WordBank;
         data.answers.forEach((a, i) => {
-            const el = document.getElementById(`wb-${i}`);
-            const userAns = el.value.toLowerCase().trim();
-            if(userAns === a.toLowerCase()) {
-                el.style.color = "var(--success)";
-                el.style.borderBottomColor = "var(--success)";
-                h++;
-            } else {
-                el.style.color = "var(--danger)";
-                el.style.borderBottomColor = "var(--danger)";
-                el.value = userAns + " (" + a + ")";
-                el.style.width = "auto";
-            }
+            const el = document.getElementById(`wb-${i}`); const userAns = el.value.toLowerCase().trim();
+            if(userAns === a.toLowerCase()) { el.style.color = "var(--success)"; el.style.borderBottomColor = "var(--success)"; h++; } 
+            else { el.style.color = "var(--danger)"; el.style.borderBottomColor = "var(--danger)"; el.value = userAns + " (" + a + ")"; el.style.width = "auto"; }
         });
-        score = h;
-        setTimeout(() => { finishModule(true); }, 5000);
+        score = h; setTimeout(() => { finishModule(true); }, 5000);
     }
 
     function startMemory() {
