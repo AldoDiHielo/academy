@@ -495,3 +495,10 @@
         const display = document.getElementById('final-score-display');
         display.innerText = isGame ? `${user}, module completed!` : `${user}, your score: ${score} points`;
     }
+    function goBackToList() {
+        if(timerInterval) clearInterval(timerInterval);
+        showQuizzes();
+    }
+</script>
+</body>
+</html>
