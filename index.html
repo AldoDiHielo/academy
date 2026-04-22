@@ -266,10 +266,16 @@ let selectedLevelCode = "";
             modules.push({ id: "soon", name: `Quiz ${i}`, sub: "Coming soon..." });
         }
 
-        modules.forEach(m => {
-            const d = document.createElement('div'); d.className = 'level-card';
+                modules.forEach(m => {
+            if (selectedPath === 'General' && (m.id !== 'B2_MC' && m.id !== 'B2_Writing')) {
+                return; 
+            }
+
+            const d = document.createElement('div'); 
+            d.className = 'level-card';
             d.innerHTML = `<strong>${m.name}</strong><br><small>${m.sub}</small>`;
-                        d.onclick = () => {
+            
+            d.onclick = () => {
                 if (m.id === "soon") {
                     alert("This module is currently under development.");
                     return;
@@ -281,6 +287,9 @@ let selectedLevelCode = "";
                 else if(mode === "B2_WordBank") startWordBank();
                 else startQuiz();
             };
+            container.appendChild(d);
+        });
+
 
             container.appendChild(d);
         });
@@ -477,9 +486,14 @@ let selectedLevelCode = "";
 }
 
 function selectLevel(level) {
+    if (level !== 'B2') {
+        alert("Content for " + level + " is currently under development. Please select B2 to see available modules.");
+        return;
+    }
     selectedLevelCode = level;
     showQuizzes(); 
 }
+
 
     </script>
 </body>
