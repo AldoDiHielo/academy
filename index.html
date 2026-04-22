@@ -52,8 +52,9 @@
     <div id="screen-branch" class="container hidden">
         <h2>Choose Path</h2>
         <div class="grid">
-            <div class="level-card" onclick="showQuizzes()"><h3>General Path</h3></div>
-            <div class="level-card" onclick="showQuizzes()"><h3>Medical Path</h3></div>
+            <div class="level-card" onclick="setPath('General')"><h3>General Path</h3></div>
+<div class="level-card" onclick="setPath('Medical')"><h3>Medical Path</h3></div>
+
         </div>
     </div>
     <div id="screen-levels" class="container hidden">
@@ -83,6 +84,20 @@
         <h2 id="final-score-display"></h2>
         <button class="main-btn" onclick="showQuizzes()">Back to Modules</button>
     </div>
+<div id="screen-levels-selector" class="container hidden">
+    <h2>Select Proficiency Level</h2>
+    <div class="grid">
+        <div class="level-card" onclick="selectLevel('A1')"><h3>A1</h3></div>
+        <div class="level-card" onclick="selectLevel('A2')"><h3>A2</h3></div>
+        <div class="level-card" onclick="selectLevel('B1')"><h3>B1</h3></div>
+        <div class="level-card" onclick="selectLevel('B2')"><h3>B2</h3></div>
+        <div class="level-card" onclick="selectLevel('C1')"><h3>C1</h3></div>
+        <div class="level-card" onclick="selectLevel('C2')"><h3>C2</h3></div>
+        <div class="level-card" onclick="selectLevel('Conversation')"><h3>Conversation</h3></div>
+        <div class="level-card" onclick="selectLevel('Proficiency')"><h3>Proficiency</h3></div>
+    </div>
+    <button class="main-btn" style="margin-top:20px; background:#7f8c8d" onclick="showScreen('screen-branch')">Back</button>
+</div>
 
     <script>
     const database = {
@@ -215,6 +230,9 @@
     };
 
     let user = "", mode = "", index = 0, score = 0, timerInterval = null, flippedCards = [], matchedCount = 0, selectedLeft = null, matchingScore = 0;
+        let selectedPath = ""; 
+let selectedLevelCode = "";
+
 
     function login() { 
         const input = document.getElementById('student-name');
@@ -443,6 +461,16 @@
         const display = document.getElementById('final-score-display');
         display.innerText = isGame ? `${user}, module completed!` : `${user}, your score: ${score} points`;
     }
+        function setPath(path) {
+    selectedPath = path;
+    showScreen('screen-levels-selector');
+}
+
+function selectLevel(level) {
+    selectedLevelCode = level;
+    showQuizzes(); 
+}
+
     </script>
 </body>
 </html>
