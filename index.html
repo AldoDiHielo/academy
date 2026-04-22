@@ -1,154 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DiHielo English Academy</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.85em%22 x=%2250%%22 font-size=%2270%22 font-family=%22Arial, sans-serif%22 font-weight=%22bold%22 fill=%22%231a73e8%22 text-anchor=%22middle%22>A.D.</text></svg>">
-    <style>
-        :root {
-            --primary: #2c3e50; --secondary: #3498db; --medical-blue: #007b83;
-            --accent: #e67e22; --success: #27ae60; --danger: #e74c3c;
-            --bg: #f4f7f6; --white: #ffffff;
+        B2_Abstraction: {
+            article:`The global escalation of Metabolic Syndrome has positioned Type 2 Diabetes Mellitus (T2DM) as a critical health priority for modern healthcare systems. Current clinical guidelines emphasize that while pharmacological interventions, such as the administration of Metformin, remain the gold standard for initial glycemic control, long-term remission is rarely achieved through monotherapy alone due to the progressive nature of beta-cell decline.
+           
+            This longitudinal study evaluates the efficacy of the MET-LIFE Protocol, a rigorous 24-month randomized controlled trial involving a cohort of 1,200 participants across diverse clinical settings. The protocol is designed as a multimodal strategy that integrates high-intensity interval training (HIIT) to enhance mitochondrial biogenesis, a plant-based ketogenic diet aimed at reducing systemic inflammation, and standardized pharmacological support. Furthermore, the trial utilizes continuous glucose monitoring (CGM) as a primary tool to evaluate metabolic flexibility—the body's capacity to switch efficiently between carbohydrate and lipid oxidation. Preliminary data suggests that addressing the lifestyle-pharmacology intersection is paramount for sustained clinical success.`,
+            summary: "The MET-LIFE study was conducted to address T2DM, a condition for which single-drug treatment rarely (1) __________ long-term results. Unlike standard care, this protocol (2) __________ a specific exercise regimen known as (3) __________ with a nutritional plan. A central pillar of the trial was (4) __________, which refers to the organism's (5) __________ to alternate between different energy substrates. Regarding the outcomes, the experimental group (6) __________ a 1.8% decrease in HbA1c levels. It is (7) __________ noting that nearly half of these patients reached a state of (8) __________, meaning they no longer required drugs. The researchers (9) __________ that lifestyle changes must be applied with (10) __________ to successfully reverse metabolic impairment.",
+            answers: ["achieves", "integrated", "HIIT", "metabolic flexibility", "ability", "showed", "worth", "partial remission", "concluded", "rigor"]
+        },
+        B2_WordBank: {
+            bank: ["was admitted", "had been experiencing", "reported", "had taken", "referred", "had occurred", "had subsided", "was noted", "being", "was scheduled"],
+            text: "The patient is a 54-year-old male who (1) __________ to the Emergency Department following a syncopal episode during moderate physical activity. According to his wife, who witnessed the event, the patient (2) __________ lightheadedness and palpitations for approximately twenty minutes before losing consciousness. Upon arrival, the patient (3) __________ that he (4) __________ any significant health issues prior to this month; however, he (5) __________ that a similar, albeit shorter, episode (6) __________ two weeks ago while gardening. He mentioned that the previous symptoms (7) __________ spontaneously without medical intervention. A mild systolic murmur (8) __________ during the initial physical examination. Although the patient denied (9) __________ in pain at the moment of admission, his heart rate remained elevated. Consequently, an urgent echocardiogram (10) __________ for the following morning to rule out structural heart disease.",
+            answers: ["was admitted", "had been experiencing", "reported", "had taken", "referred", "had occurred", "had subsided", "was noted", "being", "was scheduled"]
         }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        header { background: var(--primary); color: var(--white); width: 100%; padding: 1.5rem 0; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); transition: background 0.3s; }
-        .container { width: 90%; max-width: 800px; background: var(--white); padding: 2rem; margin-top: 2rem; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); text-align: center; }
-        .hidden { display: none; }
-        input[type="text"] { padding: 12px 15px; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem; width: 80%; margin-bottom: 1rem; outline: none; transition: border-color 0.3s; }
-        input[type="text"]:focus { border-color: var(--secondary); }
-        .main-btn { background: var(--secondary); color: var(--white); padding: 12px 30px; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; transition: 0.2s; margin: 5px; }
-        .main-btn:hover { background: #2980b9; transform: translateY(-2px); }
-        .main-btn:disabled { background: #bdc3c7; cursor: not-allowed; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
-        .level-card { background: var(--white); border: 2px solid #eee; padding: 1.5rem; border-radius: 12px; cursor: pointer; transition: 0.3s; }
-        .level-card:hover { border-color: var(--secondary); background: #f0f8ff; }
-        .level-card.locked { background: #f9f9f9; color: #aaa; cursor: default; border-style: dashed; }
-        .option { background: #f8f9fa; border: 2px solid #eee; padding: 1rem; margin: 0.8rem 0; border-radius: 10px; cursor: pointer; text-align: left; }
-        .option.correct { background: #d4edda; border-color: var(--success); color: #155724; }
-        .option.wrong { background: #f8d7da; border-color: var(--danger); color: #721c24; }
-        .abs-input { width: 120px; border: none; border-bottom: 2px solid var(--secondary); background: transparent; text-align: center; font-weight: bold; color: var(--primary); outline: none; margin: 0 5px; padding: 2px; }
-        .article-box { text-align: justify; line-height: 1.6; background: #fdfdfd; padding: 25px; border-left: 5px solid var(--secondary); margin-bottom: 20px; font-size: 0.95rem; max-height: 300px; overflow-y: auto; }
-        .word-bank { background: #eef2f3; padding: 15px; border-radius: 8px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px; border: 1px dashed var(--secondary); }
-        .word-item { background: var(--white); padding: 5px 12px; border-radius: 5px; font-size: 0.85rem; font-weight: bold; color: var(--secondary); }
-        .memory-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
-        .memory-card { height: 80px; position: relative; transform-style: preserve-3d; transition: 0.5s; cursor: pointer; }
-        .memory-card.flipped { transform: rotateY(180deg); }
-        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; border-radius: 8px; padding: 5px; text-align: center; }
-        .card-front { background: var(--primary); color: white; }
-        .card-back { background: var(--success); color: white; transform: rotateY(180deg); }
-        .matching-container { display: flex; justify-content: space-between; gap: 20px; }
-        .match-col { flex: 1; }
-        .match-item { padding: 12px; margin: 8px 0; background: #f1f1f1; border-radius: 8px; cursor: pointer; }
-        .match-item.selected { border-color: var(--secondary); background: #d6eaf8; border: 2px solid var(--secondary); }
-        .match-item.matched-pair { background: #d4edda; pointer-events: none; }
-        .progress-container { width: 100%; height: 10px; background: #eee; border-radius: 5px; margin: 1rem 0; overflow: hidden; }
-        #progress-fill { height: 100%; background: var(--success); width: 0%; transition: 0.3s; }
-    </style>
-</head>
-<body>
-    <header id="app-header"><h1>DiHielo English Academy</h1></header>
-    <div id="screen-login" class="container">
-        <h2>Student Access</h2>
-        <input type="text" id="student-name" placeholder="Name">
-        <button class="main-btn" onclick="login()">Enter</button>
-    </div>
-    <div id="screen-branch" class="container hidden">
-        <h2>Choose Path</h2>
-        <div class="grid">
-            <div class="level-card" onclick="selectBranch('general')"><h3>General</h3></div>
-            <div class="level-card" onclick="selectBranch('medical')"><h3>Medical</h3></div>
-        </div>
-    </div>
-    <div id="screen-levels" class="container hidden">
-        <h2 id="lvl-title">Modules</h2>
-        <div id="quiz-list-container" class="grid"></div>
-        <button class="main-btn" onclick="showScreen('screen-branch')">Back</button>
-    </div>
-    <div id="screen-quiz" class="container hidden">
-        <div class="progress-container"><div id="progress-fill"></div></div>
-        <p id="q-text"></p>
-        <div id="options-box"></div>
-        <div id="feedback-box" class="option hidden" style="cursor:default"></div>
-        <button class="main-btn hidden" id="btn-continue" onclick="nextQuestion()">Continue</button>
-        <button class="main-btn" style="background:#7f8c8d" onclick="goBackToList()">Exit</button>
-    </div>
-    <div id="screen-memory" class="container hidden">
-        <h3>Memory Match</h3>
-        <p>Time: <span id="time-left">03:00</span></p>
-        <div id="memory-board" class="memory-grid"></div>
-    </div>
-    <div id="screen-matching" class="container hidden">
-        <h3>Collocations</h3>
-        <div class="matching-container"><div id="col-left" class="match-col"></div><div id="col-right" class="match-col"></div></div>
-    </div>
-    <div id="screen-results" class="container hidden">
-        <h2 id="final-score-display"></h2>
-        <button class="main-btn" onclick="showQuizzes()">Back to Modules</button>
-    </div>
-    <script>
-const database = {
-    B2_Writing: [
-        {q: "I'd rather you __________ (not / smoke) in here.", a: "didn't smoke", r: "Would rather + subject + past simple for preference."},
-        {q: "Seldom __________ (we / see) such a beautiful sunset.", a: "do we see", r: "Inversion with negative adverbs."},
-        {q: "If I __________ (know) about the meeting, I would have attended.", a: "had known", r: "Third conditional: If + past perfect."},
-        {q: "I wish I __________ (not / eat) so much at dinner.", a: "hadn't eaten", r: "Wish + past perfect for past regrets."},
-        {q: "It's high time you __________ (start) studying for the exam.", a: "started", r: "It's high time + past simple."},
-        {q: "No sooner __________ (the movie / start) than the power went out.", a: "had the movie started", r: "Inversion with 'No sooner'."},
-        {q: "I'd prefer it if you __________ (not / call) me so late.", a: "didn't call", r: "Prefer + if + past simple."},
-        {q: "Hardly __________ (the plane / land) when the rain started.", a: "had the plane landed", r: "Inversion with 'Hardly'."},
-        {q: "We have no more milk left; we have __________ (exhaust) our supply.", a: "run out of", r: "To 'run out of' is a more natural way to say you have exhausted a supply."}
-    ],
-    B2_Memory: [
-        {a: "Pass out", b: "To lose consciousness."},
-        {a: "Come down with", b: "To begin to suffer from an illness."},
-        {a: "Brush up on", b: "To improve or refresh your knowledge."},
-        {a: "Rule out", b: "To eliminate a possibility or diagnosis."},
-        {a: "Carry out", b: "To perform or execute a task."},
-        {a: "Look into", b: "To investigate or examine a situation."},
-        {a: "Put off", b: "To postpone or delay."},
-        {a: "Set back", b: "To delay the progress of something."},
-        {a: "Think over", b: "To consider something carefully."},
-        {a: "Back up", b: "To support or confirm a finding."}
-    ],
-    B2_Matching: [
-        {a: "Vital", b: "signs"},
-        {a: "Medical", b: "history"},
-        {a: "Blood", b: "pressure"},
-        {a: "Informed", b: "consent"},
-        {a: "Physical", b: "examination"},
-        {a: "Side", b: "effects"},
-        {a: "Family", b: "doctor"},
-        {a: "Surgical", b: "procedure"},
-        {a: "Health", b: "insurance"},
-        {a: "Immune", b: "system"},
-        {a: "Allergic", b: "reaction"},
-        {a: "Heart", b: "attack"},
-        {a: "Pain", b: "relief"},
-        {a: "Waiting", b: "room"},
-        {a: "Blood", b: "test"}
-    ],
-    B2_WordBank: {
-        bank: ["admission", "shortness of breath", "chest pain", "hadn't had", "diagnosis", "treatment", "follow-up"],
-        text: "CASE STUDY: A 45-year-old male presented to the emergency department. Upon admission, the clinical staff noted he was struggling with severe respiratory distress, specifically shortness of breath and persistent chest pain. During the initial interview, the patient reported that he hadn't had any significant health issues or chronic conditions prior to this month. Clinical examinations and imaging were performed immediately. After several diagnostic tests, including a chest X-ray and blood work, the formal diagnosis was confirmed as acute bacterial pneumonia. Consequently, the medical team initiated a rigorous treatment plan consisting of intravenous antibiotics and supportive oxygen therapy. To ensure full recovery, the patient was scheduled for a comprehensive follow-up appointment in two weeks to monitor lung clearance.",
-        answers: ["admission", "shortness of breath", "chest pain", "hadn't had", "diagnosis", "treatment", "follow-up"]
-    }
-};
-let user = "", mode = "", index = 0, score = 0;
+    };
+
+    let user = "", mode = "", index = 0, score = 0;
     let flippedCards = [], matchedCount = 0, timerInterval = null, selectedLeft = null, matchingScore = 0;
 
     function login() { user = document.getElementById('student-name').value; if(!user) return alert("Enter name"); showScreen('screen-branch'); }
     function selectBranch(b) { showQuizzes(); }
     function showScreen(id) { document.querySelectorAll('.container').forEach(c => c.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
-    
+   
     function showQuizzes() {
         const container = document.getElementById('quiz-list-container'); container.innerHTML = "";
         const active = [
-            {id: "B2_MC", name: "Quiz 1", sub: "Multiple Choice"}, 
+            {id: "B2_MC", name: "Quiz 1", sub: "Multiple Choice"},
             {id: "B2_Writing", name: "Quiz 2", sub: "Sentence Writing"},
-            {id: "B2_Stones", name: "Quiz 3", sub: "Stone vs Eggshell (Phrasals)"}, 
+            {id: "B2_Stones", name: "Quiz 3", sub: "Stone vs Eggshell (Phrasals)"},
             {id: "B2_Memory", name: "Quiz 4", sub: "Medical Phrasal Memory"},
-            {id: "B2_Matching", name: "Quiz 5", sub: "Clinical Collocations"}, 
+            {id: "B2_Matching", name: "Quiz 5", sub: "Clinical Collocations"},
             {id: "B2_Abstraction", name: "Quiz 6", sub: "Note Abstraction & Synthesis"},
             {id: "B2_WordBank", name: "Quiz 7", sub: "Clinical Case Reporting"}
         ];
@@ -176,12 +54,12 @@ let user = "", mode = "", index = 0, score = 0;
         document.getElementById('progress-fill').style.width = (index/database[mode].length*100) + "%";
     }
 
-    function checkMC(i, el) { 
+    function checkMC(i, el) {
         const d = database[mode][index]; document.querySelectorAll('.option').forEach(o => o.onclick = null);
-        if(i === d.a) { el.classList.add('correct'); score++; } else { el.classList.add('wrong'); } 
-        showFeedback(d.r); 
+        if(i === d.a) { el.classList.add('correct'); score++; } else { el.classList.add('wrong'); }
+        showFeedback(d.r);
     }
-    function checkWriting() { 
+    function checkWriting() {
         const v = document.getElementById('ans-in').value.toLowerCase().trim(); const d = database[mode][index];
         if(v === d.a.toLowerCase().trim()) { score++; document.getElementById('ans-in').style.borderColor="var(--success)"; } else { document.getElementById('ans-in').style.borderColor="var(--danger)"; }
         showFeedback(d.r);
@@ -200,10 +78,10 @@ let user = "", mode = "", index = 0, score = 0;
         let h = 0; const data = database.B2_Abstraction;
         data.answers.forEach((a, i) => {
             const el = document.getElementById(`abs-${i}`); const userAns = el.value.toLowerCase().trim();
-            if(userAns === a.toLowerCase()) { el.style.color = "var(--success)"; el.style.borderBottomColor = "var(--success)"; h++; } 
+            if(userAns === a.toLowerCase()) { el.style.color = "var(--success)"; el.style.borderBottomColor = "var(--success)"; h++; }
             else { el.style.color = "var(--danger)"; el.style.borderBottomColor = "var(--danger)"; el.value = userAns + " (" + a + ")"; el.style.width = "auto"; }
         });
-        score = h; setTimeout(() => { finishModule(true); }, 5000); 
+        score = h; setTimeout(() => { finishModule(true); }, 5000);
     }
 
     function startWordBank() {
@@ -217,7 +95,7 @@ let user = "", mode = "", index = 0, score = 0;
         let h = 0; const data = database.B2_WordBank;
         data.answers.forEach((a, i) => {
             const el = document.getElementById(`wb-${i}`); const userAns = el.value.toLowerCase().trim();
-            if(userAns === a.toLowerCase()) { el.style.color = "var(--success)"; el.style.borderBottomColor = "var(--success)"; h++; } 
+            if(userAns === a.toLowerCase()) { el.style.color = "var(--success)"; el.style.borderBottomColor = "var(--success)"; h++; }
             else { el.style.color = "var(--danger)"; el.style.borderBottomColor = "var(--danger)"; el.value = userAns + " (" + a + ")"; el.style.width = "auto"; }
         });
         score = h; setTimeout(() => { finishModule(true); }, 5000);
