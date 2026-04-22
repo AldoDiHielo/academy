@@ -134,3 +134,125 @@ const database = {
         answers: ["admission", "shortness of breath", "chest pain", "hadn't had", "diagnosis", "treatment", "follow-up"]
     }
 };
+let user = "", mode = "", index = 0, score = 0;
+    let flippedCards = [], matchedCount = 0, timerInterval = null, selectedLeft = null, matchingScore = 0;
+
+    function login() { user = document.getElementById('student-name').value; if(!user) return alert("Enter name"); showScreen('screen-branch'); }
+    function selectBranch(b) { showQuizzes(); }
+    function showScreen(id) { document.querySelectorAll('.container').forEach(c => c.classList.add('hidden')); document.getElementById(id).classList.remove('hidden'); }
+    
+    function showQuizzes() {
+        const container = document.getElementById('quiz-list-container'); container.innerHTML = "";
+        const active = [
+            {id: "B2_MC", name: "Quiz 1", sub: "Multiple Choice"}, 
+            {id: "B2_Writing", name: "Quiz 2", sub: "Sentence Writing"},
+            {id: "B2_Stones", name: "Quiz 3", sub: "Stone vs Eggshell (Phrasals)"}, 
+            {id: "B2_Memory", name: "Quiz 4", sub: "Medical Phrasal Memory"},
+            {id: "B2_Matching", name: "Quiz 5", sub: "Clinical Collocations"}, 
+            {id: "B2_Abstraction", name: "Quiz 6", sub: "Note Abstraction & Synthesis"},
+            {id: "B2_WordBank", name: "Quiz 7", sub: "Clinical Case Reporting"}
+        ];
+        active.forEach(q => {
+            const d = document.createElement('div'); d.className = 'level-card'; d.innerHTML = `<strong>${q.name}</strong><br>${q.sub}`;
+            d.onclick = () => { mode = q.id; if(mode==="B2_Memory") startMemory(); else if(mode==="B2_Matching") startMatching(); else if(mode==="B2_Abstraction") startAbstraction(); else if(mode==="B2_WordBank") startWordBank(); else startQuiz(); };
+            container.appendChild(d);
+        });
+        for(let i=active.length+1; i<=20; i++) {
+            const s = document.createElement('div'); s.className = 'level-card locked'; s.innerHTML = `Quiz ${i}<br>Soon`; container.appendChild(s);
+        }
+        showScreen('screen-levels');
+    }
+
+    function startQuiz() { index = 0; score = 0; showScreen('screen-quiz'); renderQuiz(); }
+    function renderQuiz() {
+        const data = database[mode][index]; document.getElementById('q-text').innerText = (index+1)+". "+data.q;
+        const box = document.getElementById('options-box'); box.innerHTML = "";
+        document.getElementById('feedback-box').classList.add('hidden'); document.getElementById('btn-continue').classList.add('hidden');
+        if(mode==="B2_Writing") {
+            box.innerHTML = `<input type="text" id="ans-in"><button class="main-btn" onclick="checkWriting()">Check</button>`;
+        } else {
+            data.o.forEach((o, i) => { const div = document.createElement('div'); div.className = 'option'; div.innerText = o; div.onclick = () => checkMC(i, div); box.appendChild(div); });
+        }
+        document.getElementById('progress-fill').style.width = (index/database[mode].length*100) + "%";
+    }
+
+    function checkMC(i, el) { 
+        const d = database[mode][index]; document.querySelectorAll('.option').forEach(o => o.onclick = null);
+        if(i === d.a) { el.classList.add('correct'); score++; } else { el.classList.add('wrong'); } 
+        showFeedback(d.r); 
+    }
+    function checkWriting() { 
+        const v = document.getElementById('ans-in').value.toLowerCase().trim(); const d = database[mode][index];
+        if(v === d.a.toLowerCase().trim()) { score++; document.getElementById('ans-in').style.borderColor="var(--success)"; } else { document.getElementById('ans-in').style.borderColor="var(--danger)"; }
+        showFeedback(d.r);
+    }
+    function showFeedback(r) { document.getElementById('feedback-box').innerText = r; document.getElementById('feedback-box').classList.remove('hidden'); document.getElementById('btn-continue').classList.remove('hidden'); }
+    function nextQuestion() { index++; if(index < database[mode].length) renderQuiz(); else finishModule(); }
+    function goBackToList() { clearInterval(timerInterval); showQuizzes(); }
+
+    function startAbstraction() {
+        showScreen('screen-quiz'); const data = database.B2_Abstraction;
+        let txt = data.summary; data.answers.forEach((_, i) => { txt = txt.replace(`(${i+1}) __________`, `<input type="text" class="abs-input" id="abs-${i}">`); });
+        document.getElementById('options-box').innerHTML = `<div class="article-box"><strong>Reference Article:</strong><br>${data.article}</div><div style="text-align:left; line-height:2.5;">${txt}</div><button class="main-btn" onclick="checkAbs()">Verify Summary</button>`;
+    }
+
+    function checkAbs() {
+        let h = 0; const data = database.B2_Abstraction;
+        data.answers.forEach((a, i) => {
+            const el = document.getElementById(`abs-${i}`); const userAns = el.value.toLowerCase().trim();
+            if(userAns === a.toLowerCase()) { el.style.color = "var(--success)"; el.style.borderBottomColor = "var(--success)"; h++; } 
+            else { el.style.color = "var(--danger)"; el.style.borderBottomColor = "var(--danger)"; el.value = userAns + " (" + a + ")"; el.style.width = "auto"; }
+        });
+        score = h; setTimeout(() => { finishModule(true); }, 5000); 
+    }
+
+    function startWordBank() {
+        showScreen('screen-quiz'); const data = database.B2_WordBank;
+        let bank = data.bank.map(w => `<span class="word-item">${w}</span>`).join("");
+        let txt = data.text; data.answers.forEach((_, i) => { txt = txt.replace(`(${i+1}) __________`, `<input type="text" class="abs-input" id="wb-${i}">`); });
+        document.getElementById('options-box').innerHTML = `<div class="word-bank">${bank}</div><div style="text-align:left; line-height:2.5;">${txt}</div><button class="main-btn" onclick="checkWB()">Check Note</button>`;
+    }
+
+    function checkWB() {
+        let h = 0; const data = database.B2_WordBank;
+        data.answers.forEach((a, i) => {
+            const el = document.getElementById(`wb-${i}`); const userAns = el.value.toLowerCase().trim();
+            if(userAns === a.toLowerCase()) { el.style.color = "var(--success)"; el.style.borderBottomColor = "var(--success)"; h++; } 
+            else { el.style.color = "var(--danger)"; el.style.borderBottomColor = "var(--danger)"; el.value = userAns + " (" + a + ")"; el.style.width = "auto"; }
+        });
+        score = h; setTimeout(() => { finishModule(true); }, 5000);
+    }
+
+    function startMemory() {
+        showScreen('screen-memory'); matchedCount = 0; flippedCards = []; startTimer(180);
+        const board = document.getElementById('memory-board'); board.innerHTML = "";
+        let cards = []; database.B2_Memory.slice(0, 10).forEach((item, i) => { cards.push({ t: item.v, id: i }, { t: item.m, id: i }); });
+        cards.sort(() => Math.random() - 0.5);
+        cards.forEach(c => {
+            const d = document.createElement('div'); d.className = 'memory-card'; d.dataset.id = c.id;
+            d.innerHTML = `<div class="card-face card-front">?</div><div class="card-face card-back">${c.t}</div>`;
+            d.onclick = () => { if(flippedCards.length<2 && !d.classList.contains('flipped')) { d.classList.add('flipped'); flippedCards.push(d); if(flippedCards.length===2) setTimeout(checkM, 700); } };
+            board.appendChild(d);
+        });
+    }
+    function checkM() { const [c1, c2] = flippedCards; if(c1.dataset.id === c2.dataset.id) { matchedCount++; if(matchedCount===10) { clearInterval(timerInterval); finishModule(true); } } else { c1.classList.remove('flipped'); c2.classList.remove('flipped'); } flippedCards = []; }
+
+    function startMatching() {
+        showScreen('screen-matching'); matchingScore = 0; selectedLeft = null;
+        const colL = document.getElementById('col-left'), colR = document.getElementById('col-right');
+        colL.innerHTML = ""; colR.innerHTML = "";
+        database.B2_Matching.forEach((item, i) => {
+            const l = document.createElement('div'); l.className = 'match-item'; l.innerText = item.a;
+            l.onclick = () => { document.querySelectorAll('#col-left .match-item').forEach(x => x.classList.remove('selected')); l.classList.add('selected'); selectedLeft = i; };
+            colL.appendChild(l);
+            const r = document.createElement('div'); r.className = 'match-item'; r.innerText = item.b;
+            r.onclick = () => { if(selectedLeft === i) { r.classList.add('matched-pair'); document.querySelector('#col-left .selected').classList.add('matched-pair'); matchingScore++; if(matchingScore===15) finishModule(true); } };
+            colR.appendChild(r);
+        });
+    }
+
+    function startTimer(s) { clearInterval(timerInterval); let t = s; timerInterval = setInterval(() => { let m = Math.floor(t/60), sec = t%60; document.getElementById('time-left').innerText = `${m}:${sec.toString().padStart(2,'0')}`; if(--t<0) { clearInterval(timerInterval); goBackToList(); } }, 1000); }
+    function finishModule(g = false) { showScreen('screen-results'); document.getElementById('final-score-display').innerText = g ? `${user}: Completed!` : `${user}: ${score} points`; }
+</script>
+</body>
+</html>
