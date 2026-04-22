@@ -262,6 +262,8 @@
     function startQuiz() { index = 0; score = 0; showScreen('screen-quiz'); renderQuiz(); }
     function renderQuiz() {
         const data = database[mode][index];
+        document.getElementById('progress-fill').parentElement.classList.remove('hidden');
+
         document.getElementById('q-text').innerText = `${index + 1}. ${data.q}`;
         const box = document.getElementById('options-box'); box.innerHTML = "";
         document.getElementById('feedback-box').classList.add('hidden');
@@ -311,8 +313,14 @@
     }
 
     function startAbstraction() {
-        showScreen('screen-quiz');
-        const data = database.B2_Abstraction;
+    showScreen('screen-quiz');
+    document.getElementById('progress-fill').parentElement.classList.add('hidden');
+    document.getElementById('feedback-box').classList.add('hidden');
+    document.getElementById('btn-continue').classList.add('hidden');
+    document.getElementById('q-text').innerText = ""; 
+
+    const data = database.B2_Abstraction;
+
         let summaryHtml = data.summary;
         data.answers.forEach((_, i) => {
             summaryHtml = summaryHtml.replace(`(${i + 1}) __________`, `<input type="text" class="abs-input" id="abs-${i}">`);
@@ -332,8 +340,14 @@
     }
 
     function startWordBank() {
-        showScreen('screen-quiz');
-        const data = database.B2_WordBank;
+    showScreen('screen-quiz');
+    document.getElementById('progress-fill').parentElement.classList.add('hidden');
+    document.getElementById('feedback-box').classList.add('hidden');
+    document.getElementById('btn-continue').classList.add('hidden');
+    document.getElementById('q-text').innerText = "";
+
+    const data = database.B2_WordBank;
+
         const bankHtml = data.bank.map(w => `<span class="word-item">${w}</span>`).join("");
         let textHtml = data.text;
         data.answers.forEach((_, i) => {
