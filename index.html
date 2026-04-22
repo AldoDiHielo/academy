@@ -261,10 +261,19 @@ let selectedLevelCode = "";
             {id: "B2_Abstraction", name: "Quiz 6", sub: "Note Abstraction"},
             {id: "B2_WordBank", name: "Quiz 7", sub: "Case Reporting"}
         ];
+                
+        for (let i = 8; i <= 20; i++) {
+            modules.push({ id: "soon", name: `Quiz ${i}`, sub: "Coming soon..." });
+        }
+
         modules.forEach(m => {
             const d = document.createElement('div'); d.className = 'level-card';
             d.innerHTML = `<strong>${m.name}</strong><br><small>${m.sub}</small>`;
-            d.onclick = () => {
+                        d.onclick = () => {
+                if (m.id === "soon") {
+                    alert("This module is currently under development.");
+                    return;
+                }
                 mode = m.id;
                 if(mode === "B2_Memory") startMemory();
                 else if(mode === "B2_Matching") startMatching();
@@ -272,6 +281,7 @@ let selectedLevelCode = "";
                 else if(mode === "B2_WordBank") startWordBank();
                 else startQuiz();
             };
+
             container.appendChild(d);
         });
         showScreen('screen-levels');
