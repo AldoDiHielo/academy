@@ -44,24 +44,42 @@
 </head>
 <body>
     <header><h1>DiHielo English Academy</h1></header>
+
     <div id="screen-login" class="container">
         <h2>Student Access</h2>
         <input type="text" id="student-name" placeholder="Name">
         <button class="main-btn" onclick="login()">Enter</button>
     </div>
+
     <div id="screen-branch" class="container hidden">
         <h2>Choose Path</h2>
         <div class="grid">
             <div class="level-card" onclick="setPath('General')"><h3>General Path</h3></div>
-<div class="level-card" onclick="setPath('Medical')"><h3>Medical Path</h3></div>
-
+            <div class="level-card" onclick="setPath('Medical')"><h3>Medical Path</h3></div>
         </div>
     </div>
+
+    <div id="screen-levels-selector" class="container hidden">
+        <h2>Select Proficiency Level</h2>
+        <div class="grid">
+            <div class="level-card" onclick="selectLevel('A1')"><h3>A1</h3></div>
+            <div class="level-card" onclick="selectLevel('A2')"><h3>A2</h3></div>
+            <div class="level-card" onclick="selectLevel('B1')"><h3>B1</h3></div>
+            <div class="level-card" onclick="selectLevel('B2')"><h3>B2</h3></div>
+            <div class="level-card" onclick="selectLevel('C1')"><h3>C1</h3></div>
+            <div class="level-card" onclick="selectLevel('C2')"><h3>C2</h3></div>
+            <div class="level-card" onclick="selectLevel('Conversation')"><h3>Conversation</h3></div>
+            <div class="level-card" onclick="selectLevel('Proficiency')"><h3>Proficiency</h3></div>
+        </div>
+        <button class="main-btn" style="margin-top:20px; background:#7f8c8d" onclick="showScreen('screen-branch')">Back</button>
+    </div>
+
     <div id="screen-levels" class="container hidden">
         <h2 id="lvl-title">Modules</h2>
         <div id="quiz-list-container" class="grid"></div>
-        <button class="main-btn" onclick="showScreen('screen-branch')">Back</button>
+        <button class="main-btn" style="background:#7f8c8d" onclick="showScreen('screen-levels-selector')">Back</button>
     </div>
+
     <div id="screen-quiz" class="container hidden">
         <div class="progress-container"><div id="progress-fill"></div></div>
         <p id="q-text"></p>
@@ -70,34 +88,23 @@
         <button class="main-btn hidden" id="btn-continue" onclick="nextQuestion()">Continue</button>
         <button class="main-btn" style="background:#7f8c8d" onclick="goBackToList()">Exit</button>
     </div>
+
     <div id="screen-memory" class="container hidden">
         <h3>Memory Match</h3>
         <p>Time: <span id="time-left">03:00</span></p>
         <div id="memory-board" class="memory-grid"></div>
     </div>
+
     <div id="screen-matching" class="container hidden">
         <h3>Collocations</h3>
         <div class="matching-container"><div id="col-left" class="match-col"></div><div id="col-right" class="match-col"></div></div>
         <button class="main-btn" style="background:#7f8c8d; margin-top:20px;" onclick="goBackToList()">Exit</button>
     </div>
+
     <div id="screen-results" class="container hidden">
         <h2 id="final-score-display"></h2>
         <button class="main-btn" onclick="showQuizzes()">Back to Modules</button>
     </div>
-<div id="screen-levels-selector" class="container hidden">
-    <h2>Select Proficiency Level</h2>
-    <div class="grid">
-        <div class="level-card" onclick="selectLevel('A1')"><h3>A1</h3></div>
-        <div class="level-card" onclick="selectLevel('A2')"><h3>A2</h3></div>
-        <div class="level-card" onclick="selectLevel('B1')"><h3>B1</h3></div>
-        <div class="level-card" onclick="selectLevel('B2')"><h3>B2</h3></div>
-        <div class="level-card" onclick="selectLevel('C1')"><h3>C1</h3></div>
-        <div class="level-card" onclick="selectLevel('C2')"><h3>C2</h3></div>
-        <div class="level-card" onclick="selectLevel('Conversation')"><h3>Conversation</h3></div>
-        <div class="level-card" onclick="selectLevel('Proficiency')"><h3>Proficiency</h3></div>
-    </div>
-    <button class="main-btn" style="margin-top:20px; background:#7f8c8d" onclick="showScreen('screen-branch')">Back</button>
-</div>
 
     <script>
     const database = {
@@ -217,8 +224,7 @@
             { a: "Blood", b: "sample" }, { a: "Chronic", b: "condition" }, { a: "Shortness", b: "of breath" }
         ],
         "B2_Abstraction": {
-            article:`The global escalation of Metabolic Syndrome has positioned Type 2 Diabetes Mellitus (T2DM) as a critical health priority for modern healthcare systems. Current clinical guidelines emphasize that while pharmacological interventions, such as the administration of Metformin, remain the gold standard for initial glycemic control, long-term remission is rarely achieved through monotherapy alone due to the progressive nature of beta-cell decline.
-            This longitudinal study evaluates the efficacy of the MET-LIFE Protocol, a rigorous 24-month randomized controlled trial involving a cohort of 1,200 participants across diverse clinical settings. The protocol is designed as a multimodal strategy that integrates high-intensity interval training (HIIT) to enhance mitochondrial biogenesis, a plant-based ketogenic diet aimed at reducing systemic inflammation, and standardized pharmacological support. Furthermore, the trial utilizes continuous glucose monitoring (CGM) as a primary tool to evaluate metabolic flexibility—the body's capacity to switch efficiently between carbohydrate and lipid oxidation. Preliminary data suggests that addressing the lifestyle-pharmacology intersection is paramount for sustained clinical success. During the follow-up phase, the experimental group showed a significant 1.8% decrease in HbA1c levels, contrasting with the control group’s stagnant metrics. It is worth noting that nearly half of these patients reached a state of partial remission, defined as maintaining sub-diabetic glycemic levels for at least six months without the need for active medication. These results were consistent across various age groups, provided that adherence to the HIIT and ketogenic components remained high. Ultimately, the researchers concluded that while Metformin provides a necessary foundation, lifestyle changes must be applied with maximum rigor and clinical supervision to successfully reverse long-standing metabolic impairment and restore beta-cell functionality.`,
+            article:`The global escalation of Metabolic Syndrome has positioned Type 2 Diabetes Mellitus (T2DM) as a critical health priority for modern healthcare systems. Current clinical guidelines emphasize that while pharmacological interventions, such as the administration of Metformin, remain the gold standard for initial glycemic control, long-term remission is rarely achieved through monotherapy alone due to the progressive nature of beta-cell decline. This longitudinal study evaluates the efficacy of the MET-LIFE Protocol, a rigorous 24-month randomized controlled trial involving a cohort of 1,200 participants across diverse clinical settings. The protocol is designed as a multimodal strategy that integrates high-intensity interval training (HIIT) to enhance mitochondrial biogenesis, a plant-based ketogenic diet aimed at reducing systemic inflammation, and standardized pharmacological support. Furthermore, the trial utilizes continuous glucose monitoring (CGM) as a primary tool to evaluate metabolic flexibility—the body's capacity to switch efficiently between carbohydrate and lipid oxidation. Preliminary data suggests that addressing the lifestyle-pharmacology intersection is paramount for sustained clinical success. During the follow-up phase, the experimental group showed a significant 1.8% decrease in HbA1c levels, contrasting with the control group’s stagnant metrics. It is worth noting that nearly half of these patients reached a state of partial remission, defined as maintaining sub-diabetic glycemic levels for at least six months without the need for active medication. These results were consistent across various age groups, provided that adherence to the HIIT and ketogenic components remained high. Ultimately, the researchers concluded that while Metformin provides a necessary foundation, lifestyle changes must be applied with maximum rigor and clinical supervision to successfully reverse long-standing metabolic impairment and restore beta-cell functionality.`,
             summary: "The MET-LIFE study was conducted to address T2DM, a condition for which single-drug treatment rarely (1) __________ long-term results. Unlike standard care, this protocol (2) __________ a specific exercise regimen known as (3) __________ with a nutritional plan. A central pillar of the trial was (4) __________, which refers to the organism's (5) __________ to alternate between different energy substrates. Regarding the outcomes, the experimental group (6) __________ a 1.8% decrease in HbA1c levels. It is (7) __________ noting that nearly half of these patients reached a state of (8) __________, meaning they no longer required drugs. The researchers (9) __________ that lifestyle changes must be applied with (10) __________ to successfully reverse metabolic impairment.",
             answers: ["achieves", "integrated", "HIIT", "metabolic flexibility", "ability", "showed", "worth", "partial remission", "concluded", "rigor"]
         },
@@ -230,9 +236,8 @@
     };
 
     let user = "", mode = "", index = 0, score = 0, timerInterval = null, flippedCards = [], matchedCount = 0, selectedLeft = null, matchingScore = 0;
-        let selectedPath = ""; 
-let selectedLevelCode = "";
-
+    let selectedPath = ""; 
+    let selectedLevelCode = "";
 
     function login() { 
         const input = document.getElementById('student-name');
@@ -248,10 +253,27 @@ let selectedLevelCode = "";
         if(target) target.classList.remove('hidden');
     }
 
+    function setPath(path) {
+        selectedPath = path;
+        showScreen('screen-levels-selector');
+    }
+
+    function selectLevel(level) {
+        if (level !== 'B2') {
+            alert("Content for " + level + " is currently under development. Please select B2 to see available modules.");
+            return;
+        }
+        selectedLevelCode = level;
+        showQuizzes(); 
+    }
+
     function showQuizzes() {
         const container = document.getElementById('quiz-list-container'); 
         if(!container) return;
         container.innerHTML = "";
+        
+        document.getElementById('lvl-title').innerText = `${selectedLevelCode} Modules`;
+
         const modules = [
             {id: "B2_MC", name: "Quiz 1", sub: "Multiple Choice"},
             {id: "B2_Writing", name: "Quiz 2", sub: "Sentence Writing"},
@@ -266,7 +288,7 @@ let selectedLevelCode = "";
             modules.push({ id: "soon", name: `Quiz ${i}`, sub: "Coming soon..." });
         }
 
-                modules.forEach(m => {
+        modules.forEach(m => {
             if (selectedPath === 'General' && (m.id !== 'B2_MC' && m.id !== 'B2_Writing')) {
                 return; 
             }
@@ -289,22 +311,19 @@ let selectedLevelCode = "";
             };
             container.appendChild(d);
         });
-
-
-            container.appendChild(d);
-        });
         showScreen('screen-levels');
     }
 
     function startQuiz() { index = 0; score = 0; showScreen('screen-quiz'); renderQuiz(); }
+    
     function renderQuiz() {
         const data = database[mode][index];
         document.getElementById('progress-fill').parentElement.classList.remove('hidden');
-
         document.getElementById('q-text').innerText = `${index + 1}. ${data.q}`;
         const box = document.getElementById('options-box'); box.innerHTML = "";
         document.getElementById('feedback-box').classList.add('hidden');
         document.getElementById('btn-continue').classList.add('hidden');
+        
         if(mode === "B2_Writing") {
             box.innerHTML = `<input type="text" id="ans-in" placeholder="Type answer..."><br><button class="main-btn" onclick="checkWriting()">Submit</button>`;
         } else {
@@ -350,14 +369,12 @@ let selectedLevelCode = "";
     }
 
     function startAbstraction() {
-    showScreen('screen-quiz');
-    document.getElementById('progress-fill').parentElement.classList.add('hidden');
-    document.getElementById('feedback-box').classList.add('hidden');
-    document.getElementById('btn-continue').classList.add('hidden');
-    document.getElementById('q-text').innerText = ""; 
-
-    const data = database.B2_Abstraction;
-
+        showScreen('screen-quiz');
+        document.getElementById('progress-fill').parentElement.classList.add('hidden');
+        document.getElementById('feedback-box').classList.add('hidden');
+        document.getElementById('btn-continue').classList.add('hidden');
+        document.getElementById('q-text').innerText = ""; 
+        const data = database.B2_Abstraction;
         let summaryHtml = data.summary;
         data.answers.forEach((_, i) => {
             summaryHtml = summaryHtml.replace(`(${i + 1}) __________`, `<input type="text" class="abs-input" id="abs-${i}">`);
@@ -377,14 +394,12 @@ let selectedLevelCode = "";
     }
 
     function startWordBank() {
-    showScreen('screen-quiz');
-    document.getElementById('progress-fill').parentElement.classList.add('hidden');
-    document.getElementById('feedback-box').classList.add('hidden');
-    document.getElementById('btn-continue').classList.add('hidden');
-    document.getElementById('q-text').innerText = "";
-
-    const data = database.B2_WordBank;
-
+        showScreen('screen-quiz');
+        document.getElementById('progress-fill').parentElement.classList.add('hidden');
+        document.getElementById('feedback-box').classList.add('hidden');
+        document.getElementById('btn-continue').classList.add('hidden');
+        document.getElementById('q-text').innerText = "";
+        const data = database.B2_WordBank;
         const bankHtml = data.bank.map(w => `<span class="word-item">${w}</span>`).join("");
         let textHtml = data.text;
         data.answers.forEach((_, i) => {
@@ -480,21 +495,3 @@ let selectedLevelCode = "";
         const display = document.getElementById('final-score-display');
         display.innerText = isGame ? `${user}, module completed!` : `${user}, your score: ${score} points`;
     }
-        function setPath(path) {
-    selectedPath = path;
-    showScreen('screen-levels-selector');
-}
-
-function selectLevel(level) {
-    if (level !== 'B2') {
-        alert("Content for " + level + " is currently under development. Please select B2 to see available modules.");
-        return;
-    }
-    selectedLevelCode = level;
-    showQuizzes(); 
-}
-
-
-    </script>
-</body>
-</html>
