@@ -267,52 +267,62 @@
         showQuizzes(); 
     }
 
-    function showQuizzes() {
-        const container = document.getElementById('quiz-list-container'); 
-        if(!container) return;
-        container.innerHTML = "";
-        
-        document.getElementById('lvl-title').innerText = `${selectedLevelCode} Modules`;
+function showQuizzes() {
+    const container = document.getElementById('quiz-list-container'); 
+    if(!container) return;
+    container.innerHTML = "";
+    
+    const headerTitle = document.querySelector('header h1');
+    if (selectedPath === 'Medical') {
+        headerTitle.innerText = "Dr. DiHielo Medical English Academy";
+        headerTitle.style.color = "var(--medical-blue)";
+    } else {
+        headerTitle.innerText = "DiHielo English Academy";
+        headerTitle.style.color = "var(--white)";
+    }
 
-        const modules = [
-            {id: "B2_MC", name: "Quiz 1", sub: "Multiple Choice"},
-            {id: "B2_Writing", name: "Quiz 2", sub: "Sentence Writing"},
-            {id: "B2_Stones", name: "Quiz 3", sub: "Stone vs Eggshell"},
-            {id: "B2_Memory", name: "Quiz 4", sub: "Phrasal Memory"},
-            {id: "B2_Matching", name: "Quiz 5", sub: "Collocations"},
-            {id: "B2_Abstraction", name: "Quiz 6", sub: "Note Abstraction"},
-            {id: "B2_WordBank", name: "Quiz 7", sub: "Case Reporting"}
-        ];
-                
-        for (let i = 8; i <= 20; i++) {
-            modules.push({ id: "soon", name: `Quiz ${i}`, sub: "Coming soon..." });
+    document.getElementById('lvl-title').innerText = `${selectedLevelCode} Modules`;
+
+    const modules = [
+        {id: "B2_MC", name: "Quiz 1", sub: "Multiple Choice"},
+        {id: "B2_Writing", name: "Quiz 2", sub: "Sentence Writing"},
+        {id: "B2_Stones", name: "Quiz 3", sub: "Stone vs Eggshell"},
+        {id: "B2_Memory", name: "Quiz 4", sub: "Phrasal Memory"},
+        {id: "B2_Matching", name: "Quiz 5", sub: "Collocations"},
+        {id: "B2_Abstraction", name: "Quiz 6", sub: "Note Abstraction"},
+        {id: "B2_WordBank", name: "Quiz 7", sub: "Case Reporting"}
+    ];
+            
+    for (let i = 8; i <= 20; i++) {
+        modules.push({ id: "soon", name: `Quiz ${i}`, sub: "Coming soon..." });
+    }
+
+    modules.forEach(m => {
+        if (selectedPath === 'General' && (m.id !== 'B2_MC' && m.id !== 'B2_Writing' && m.id !== 'soon')) {
+            return; 
         }
 
-        modules.forEach(m => {
-            if (selectedPath === 'General' && (m.id !== 'B2_MC' && m.id !== 'B2_Writing')) {
-                return; 
+        const d = document.createElement('div'); 
+        d.className = 'level-card';
+        d.innerHTML = `<strong>${m.name}</strong><br><small>${m.sub}</small>`;
+        
+        d.onclick = () => {
+            if (m.id === "soon") {
+                alert("This module is currently under development.");
+                return;
             }
+            mode = m.id;
+            if(mode === "B2_Memory") startMemory();
+            else if(mode === "B2_Matching") startMatching();
+            else if(mode === "B2_Abstraction") startAbstraction();
+            else if(mode === "B2_WordBank") startWordBank();
+            else startQuiz();
+        };
+        container.appendChild(d);
+    });
+    showScreen('screen-levels');
+}
 
-            const d = document.createElement('div'); 
-            d.className = 'level-card';
-            d.innerHTML = `<strong>${m.name}</strong><br><small>${m.sub}</small>`;
-            
-            d.onclick = () => {
-                if (m.id === "soon") {
-                    alert("This module is currently under development.");
-                    return;
-                }
-                mode = m.id;
-                if(mode === "B2_Memory") startMemory();
-                else if(mode === "B2_Matching") startMatching();
-                else if(mode === "B2_Abstraction") startAbstraction();
-                else if(mode === "B2_WordBank") startWordBank();
-                else startQuiz();
-            };
-            container.appendChild(d);
-        });
-        showScreen('screen-levels');
-    }
 
     function startQuiz() { index = 0; score = 0; showScreen('screen-quiz'); renderQuiz(); }
     
