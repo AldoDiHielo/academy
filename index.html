@@ -527,3 +527,124 @@
     function startWordBank() {
         showScreen('screen-quiz'); const data = database.B2_WordBank; let bank = data.bank.map(w => `<span class="word-item">${w}</span>`).join(""); let txt = data.text;
         data.answers.forEach((_, i) => { txt = txt.replace(`(${i+1}) __________`, `<input type="text" class="abs-input" id="wb-${i}">
+// ... continuación de la función startWordBank
+        data.answers.forEach((_, i) => { 
+            txt = txt.replace(`(${i+1}) __________`, `<input type="text" class="abs-input" id="wb-${i}">`); 
+        });
+        document.getElementById('options-box').innerHTML = `<div class="word-bank">${bank}</div><div style="text-align:left; line-height:2.2;">${txt}</div><button class="main-btn" onclick="checkWB()">Verify</button>`;
+    }
+
+    function checkWB() { 
+        let h = 0; 
+        const data = database.B2_WordBank; 
+        data.answers.forEach((a, i) => { 
+            const el = document.getElementById(`wb-${i}`); 
+            if(el && el.value.toLowerCase().trim() === a.toLowerCase().trim()) { 
+                el.style.borderBottomColor = "var(--success)"; 
+                h++; 
+            } else if(el) { 
+                el.style.borderBottomColor = "var(--danger)"; 
+            } 
+        }); 
+        score = h; 
+        setTimeout(finishModule, 3000); 
+    }
+
+    function startMemory() {
+        showScreen('screen-memory'); 
+        matchedCount = 0; 
+        startTimer(180); 
+        const board = document.getElementById('memory-board'); 
+        board.innerHTML = "";
+        let cards = []; 
+        database.B2_Memory.forEach((item, i) => { 
+            cards.push({ t: item.v, id: i }, { t: item.m, id: i }); 
+        });
+        cards.sort(() => Math.random() - 0.5);
+        cards.forEach(c => {
+            const d = document.createElement('div'); 
+            d.className = 'memory-card'; 
+            d.dataset.id = c.id;
+            d.innerHTML = `<div class="card-face card-front">?</div><div class="card-face card-back">${c.t}</div>`;
+            d.onclick = () => { 
+                if(flippedCards.length < 2 && !d.classList.contains('flipped')) { 
+                    d.classList.add('flipped'); 
+                    flippedCards.push(d); 
+                    if(flippedCards.length === 2) setTimeout(checkM, 700); 
+                } 
+            };
+            board.appendChild(d);
+        });
+    }
+
+    function checkM() { 
+        const [c1, c2] = flippedCards; 
+        if(c1.dataset.id === c2.dataset.id) { 
+            matchedCount++; 
+            if(matchedCount === database.B2_Memory.length) { 
+                if(timerInterval) clearInterval(timerInterval); 
+                finishModule(true); 
+            } 
+        } else { 
+            c1.classList.remove('flipped'); 
+            c2.classList.remove('flipped'); 
+        } 
+        flippedCards = []; 
+    }
+
+    function startMatching() {
+        showScreen('screen-matching'); 
+        matchingScore = 0; 
+        selectedLeft = null;
+        const colL = document.getElementById('col-left'), colR = document.getElementById('col-right');
+        colL.innerHTML = ""; colR.innerHTML = "";
+        let leftItems = database.B2_Matching.map((item, i) => ({ text: item.a, id: i })).sort(() => Math.random() - 0.5);
+        let rightItems = database.B2_Matching.map((item, i) => ({ text: item.b, id: i })).sort(() => Math.random() - 0.5);
+        
+        leftItems.forEach(item => { 
+            const l = document.createElement('div'); 
+            l.className = 'match-item'; 
+            l.innerText = item.text; 
+            l.onclick = () => { 
+                document.querySelectorAll('#col-left .match-item').forEach(x => x.classList.remove('selected')); 
+                l.classList.add('selected'); 
+                selectedLeft = item.id; 
+            }; 
+            colL.appendChild(l); 
+        });
+        
+        rightItems.forEach(item => { 
+            const r = document.createElement('div'); 
+            r.className = 'match-item'; 
+            r.innerText = item.text; 
+            r.onclick = () => { 
+                if(selectedLeft === item.id) { 
+                    r.classList.add('matched-pair'); 
+                    const sel = document.querySelector('#col-left .selected'); 
+                    if(sel) sel.classList.add('matched-pair'); 
+                    matchingScore++; 
+                    if(matchingScore === database.B2_Matching.length) finishModule(true); 
+                } 
+            }; 
+            colR.appendChild(r); 
+        });
+    }
+
+    function startTimer(s) { 
+        let t = s; 
+        if(timerInterval) clearInterval(timerInterval); 
+        timerInterval = setInterval(() => { 
+            let m = Math.floor(t/60), sec = t%60; 
+            document.getElementById('time-left').innerText = `${m}:${sec.toString().padStart(2,'0')}`; 
+            if(--t < 0) { clearInterval(timerInterval); goBackToList(); } 
+        }, 1000); 
+    }
+
+    function finishModule(g = false) { 
+        showScreen('screen-results'); 
+        const display = document.getElementById('final-score-display');
+        if(display) display.innerText = g ? `${user}: Module Completed!` : `${user}: ${score} points`; 
+    }
+    </script>
+</body>
+</html>
