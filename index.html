@@ -107,7 +107,7 @@
     </div>
 
     <script>
-    const database = {
+const database = {
         "B2_MC": [
             {q: "By the time the surgeon arrived, the nurses __________ the patient.", o: ["had already prepared", "have already prepared", "already prepared"], a: 0, r: "Past Perfect is for an action completed before another past action."},
             {q: "If I __________ more attention, I would be able to answer this now.", o: ["paid", "had paid", "would have paid"], a: 1, r: "Mixed conditional: Past condition, present result."},
@@ -239,12 +239,38 @@
     let selectedPath = ""; 
     let selectedLevelCode = "";
 
+    function showCustomAlert(title, message) {
+        const modal = document.createElement('div');
+        modal.id = "custom-alert-modal";
+        modal.style = "position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:flex; align-items:center; justify-content:center; z-index:2000; padding:20px;";
+        modal.innerHTML = `
+            <div class="container" style="max-width:400px; width:100%; text-align:center; border: 2px solid var(--accent); background: #ffffff; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
+                <h2 style="color:var(--accent); margin-bottom:15px;">${title}</h2>
+                <p style="margin-bottom:20px; font-size:1.1rem;">${message}</p>
+                <button class="main-btn" onclick="document.getElementById('custom-alert-modal').remove()">Understood</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+
     function login() { 
         const input = document.getElementById('student-name');
         if(!input) return;
         user = input.value.trim();
-        if(!user) { alert("Please enter your name"); return; }
+        if(!user) { 
+            showCustomAlert("Attention", "Please enter your name to proceed."); 
+            return; 
+        }
         showScreen('screen-branch');
+    }
+
+    function selectLevel(level) {
+        if (level !== 'B2') {
+            showCustomAlert("Coming Soon", `The content for ${level} is currently under development. Please select B2.`);
+            return;
+        }
+        selectedLevelCode = level;
+        showQuizzes(); 
     }
 
     function showScreen(id) { 
@@ -264,15 +290,6 @@
             headerTitle.style.color = "var(--white)";
         }
         showScreen('screen-levels-selector');
-    }
-
-    function selectLevel(level) {
-        if (level !== 'B2') {
-            alert("Content for " + level + " is currently under development. Please select B2 to see available modules.");
-            return;
-        }
-        selectedLevelCode = level;
-        showQuizzes(); 
     }
 
     function showQuizzes() {
@@ -297,8 +314,7 @@
 
         modules.forEach(m => {
             if (selectedPath === 'General' && (m.id !== 'B2_MC' && m.id !== 'B2_Writing' && m.id !== 'soon')) {
-                const soonPlaceholder = { ...m, id: "soon", sub: "Coming soon..." };
-                renderModuleCard(soonPlaceholder, container);
+                renderModuleCard({ ...m, id: "soon", sub: "Coming soon..." }, container);
                 return; 
             }
             renderModuleCard(m, container);
@@ -377,9 +393,6 @@
     function startAbstraction() {
         showScreen('screen-quiz');
         document.getElementById('progress-fill').parentElement.classList.add('hidden');
-        document.getElementById('feedback-box').classList.add('hidden');
-        document.getElementById('btn-continue').classList.add('hidden');
-        document.getElementById('q-text').innerText = ""; 
         const data = database.B2_Abstraction;
         let summaryHtml = data.summary;
         data.answers.forEach((_, i) => {
@@ -402,9 +415,6 @@
     function startWordBank() {
         showScreen('screen-quiz');
         document.getElementById('progress-fill').parentElement.classList.add('hidden');
-        document.getElementById('feedback-box').classList.add('hidden');
-        document.getElementById('btn-continue').classList.add('hidden');
-        document.getElementById('q-text').innerText = "";
         const data = database.B2_WordBank;
         const bankHtml = data.bank.map(w => `<span class="word-item">${w}</span>`).join("");
         let textHtml = data.text;
@@ -505,20 +515,6 @@
     function goBackToList() {
         if(timerInterval) clearInterval(timerInterval);
         showQuizzes();
-    }
-
-    function showCustomAlert(title, message) {
-        const modal = document.createElement('div');
-        modal.id = "custom-alert-modal";
-        modal.style = "position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:flex; align-items:center; justify-content:center; z-index:2000; padding:20px;";
-        modal.innerHTML = `
-            <div class="container" style="max-width:400px; width:100%; text-align:center; border: 2px solid var(--accent); background: #ffffff; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
-                <h2 style="color:var(--accent); margin-bottom:15px;">${title}</h2>
-                <p style="margin-bottom:20px; font-size:1.1rem;">${message}</p>
-                <button class="main-btn" onclick="document.getElementById('custom-alert-modal').remove()">Understood</button>
-            </div>
-        `;
-        document.body.appendChild(modal);
     }
 </script>
 </body>
