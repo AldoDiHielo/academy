@@ -254,9 +254,17 @@
     }
 
     function setPath(path) {
-        selectedPath = path;
-        showScreen('screen-levels-selector');
+    selectedPath = path;
+    const headerTitle = document.querySelector('header h1');
+    if (path === 'Medical') {
+        headerTitle.innerText = "Dr. DiHielo Medical English Academy";
+        headerTitle.style.color = "var(--medical-blue)";
+    } else {
+        headerTitle.innerText = "DiHielo English Academy";
+        headerTitle.style.color = "var(--white)";
     }
+    showScreen('screen-levels-selector');
+}
 
     function selectLevel(level) {
         if (level !== 'B2') {
@@ -272,14 +280,51 @@ function showQuizzes() {
     if(!container) return;
     container.innerHTML = "";
     
-    const headerTitle = document.querySelector('header h1');
-    if (selectedPath === 'Medical') {
-        headerTitle.innerText = "Dr. DiHielo Medical English Academy";
-        headerTitle.style.color = "var(--medical-blue)";
-    } else {
-        headerTitle.innerText = "DiHielo English Academy";
-        headerTitle.style.color = "var(--white)";
+    document.getElementById('lvl-title').innerText = `${selectedLevelCode} Modules`;
+
+    const modules = [
+        {id: "B2_MC", name: "Quiz 1", sub: "Multiple Choice"},
+        {id: "B2_Writing", name: "Quiz 2", sub: "Sentence Writing"},
+        {id: "B2_Stones", name: "Quiz 3", sub: "Stone vs Eggshell"},
+        {id: "B2_Memory", name: "Quiz 4", sub: "Phrasal Memory"},
+        {id: "B2_Matching", name: "Quiz 5", sub: "Collocations"},
+        {id: "B2_Abstraction", name: "Quiz 6", sub: "Note Abstraction"},
+        {id: "B2_WordBank", name: "Quiz 7", sub: "Case Reporting"}
+    ];
+            
+    for (let i = 8; i <= 20; i++) {
+        modules.push({ id: "soon", name: `Quiz ${i}`, sub: "Coming soon..." });
     }
+
+    modules.forEach(m => {
+        if (selectedPath === 'General' && (m.id !== 'B2_MC' && m.id !== 'B2_Writing' && m.id !== 'soon')) {
+            const soonPlaceholder = { ...m, id: "soon", sub: "Coming soon..." };
+            renderModuleCard(soonPlaceholder, container);
+            return;
+        }
+        renderModuleCard(m, container);
+    });
+    showScreen('screen-levels');
+}
+
+function renderModuleCard(m, container) {
+    const d = document.createElement('div'); 
+    d.className = 'level-card';
+    d.innerHTML = `<strong>${m.name}</strong><br><small>${m.sub}</small>`;
+    d.onclick = () => {
+        if (m.id === "soon") {
+            showCustomAlert(selectedPath === 'Medical' ? "Dr. DiHielo says:" : "DiHielo says:", "This module is currently under development.");
+            return;
+        }
+        mode = m.id;
+        if(mode === "B2_Memory") startMemory();
+        else if(mode === "B2_Matching") startMatching();
+        else if(mode === "B2_Abstraction") startAbstraction();
+        else if(mode === "B2_WordBank") startWordBank();
+        else startQuiz();
+    };
+    container.appendChild(d);
+}
 
     document.getElementById('lvl-title').innerText = `${selectedLevelCode} Modules`;
 
@@ -509,6 +554,20 @@ function showQuizzes() {
         if(timerInterval) clearInterval(timerInterval);
         showQuizzes();
     }
+        function showCustomAlert(title, message) {
+    const modal = document.createElement('div');
+    modal.id = "custom-alert-modal";
+    modal.style = "position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:flex; align-items:center; justify-content:center; z-index:2000; padding:20px;";
+    
+    modal.innerHTML = `
+        <div class="container" style="max-width:400px; width:100%; text-align:center; border: 2px solid var(--accent); background: var(--bg-color); box-shadow: 0 0 20px rgba(0,0,0,0.5);">
+            <h2 style="color:var(--accent); margin-bottom:15px; font-family: 'Montserrat', sans-serif;">${title}</h2>
+            <p style="margin-bottom:20px; font-size:1.1rem;">${message}</p>
+            <button class="main-btn" onclick="document.getElementById('custom-alert-modal').remove()">Understood</button>
+        </div>
+    `;
+    document.body.appendChild(modal);
+}
 </script>
 </body>
 </html>
