@@ -307,20 +307,20 @@ let user = "", mode = "", index = 0, score = 0, timerInterval = null, flippedCar
     }
 
     function showQuizzes() {
-        const container = document.getElementById('quiz-list-container'); 
-        if(!container) return;
-        container.innerHTML = "";
-        document.getElementById('lvl-title').innerText = `${selectedLevelCode} Modules`;
+    const container = document.getElementById('quiz-list-container'); 
+    if(!container) return;
+    container.innerHTML = "";
+    document.getElementById('lvl-title').innerText = `${selectedLevelCode} Modules`;
 
-        const modules = [
-            {id: "B2_MC", name: "Quiz 1", sub: "Multiple Choice"},
-            {id: "B2_Writing", name: "Quiz 2", sub: "Sentence Writing"},
-            {id: "B2_Stones", name: "Quiz 3", sub: "Stone vs Eggshell"},
-            {id: "B2_Memory", name: "Quiz 4", sub: "Phrasal Memory"},
-            {id: "B2_Matching", name: "Quiz 5", sub: "Collocations"},
-            {id: "B2_Abstraction", name: "Quiz 6", sub: "Note Abstraction"},
-            {id: "B2_WordBank", name: "Quiz 7", sub: "Case Reporting"},
-            {id: "B2_Reading", name: "Quiz 9", sub: "Reading: Olympics"}
+       const modules = [
+        {id: "B2_MC", name: "Quiz 1", sub: "Multiple Choice"},
+        {id: "B2_Writing", name: "Quiz 2", sub: "Sentence Writing"},
+        {id: "B2_Stones", name: "Quiz 3", sub: "Stone vs Eggshell"},
+        {id: "B2_Memory", name: "Quiz 4", sub: "Phrasal Memory"},
+        {id: "B2_Matching", name: "Quiz 5", sub: "Collocations"},
+        {id: "B2_Abstraction", name: "Quiz 6", sub: "Note Abstraction"},
+        {id: "B2_WordBank", name: "Quiz 7", sub: "Case Reporting"},
+        {id: "B2_Reading", name: "Quiz 8", sub: "Reading: Olympics"}
         ];
                 
         for (let i = 8; i <= 20; i++) {
@@ -335,13 +335,13 @@ let user = "", mode = "", index = 0, score = 0, timerInterval = null, flippedCar
         });
 
         modules.forEach(m => {
-            if (selectedPath === 'General' && (m.id !== 'B2_MC' && m.id !== 'B2_Writing' && m.id !== 'soon')) {
-                renderModuleCard({ ...m, id: "soon", sub: "Coming soon..." }, container);
-                return; 
-            }
-            renderModuleCard(m, container);
-        });
-        showScreen('screen-levels');
+        if (selectedPath === 'General' && (m.id !== 'B2_MC' && m.id !== 'B2_Writing' && m.id !== 'soon')) {
+            renderModuleCard({ ...m, id: "soon", sub: "Coming soon..." }, container);
+            return; 
+        }
+        renderModuleCard(m, container);
+    });
+    showScreen('screen-levels');
     }
 
     function renderModuleCard(m, container) {
