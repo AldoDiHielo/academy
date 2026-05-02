@@ -249,6 +249,22 @@ const database = {
         ]
     }
 };
+        const B2_Crossword = {
+    gridSize: 10,
+    clues: [
+        { id: 1, r: 1, c: 1, d: "H", q: "DEPEND (Adjective)", a: "DEPENDENT" },
+        { id: 2, r: 0, c: 2, d: "V", q: "EMPLOY (Noun - person)", a: "EMPLOYEE" },
+        { id: 3, r: 0, c: 8, d: "V", q: "POSSIBLE (Noun)", a: "POSSIBILITY" },
+        { id: 4, r: 4, c: 1, d: "H", q: "DANGER (Adjective)", a: "DANGEROUS" },
+        { id: 5, r: 7, c: 3, d: "H", q: "SUCCEED (Noun)", a: "SUCCESS" },
+        { id: 6, r: 3, c: 4, d: "V", q: "ADVENTURE (Adjective)", a: "ADVENTUROUS" },
+        { id: 7, r: 9, c: 1, d: "H", q: "HEALTH (Adjective)", a: "HEALTHY" },
+        { id: 8, r: 2, c: 6, d: "V", q: "CREATE (Noun)", a: "CREATION" },
+        { id: 9, r: 1, c: 0, d: "V", q: "COMFORT (Adjective)", a: "COMFORTABLE" },
+        { id: 10, r: 6, c: 0, d: "H", q: "SURE (Adverb)", a: "SURELY" }
+    ]
+};
+        let solvedWords = 0;
 let user = "", mode = "", index = 0, score = 0, timerInterval = null, flippedCards = [], matchedCount = 0, selectedLeft = null, matchingScore = 0;
     let selectedPath = ""; 
     let selectedLevelCode = "";
@@ -306,7 +322,7 @@ let user = "", mode = "", index = 0, score = 0, timerInterval = null, flippedCar
         showScreen('screen-levels-selector');
     }
 
-    function showQuizzes() {
+   function showQuizzes() {
     const container = document.getElementById('quiz-list-container'); 
     if(!container) return;
     container.innerHTML = "";
@@ -320,12 +336,13 @@ let user = "", mode = "", index = 0, score = 0, timerInterval = null, flippedCar
         {id: "B2_Matching", name: "Quiz 5", sub: "Collocations"},
         {id: "B2_Abstraction", name: "Quiz 6", sub: "Note Abstraction"},
         {id: "B2_WordBank", name: "Quiz 7", sub: "Case Reporting"},
-        {id: "B2_Reading", name: "Quiz 8", sub: "Reading: Olympics"}
-        ];
+        {id: "B2_Reading", name: "Quiz 8", sub: "Reading: Olympics"},
+        {id: "B2_Crossword", name: "Quiz 9", sub: "Word Formation"}
+    ];
                 
-        for (let i = 8; i <= 20; i++) {
-            if (i === 9) continue;
-            modules.push({ id: "soon", name: `Quiz ${i}`, sub: "Coming soon..." });
+        for (let i = 10; i <= 20; i++) {
+        modules.push({ id: "soon", name: `Quiz ${i}`, sub: "Coming soon..." });
+    }
         }
 
         modules.sort((a, b) => {
@@ -335,34 +352,40 @@ let user = "", mode = "", index = 0, score = 0, timerInterval = null, flippedCar
         });
 
         modules.forEach(m => {
-        if (selectedPath === 'General' && (m.id !== 'B2_MC' && m.id !== 'B2_Writing' && m.id !== 'soon')) {
+        const isAllowedGeneral = m.id === 'B2_MC' || m.id === 'B2_Writing' || m.id === 'B2_Reading' || m.id === 'B2_Crossword';
+        if (selectedPath === 'General' && !isAllowedGeneral && m.id !== 'soon') {
             renderModuleCard({ ...m, id: "soon", sub: "Coming soon..." }, container);
             return; 
         }
         renderModuleCard(m, container);
     });
     showScreen('screen-levels');
+}
+        renderModuleCard(m, container);
+    });
+    showScreen('screen-levels');
     }
 
-    function renderModuleCard(m, container) {
-        const d = document.createElement('div'); 
-        d.className = 'level-card';
-        d.innerHTML = `<strong>${m.name}</strong><br><small>${m.sub}</small>`;
-        d.onclick = () => {
-            if (m.id === "soon") {
-                showCustomAlert(selectedPath === 'Medical' ? "Dr. DiHielo says:" : "DiHielo says:", "This module is currently under development.");
-                return;
-            }
-            mode = m.id;
-            if(mode === "B2_Memory") startMemory();
-            else if(mode === "B2_Matching") startMatching();
-            else if(mode === "B2_Abstraction") startAbstraction();
-            else if(mode === "B2_WordBank") startWordBank();
-            else if(mode === "B2_Reading") startReading();
-            else startQuiz();
-        };
-        container.appendChild(d);
-    }
+   function renderModuleCard(m, container) {
+    const d = document.createElement('div'); 
+    d.className = 'level-card';
+    d.innerHTML = `<strong>${m.name}</strong><br><small>${m.sub}</small>`;
+    
+    d.onclick = () => {
+        if (m.id === "soon") return;
+        if (m.id === "B2_MC") startQuiz(m.id);
+        if (m.id === "B2_Writing") startWritingQuiz();
+        if (m.id === "B2_Stones") startStonesGame();
+        if (m.id === "B2_Memory") startMemoryGame();
+        if (m.id === "B2_Matching") startMatchingGame();
+        if (m.id === "B2_Abstraction") startAbstraction();
+        if (m.id === "B2_WordBank") startWordBank();
+        if (m.id === "B2_Reading") startReading();
+        if (m.id === "B2_Crossword") startCrossword();
+    };
+    
+    container.appendChild(d);
+}
 
     function startQuiz() { index = 0; score = 0; showScreen('screen-quiz'); renderQuiz(); }
 
@@ -609,6 +632,111 @@ let user = "", mode = "", index = 0, score = 0, timerInterval = null, flippedCar
     function goBackToList() {
         if(timerInterval) clearInterval(timerInterval);
         showQuizzes();
+        function startCrossword() {
+    solvedWords = 0;
+    showScreen('screen-quiz');
+    const quizArea = document.getElementById('quiz-area');
+    
+    quizArea.innerHTML = `
+        <div id="cw-wrapper" style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+            <div id="cw-grid-container"></div>
+            <div id="cw-input-zone" style="text-align: center; background: #f9f9f9; padding: 15px; border-radius: 8px; width: 100%; max-width: 400px;">
+                <select id="cw-clue-select" onchange="updateClueText()" style="width: 100%; padding: 8px; margin-bottom: 10px;"></select>
+                <p id="cw-clue-display" style="font-weight: bold; min-height: 40px; color: #333;"></p>
+                <input type="text" id="cw-user-input" placeholder="Type answer..." style="width: 60%; padding: 8px; text-transform: uppercase;">
+                <button onclick="checkCwAnswer()" style="padding: 8px 15px; cursor: pointer;">Submit</button>
+            </div>
+        </div>
+    `;
+    
+    renderCwTable();
+    populateClues();
+            document.getElementById('cw-user-input').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            checkCwAnswer();
+        }
+    });
+}
+        function renderCwTable() {
+    const container = document.getElementById('cw-grid-container');
+    let table = '<table style="border-collapse: collapse; background: #333;">';
+    for (let i = 0; i < B2_Crossword.gridSize; i++) {
+        table += '<tr>';
+        for (let j = 0; j < B2_Crossword.gridSize; j++) {
+            table += `<td id="cw-${i}-${j}" style="width: 30px; height: 30px; border: 1px solid #000; text-align: center; vertical-align: middle; font-weight: bold; position: relative; background: #222; color: #333;"></td>`;
+        }
+        table += '</tr>';
+    }
+    table += '</table>';
+    container.innerHTML = table;
+    
+    B2_Crossword.clues.forEach(clue => {
+        for (let i = 0; i < clue.a.length; i++) {
+            let row = clue.d === "V" ? clue.r + i : clue.r;
+            let col = clue.d === "H" ? clue.c + i : clue.c;
+            let cell = document.getElementById(`cw-${row}-${col}`);
+            cell.style.background = "#fff";
+            if (i === 0) {
+                const num = document.createElement('span');
+                num.innerText = clue.id;
+                num.style.cssText = "position: absolute; top: 1px; left: 1px; font-size: 9px; color: #666;";
+                cell.appendChild(num);
+            }
+        }
+    });
+}
+        function populateClues() {
+    const select = document.getElementById('cw-clue-select');
+    B2_Crossword.clues.forEach((clue, index) => {
+        const opt = document.createElement('option');
+        opt.value = index;
+        opt.innerText = `Clue ${clue.id} (${clue.d === 'H' ? 'Across' : 'Down'})`;
+        select.appendChild(opt);
+    });
+    updateClueText();
+}
+
+function updateClueText() {
+    const select = document.getElementById('cw-clue-select');
+    const display = document.getElementById('cw-clue-display');
+    const clue = B2_Crossword.clues[select.value];
+    display.innerText = clue.q;
+    document.getElementById('cw-user-input').value = "";
+    document.getElementById('cw-user-input').focus();
+}
+        function checkCwAnswer() {
+    const select = document.getElementById('cw-clue-select');
+    const clue = B2_Crossword.clues[select.value];
+    const input = document.getElementById('cw-user-input');
+    const val = input.value.toUpperCase().trim();
+
+    if (val === clue.a) {
+        for (let i = 0; i < clue.a.length; i++) {
+            let row = clue.d === "V" ? clue.r + i : clue.r;
+            let col = clue.d === "H" ? clue.c + i : clue.c;
+            const cell = document.getElementById(`cw-${row}-${col}`);
+            
+            const span = cell.querySelector('span');
+            cell.innerText = clue.a[i];
+            if (span) cell.appendChild(span);
+        }
+        
+        input.value = "";
+        solvedWords++;
+        
+        if (solvedWords === B2_Crossword.clues.length) {
+            finishCwModule();
+        }
+    }
+}
+        function finishCwModule() {
+    if (timerInterval) clearInterval(timerInterval);
+    showScreen('screen-results');
+    const display = document.getElementById('final-score-display');
+    if (display) {
+        display.innerText = `${user}, Correct! Module completed.`;
+    }
+}
     }
 </script>
 </body>
