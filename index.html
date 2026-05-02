@@ -247,497 +247,495 @@ const database = {
             {q: "The city of Athens hosted both the first ancient and first modern games.", a: false, r: "False. Ancient games were in Olympia; modern in Athens."},
             {q: "The modern Games have been held every four years without any official cancellations.", a: false, r: "False. They were cancelled during the World Wars."}
         ]
+    },
+    "B2_Crossword": {
+        gridSize: 10,
+        clues: [
+            { id: 1, r: 1, c: 1, d: "H", q: "DEPEND (Adjective)", a: "DEPENDENT" },
+            { id: 2, r: 0, c: 2, d: "V", q: "EMPLOY (Noun - person)", a: "EMPLOYEE" },
+            { id: 3, r: 0, c: 8, d: "V", q: "POSSIBLE (Noun)", a: "POSSIBILITY" },
+            { id: 4, r: 4, c: 1, d: "H", q: "DANGER (Adjective)", a: "DANGEROUS" },
+            { id: 5, r: 7, c: 3, d: "H", q: "SUCCEED (Noun)", a: "SUCCESS" },
+            { id: 6, r: 3, c: 4, d: "V", q: "ADVENTURE (Adjective)", a: "ADVENTUROUS" },
+            { id: 7, r: 9, c: 1, d: "H", q: "HEALTH (Adjective)", a: "HEALTHY" },
+            { id: 8, r: 2, c: 6, d: "V", q: "CREATE (Noun)", a: "CREATION" },
+            { id: 9, r: 1, c: 0, d: "V", q: "COMFORT (Adjective)", a: "COMFORTABLE" },
+            { id: 10, r: 6, c: 0, d: "H", q: "SURE (Adverb)", a: "SURELY" }
+        ]
     }
 };
-        const B2_Crossword = {
-    gridSize: 10,
-    clues: [
-        { id: 1, r: 1, c: 1, d: "H", q: "DEPEND (Adjective)", a: "DEPENDENT" },
-        { id: 2, r: 0, c: 2, d: "V", q: "EMPLOY (Noun - person)", a: "EMPLOYEE" },
-        { id: 3, r: 0, c: 8, d: "V", q: "POSSIBLE (Noun)", a: "POSSIBILITY" },
-        { id: 4, r: 4, c: 1, d: "H", q: "DANGER (Adjective)", a: "DANGEROUS" },
-        { id: 5, r: 7, c: 3, d: "H", q: "SUCCEED (Noun)", a: "SUCCESS" },
-        { id: 6, r: 3, c: 4, d: "V", q: "ADVENTURE (Adjective)", a: "ADVENTUROUS" },
-        { id: 7, r: 9, c: 1, d: "H", q: "HEALTH (Adjective)", a: "HEALTHY" },
-        { id: 8, r: 2, c: 6, d: "V", q: "CREATE (Noun)", a: "CREATION" },
-        { id: 9, r: 1, c: 0, d: "V", q: "COMFORT (Adjective)", a: "COMFORTABLE" },
-        { id: 10, r: 6, c: 0, d: "H", q: "SURE (Adverb)", a: "SURELY" }
-    ]
-};
-        let solvedWords = 0;
-let user = "", mode = "", index = 0, score = 0, timerInterval = null, flippedCards = [], matchedCount = 0, selectedLeft = null, matchingScore = 0;
-    let selectedPath = ""; 
-    let selectedLevelCode = "";
+        let currentMode = "";
+let currentQuestionIndex = 0;
+let score = 0;
+let matchedPairs = [];
+let selectedWord = null;
 
-    function showCustomAlert(title, message) {
-        const modal = document.createElement('div');
-        modal.id = "custom-alert-modal";
-        modal.style = "position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); display:flex; align-items:center; justify-content:center; z-index:2000; padding:20px;";
-        modal.innerHTML = `
-            <div class="container" style="max-width:400px; width:100%; text-align:center; border: 2px solid var(--accent); background: #ffffff; box-shadow: 0 0 20px rgba(0,0,0,0.5);">
-                <h2 style="color:var(--accent); margin-bottom:15px;">${title}</h2>
-                <p style="margin-bottom:20px; font-size:1.1rem;">${message}</p>
-                <button class="main-btn" onclick="document.getElementById('custom-alert-modal').remove()">Understood</button>
-            </div>
-        `;
-        document.body.appendChild(modal);
-    }
-
-    function login() { 
-        const input = document.getElementById('student-name');
-        if(!input) return;
-        user = input.value.trim();
-        if(!user) { 
-            showCustomAlert("Attention", "Please enter your name to proceed."); 
-            return; 
-        }
-        showScreen('screen-branch');
-    }
-
-    function selectLevel(level) {
-        if (level !== 'B2') {
-            showCustomAlert("Coming Soon", `The content for ${level} is currently under development. Please select B2.`);
-            return;
-        }
-        selectedLevelCode = level;
-        showQuizzes(); 
-    }
-
-    function showScreen(id) { 
-        document.querySelectorAll('.container').forEach(c => c.classList.add('hidden')); 
-        const target = document.getElementById(id);
-        if(target) target.classList.remove('hidden');
-    }
-
-    function setPath(path) {
-        selectedPath = path;
-        const headerTitle = document.querySelector('header h1');
-        if (path === 'Medical') {
-            headerTitle.innerText = "Dr. DiHielo Medical English Academy";
-            headerTitle.style.color = "var(--medical-blue)";
-        } else {
-            headerTitle.innerText = "DiHielo English Academy";
-            headerTitle.style.color = "var(--white)";
-        }
-        showScreen('screen-levels-selector');
-    }
-
-   function showQuizzes() {
-    const container = document.getElementById('quiz-list-container'); 
-    if(!container) return;
-    container.innerHTML = "";
-    document.getElementById('lvl-title').innerText = `${selectedLevelCode} Modules`;
-
-       const modules = [
-        {id: "B2_MC", name: "Quiz 1", sub: "Multiple Choice"},
-        {id: "B2_Writing", name: "Quiz 2", sub: "Sentence Writing"},
-        {id: "B2_Stones", name: "Quiz 3", sub: "Stone vs Eggshell"},
-        {id: "B2_Memory", name: "Quiz 4", sub: "Phrasal Memory"},
-        {id: "B2_Matching", name: "Quiz 5", sub: "Collocations"},
-        {id: "B2_Abstraction", name: "Quiz 6", sub: "Note Abstraction"},
-        {id: "B2_WordBank", name: "Quiz 7", sub: "Case Reporting"},
-        {id: "B2_Reading", name: "Quiz 8", sub: "Reading: Olympics"},
-        {id: "B2_Crossword", name: "Quiz 9", sub: "Word Formation"}
-    ];
-                
-        for (let i = 10; i <= 20; i++) {
-        modules.push({ id: "soon", name: `Quiz ${i}`, sub: "Coming soon..." });
-    }
-        }
-
-        modules.sort((a, b) => {
-            const numA = parseInt(a.name.replace("Quiz ", ""));
-            const numB = parseInt(b.name.replace("Quiz ", ""));
-            return numA - numB;
-        });
-
-        modules.forEach(m => {
-        const isAllowedGeneral = m.id === 'B2_MC' || m.id === 'B2_Writing' || m.id === 'B2_Reading' || m.id === 'B2_Crossword';
-        if (selectedPath === 'General' && !isAllowedGeneral && m.id !== 'soon') {
-            renderModuleCard({ ...m, id: "soon", sub: "Coming soon..." }, container);
-            return; 
-        }
-        renderModuleCard(m, container);
-    });
-    showScreen('screen-levels');
-}
-        renderModuleCard(m, container);
-    });
-    showScreen('screen-levels');
-    }
-
-   function renderModuleCard(m, container) {
-    const d = document.createElement('div'); 
-    d.className = 'level-card';
-    d.innerHTML = `<strong>${m.name}</strong><br><small>${m.sub}</small>`;
+function startApp(mode) {
+    currentMode = mode;
+    currentQuestionIndex = 0;
+    score = 0;
+    matchedPairs = [];
     
-    d.onclick = () => {
-        if (m.id === "soon") return;
-        if (m.id === "B2_MC") startQuiz(m.id);
-        if (m.id === "B2_Writing") startWritingQuiz();
-        if (m.id === "B2_Stones") startStonesGame();
-        if (m.id === "B2_Memory") startMemoryGame();
-        if (m.id === "B2_Matching") startMatchingGame();
-        if (m.id === "B2_Abstraction") startAbstraction();
-        if (m.id === "B2_WordBank") startWordBank();
-        if (m.id === "B2_Reading") startReading();
-        if (m.id === "B2_Crossword") startCrossword();
-    };
-    
-    container.appendChild(d);
-}
+    const container = document.getElementById("app-container");
+    container.innerHTML = ""; 
 
-    function startQuiz() { index = 0; score = 0; showScreen('screen-quiz'); renderQuiz(); }
-
-    function renderQuiz() {
-        const data = database[mode][index];
-        document.getElementById('progress-fill').parentElement.classList.remove('hidden');
-        document.getElementById('q-text').innerText = `${index + 1}. ${data.q}`;
-        const box = document.getElementById('options-box'); box.innerHTML = "";
-        document.getElementById('feedback-box').classList.add('hidden');
-        document.getElementById('btn-continue').classList.add('hidden');
-        
-        if(mode === "B2_Writing") {
-            box.innerHTML = `<input type="text" id="ans-in" placeholder="Type answer..."><br><button class="main-btn" onclick="checkWriting()">Submit</button>`;
-        } else {
-            data.o.forEach((opt, i) => {
-                const btn = document.createElement('div'); btn.className = 'option'; btn.innerText = opt;
-                btn.onclick = () => checkMC(i, btn);
-                box.appendChild(btn);
-            });
-        }
-        document.getElementById('progress-fill').style.width = `${(index / database[mode].length) * 100}%`;
-    }
-
-    function checkMC(i, el) {
-        const d = database[mode][index];
-        document.querySelectorAll('.option').forEach(o => o.onclick = null);
-        if(i === d.a) { el.classList.add('correct'); score++; } else { el.classList.add('wrong'); }
-        showFeedback(d.r);
-    }
-
-    function checkWriting() {
-        const input = document.getElementById('ans-in');
-        const val = input.value.toLowerCase().trim();
-        const d = database[mode][index];
-        if(val === d.a.toLowerCase().trim()) { score++; }
-        showFeedback(d.r);
-    }
-
-    function showFeedback(r) {
-        const f = document.getElementById('feedback-box');
-        f.innerText = r; f.classList.remove('hidden');
-        document.getElementById('btn-continue').classList.remove('hidden');
-    }
-
-    function nextQuestion() {
-        index++;
-        if(mode === "B2_Reading") {
-            if(index < database.B2_Reading.questions.length) renderReading();
-            else finishModule();
-        } else {
-            if(index < database[mode].length) renderQuiz();
-            else finishModule();
-        }
-    }
-
-    function startAbstraction() {
-        showScreen('screen-quiz');
-        document.getElementById('progress-fill').parentElement.classList.add('hidden');
-        const data = database.B2_Abstraction;
-        let summaryHtml = data.summary;
-        data.answers.forEach((_, i) => {
-            summaryHtml = summaryHtml.replace(`(${i + 1}) __________`, `<input type="text" class="abs-input" id="abs-${i}">`);
-        });
-        document.getElementById('options-box').innerHTML = `<div class="article-box">${data.article}</div><div style="text-align:left; line-height:2;">${summaryHtml}</div><button class="main-btn" onclick="checkAbs()">Check All</button>`;
-    }
-
-    function startWordBank() {
-        showScreen('screen-quiz');
-        document.getElementById('progress-fill').parentElement.classList.add('hidden');
-        const data = database.B2_WordBank;
-        const bankHtml = data.bank.map(w => `<span class="word-item">${w}</span>`).join("");
-        let textHtml = data.text;
-        data.answers.forEach((_, i) => {
-            textHtml = textHtml.replace(`(${i + 1}) __________`, `<input type="text" class="abs-input" id="wb-${i}">`);
-        });
-        document.getElementById('options-box').innerHTML = `<div class="word-bank">${bankHtml}</div><div style="text-align:left; line-height:2;">${textHtml}</div><button class="main-btn" onclick="checkWB()">Check All</button>`;
-    }
-
-    function checkAbs() {
-        let correct = 0;
-        database.B2_Abstraction.answers.forEach((ans, i) => {
-            const el = document.getElementById(`abs-${i}`);
-            el.readOnly = true; 
-            if(el.value.toLowerCase().trim() === ans.toLowerCase()) { 
-                el.style.borderBottom = "3px solid var(--success)"; 
-                correct++; 
-            } else { 
-                el.style.borderBottom = "3px solid var(--danger)"; 
-                el.title = "Correct: " + ans; 
-            }
-        });
-        score = correct;
-        showFinishReviewButton();
-    }
-
-    function checkWB() {
-        let correct = 0;
-        database.B2_WordBank.answers.forEach((ans, i) => {
-            const el = document.getElementById(`wb-${i}`);
-            el.readOnly = true;
-            if(el.value.toLowerCase().trim() === ans.toLowerCase()) { 
-                el.style.borderBottom = "3px solid var(--success)"; 
-                correct++; 
-            } else { 
-                el.style.borderBottom = "3px solid var(--danger)"; 
-                el.title = "Correct: " + ans; 
-            }
-        });
-        score = correct;
-        showFinishReviewButton();
-    }
-
-    function showFinishReviewButton() {
-        if(document.getElementById('finish-review-btn')) return;
-        const box = document.getElementById('options-box');
-        const btn = document.createElement('button');
-        btn.id = "finish-review-btn";
-        btn.className = "main-btn";
-        btn.style = "margin-top: 25px; background-color: var(--success); width: 100%;";
-        btn.innerText = "Finish & See Final Score";
-        btn.onclick = () => finishModule();
-        box.appendChild(btn);
-        btn.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function startReading() {
-        index = 0; score = 0;
-        showScreen('screen-quiz');
-        document.getElementById('progress-fill').parentElement.classList.remove('hidden');
+    if (mode === "B2_MC" || mode === "B2_Stones") {
+        renderQuiz();
+    } else if (mode === "B2_Writing") {
+        renderWriting();
+    } else if (mode === "B2_Matching") {
+        renderMatching();
+    } else if (mode === "B2_Abstraction" || mode === "B2_WordBank") {
+        renderFillInBlanks(mode);
+    } else if (mode === "B2_Reading") {
         renderReading();
+    } else if (mode === "B2_Memory") {
+        renderMemory();
+    } else if (mode === "B2_Crossword") {
+        renderCrossword();
+    }
+}
+function renderQuiz() {
+    const data = database[currentMode][currentQuestionIndex];
+    const container = document.getElementById("app-container");
+    
+    let html = `
+        <div class="card p-4">
+            <h3 class="mb-4">${data.q}</h3>
+            <div class="d-grid gap-2">
+                ${data.o.map((opt, i) => `
+                    <button class="btn btn-outline-primary text-start" onclick="checkQuiz(${i})">
+                        ${opt}
+                    </button>
+                `).join('')}
+            </div>
+            <div id="feedback" class="mt-3"></div>
+        </div>
+    `;
+    container.innerHTML = html;
+}
+
+function checkQuiz(index) {
+    const data = database[currentMode][currentQuestionIndex];
+    const feedback = document.getElementById("feedback");
+    
+    if (index === data.a) {
+        score++;
+        feedback.innerHTML = `<div class="alert alert-success">Correct! ${data.r}</div>`;
+    } else {
+        feedback.innerHTML = `<div class="alert alert-danger">Incorrect. ${data.r}</div>`;
     }
 
-    function renderReading() {
-        const data = database.B2_Reading;
-        const currentQ = data.questions[index];
-        document.getElementById('q-text').innerText = `Question ${index + 1} of ${data.questions.length}`;
-        document.getElementById('feedback-box').classList.add('hidden');
-        document.getElementById('btn-continue').classList.add('hidden');
-        const box = document.getElementById('options-box');
-        box.innerHTML = `
-            <div class="article-box" style="text-align:justify; margin-bottom:20px; max-height:300px; overflow-y:auto; padding:15px; border:1px solid #ddd; background:#fefefe; font-size:0.95rem;">
+    setTimeout(() => {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < database[currentMode].length) {
+            renderQuiz();
+        } else {
+            showResults();
+        }
+    }, 2000);
+}
+function renderReading() {
+    const data = database.B2_Reading;
+    const container = document.getElementById("app-container");
+    const q = data.questions[currentQuestionIndex];
+
+    container.innerHTML = `
+        <div class="row">
+            <div class="col-md-6 scrollable-text p-3 border rounded bg-light">
                 ${data.article}
             </div>
-            <div style="font-weight:bold; margin-bottom:15px; font-size:1.1rem;">${currentQ.q}</div>
-            <div style="display:flex; gap:10px; justify-content:center;">
-                <button class="main-btn" style="background:#2ecc71" onclick="checkTF(true)">True</button>
-                <button class="main-btn" style="background:#e74c3c" onclick="checkTF(false)">False</button>
-            </div>
-        `;
-        document.getElementById('progress-fill').style.width = `${(index / data.questions.length) * 100}%`;
-    }
-
-    function checkTF(userAns) {
-        const d = database.B2_Reading.questions[index];
-        const buttons = document.querySelectorAll('#options-box button');
-        buttons.forEach(b => b.disabled = true);
-        if(userAns === d.a) { score++; showFeedback("Correct! " + d.r); } 
-        else { showFeedback("Incorrect. " + d.r); }
-    }
-
-    function startMemory() {
-        showScreen('screen-memory');
-        matchedCount = 0; startTimer(180);
-        const board = document.getElementById('memory-board'); board.innerHTML = "";
-        let cards = [];
-        database.B2_Memory.forEach((item, i) => {
-            cards.push({ text: item.v, id: i }, { text: item.m, id: i });
-        });
-        cards.sort(() => Math.random() - 0.5);
-        cards.forEach(c => {
-            const div = document.createElement('div'); div.className = 'memory-card'; div.dataset.id = c.id;
-            div.innerHTML = `<div class="card-face card-front">?</div><div class="card-face card-back">${c.text}</div>`;
-            div.onclick = () => {
-                if(flippedCards.length < 2 && !div.classList.contains('flipped')) {
-                    div.classList.add('flipped');
-                    flippedCards.push(div);
-                    if(flippedCards.length === 2) setTimeout(checkPairs, 700);
-                }
-            };
-            board.appendChild(div);
-        });
-    }
-
-    function checkPairs() {
-        const [c1, c2] = flippedCards;
-        if(c1.dataset.id === c2.dataset.id) {
-            matchedCount++;
-            if(matchedCount === database.B2_Memory.length) { clearInterval(timerInterval); finishModule(true); }
-        } else {
-            setTimeout(() => { c1.classList.remove('flipped'); c2.classList.remove('flipped'); }, 500);
-        }
-        flippedCards = [];
-    }
-
-    function startMatching() {
-        showScreen('screen-matching');
-        matchingScore = 0; selectedLeft = null;
-        const colL = document.getElementById('col-left'), colR = document.getElementById('col-right');
-        colL.innerHTML = ""; colR.innerHTML = "";
-        let L = database.B2_Matching.map((it, i) => ({ t: it.a, id: i })).sort(() => Math.random() - 0.5);
-        let R = database.B2_Matching.map((it, i) => ({ t: it.b, id: i })).sort(() => Math.random() - 0.5);
-        L.forEach(it => {
-            const d = document.createElement('div'); d.className = 'match-item'; d.innerText = it.t;
-            d.onclick = () => { document.querySelectorAll('#col-left .match-item').forEach(x => x.classList.remove('selected')); d.classList.add('selected'); selectedLeft = it.id; };
-            colL.appendChild(d);
-        });
-        R.forEach(it => {
-            const d = document.createElement('div'); d.className = 'match-item'; d.innerText = it.t;
-            d.onclick = () => {
-                if(selectedLeft === it.id) {
-                    d.classList.add('matched-pair');
-                    const sel = document.querySelector('#col-left .selected');
-                    if(sel) sel.classList.add('matched-pair');
-                    matchingScore++;
-                    if(matchingScore === database.B2_Matching.length) finishModule(true);
-                }
-            };
-            colR.appendChild(d);
-        });
-    }
-
-    function startTimer(s) {
-        let t = s;
-        if(timerInterval) clearInterval(timerInterval);
-        timerInterval = setInterval(() => {
-            let m = Math.floor(t / 60), sec = t % 60;
-            const timerDisplay = document.getElementById('time-left');
-            if(timerDisplay) timerDisplay.innerText = `${m}:${sec < 10 ? '0' : ''}${sec}`;
-            if(--t < 0) { 
-                clearInterval(timerInterval); 
-                showCustomAlert("Time's Up!", "Game over. Try again!"); 
-                goBackToList(); 
-            }
-        }, 1000);
-    }
-
-    function finishModule(isGame = false) {
-        if(timerInterval) clearInterval(timerInterval);
-        showScreen('screen-results');
-        const display = document.getElementById('final-score-display');
-        display.innerText = isGame ? `${user}, module completed!` : `${user}, your score: ${score} points`;
-    }
-
-    function goBackToList() {
-        if(timerInterval) clearInterval(timerInterval);
-        showQuizzes();
-        function startCrossword() {
-    solvedWords = 0;
-    showScreen('screen-quiz');
-    const quizArea = document.getElementById('quiz-area');
-    
-    quizArea.innerHTML = `
-        <div id="cw-wrapper" style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
-            <div id="cw-grid-container"></div>
-            <div id="cw-input-zone" style="text-align: center; background: #f9f9f9; padding: 15px; border-radius: 8px; width: 100%; max-width: 400px;">
-                <select id="cw-clue-select" onchange="updateClueText()" style="width: 100%; padding: 8px; margin-bottom: 10px;"></select>
-                <p id="cw-clue-display" style="font-weight: bold; min-height: 40px; color: #333;"></p>
-                <input type="text" id="cw-user-input" placeholder="Type answer..." style="width: 60%; padding: 8px; text-transform: uppercase;">
-                <button onclick="checkCwAnswer()" style="padding: 8px 15px; cursor: pointer;">Submit</button>
+            <div class="col-md-6 p-3">
+                <div class="card p-3">
+                    <p class="fw-bold">Question ${currentQuestionIndex + 1} of ${data.questions.length}:</p>
+                    <p>${q.q}</p>
+                    <button class="btn btn-success mb-2" onclick="checkReading(true)">True</button>
+                    <button class="btn btn-danger" onclick="checkReading(false)">False</button>
+                    <div id="feedback" class="mt-3"></div>
+                </div>
             </div>
         </div>
     `;
+}
+
+function checkReading(val) {
+    const q = database.B2_Reading.questions[currentQuestionIndex];
+    const feedback = document.getElementById("feedback");
     
-    renderCwTable();
-    populateClues();
-            document.getElementById('cw-user-input').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            checkCwAnswer();
+    if (val === q.a) {
+        score++;
+        feedback.innerHTML = `<div class="alert alert-success">Correcte! ${q.r}</div>`;
+    } else {
+        feedback.innerHTML = `<div class="alert alert-danger">Incorrecte. ${q.r}</div>`;
+    }
+
+    setTimeout(() => {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < database.B2_Reading.questions.length) {
+            renderReading();
+        } else {
+            showResults();
+        }
+    }, 2500);
+}
+function showResults() {
+    const container = document.getElementById("app-container");
+    let total = 0;
+    
+    if (Array.isArray(database[currentMode])) {
+        total = database[currentMode].length;
+    } else if (database[currentMode].questions) {
+        total = database[currentMode].questions.length;
+    } else if (database[currentMode].answers) {
+        total = database[currentMode].answers.length;
+    }
+
+    container.innerHTML = `
+        <div class="text-center p-5 card">
+            <h2>Activity Finished!</h2>
+            <p class="display-4">${score} / ${total}</p>
+            <button class="btn btn-primary" onclick="location.reload()">Return to Menu</button>
+        </div>
+    `;
+}
+        function renderWriting() {
+    const data = database.B2_Writing[currentQuestionIndex];
+    const container = document.getElementById("app-container");
+    container.innerHTML = `
+        <div class="card p-4">
+            <h3>Complete the sentence:</h3>
+            <p class="fs-5">${data.q.replace('__________', '<input type="text" id="writing-answer" class="form-control d-inline-block w-auto" autocomplete="off">')}</p>
+            <button class="btn btn-primary mt-3" onclick="checkWriting()">Submit</button>
+            <div id="feedback" class="mt-3"></div>
+        </div>
+    `;
+    document.getElementById("writing-answer").focus();
+}
+
+function checkWriting() {
+    const userAnswer = document.getElementById("writing-answer").value.trim().toLowerCase();
+    const data = database.B2_Writing[currentQuestionIndex];
+    const feedback = document.getElementById("feedback");
+    if (userAnswer === data.a.toLowerCase()) {
+        score++;
+        feedback.innerHTML = `<div class="alert alert-success">Correcte! ${data.r}</div>`;
+    } else {
+        feedback.innerHTML = `<div class="alert alert-danger">Incorrecte. Expected: <b>${data.a}</b>. ${data.r}</div>`;
+    }
+    setTimeout(() => {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < database.B2_Writing.length) renderWriting();
+        else showResults();
+    }, 2000);
+}
+
+function renderMatching() {
+    const container = document.getElementById("app-container");
+    const data = database.B2_Matching;
+    let colA = [...data].sort(() => Math.random() - 0.5);
+    let colB = [...data].sort(() => Math.random() - 0.5);
+    container.innerHTML = `
+        <div class="row">
+            <div class="col-6" id="col-a">
+                ${colA.map(item => `<button class="btn btn-outline-secondary w-100 mb-2" onclick="selectMatch('${item.a}', 'a', this)">${item.a}</button>`).join('')}
+            </div>
+            <div class="col-6" id="col-b">
+                ${colB.map(item => `<button class="btn btn-outline-secondary w-100 mb-2" onclick="selectMatch('${item.b}', 'b', this)">${item.b}</button>`).join('')}
+            </div>
+        </div>
+    `;
+}
+
+function selectMatch(val, side, btn) {
+    if (!selectedWord) {
+        selectedWord = { val, side, btn };
+        btn.classList.replace('btn-outline-secondary', 'btn-warning');
+    } else {
+        if (selectedWord.side === side) {
+            selectedWord.btn.classList.replace('btn-warning', 'btn-outline-secondary');
+            selectedWord = { val, side, btn };
+            btn.classList.replace('btn-outline-secondary', 'btn-warning');
+            return;
+        }
+        const pair = side === 'a' ? { a: val, b: selectedWord.val } : { a: selectedWord.val, b: val };
+        const match = database.B2_Matching.find(m => m.a === pair.a && m.b === pair.b);
+        if (match) {
+            score++;
+            btn.classList.replace('btn-outline-secondary', 'btn-success');
+            selectedWord.btn.classList.replace('btn-warning', 'btn-success');
+            btn.disabled = true;
+            selectedWord.btn.disabled = true;
+            matchedPairs.push(pair);
+        } else {
+            btn.classList.replace('btn-outline-secondary', 'btn-danger');
+            selectedWord.btn.classList.replace('btn-warning', 'btn-danger');
+            setTimeout(() => {
+                btn.classList.replace('btn-danger', 'btn-outline-secondary');
+                selectedWord.btn.classList.replace('btn-danger', 'btn-outline-secondary');
+            }, 500);
+        }
+        selectedWord = null;
+        if (matchedPairs.length === database.B2_Matching.length) setTimeout(showResults, 1000);
+    }
+}
+
+function renderFillInBlanks(mode) {
+    const data = database[mode];
+    const container = document.getElementById("app-container");
+    let textHtml = data.summary || data.text;
+    data.answers.forEach((_, i) => {
+        textHtml = textHtml.replace(`(${i + 1}) __________`, `<input type="text" class="form-control d-inline-block w-auto blank-input" data-index="${i}" style="width:120px !important">`);
+    });
+    container.innerHTML = `
+        <div class="card p-4">
+            ${data.article ? `<div class="alert alert-info small">${data.article}</div>` : ''}
+            ${data.bank ? `<div class="mb-3 p-2 border rounded bg-light"><b>Word Bank:</b> ${data.bank.join(' | ')}</div>` : ''}
+            <div class="line-height-lg">${textHtml}</div>
+            <button class="btn btn-primary mt-4" onclick="checkBlanks('${mode}')">Check Answers</button>
+        </div>
+    `;
+}
+
+function checkBlanks(mode) {
+    const inputs = document.querySelectorAll('.blank-input');
+    const correctAnswers = database[mode].answers;
+    inputs.forEach((input, i) => {
+        if (input.value.trim().toLowerCase() === correctAnswers[i].toLowerCase()) {
+            score++;
+            input.classList.add('is-valid');
+        } else {
+            input.classList.add('is-invalid');
+            input.value += ` (${correctAnswers[i]})`;
         }
     });
+    setTimeout(showResults, 5000);
 }
-        function renderCwTable() {
-    const container = document.getElementById('cw-grid-container');
-    let table = '<table style="border-collapse: collapse; background: #333;">';
-    for (let i = 0; i < B2_Crossword.gridSize; i++) {
-        table += '<tr>';
-        for (let j = 0; j < B2_Crossword.gridSize; j++) {
-            table += `<td id="cw-${i}-${j}" style="width: 30px; height: 30px; border: 1px solid #000; text-align: center; vertical-align: middle; font-weight: bold; position: relative; background: #222; color: #333;"></td>`;
+
+function renderMemory() {
+    const container = document.getElementById("app-container");
+    const cards = [];
+    database.B2_Memory.forEach((item, i) => {
+        cards.push({ text: item.v, id: i, type: 'v' });
+        cards.push({ text: item.m, id: i, type: 'm' });
+    });
+    cards.sort(() => Math.random() - 0.5);
+    container.innerHTML = `<div class="row g-2">${cards.map((c, i) => `
+        <div class="col-3">
+            <div class="card memory-card text-center p-2" onclick="flipCard(this, ${c.id}, '${c.type}')" style="cursor:pointer; height:80px; font-size:0.8rem">?</div>
+        </div>`).join('')}</div>`;
+}
+
+let firstCard = null;
+function flipCard(el, id, type) {
+    if (el.classList.contains('bg-success') || el === firstCard?.el) return;
+    const item = database.B2_Memory[id];
+    el.innerText = type === 'v' ? item.v : item.m;
+    if (!firstCard) {
+        firstCard = { el, id };
+    } else {
+        if (firstCard.id === id) {
+            score++;
+            el.classList.add('bg-success', 'text-white');
+            firstCard.el.classList.add('bg-success', 'text-white');
+            matchedPairs.push(id);
+        } else {
+            const temp = firstCard;
+            setTimeout(() => {
+                el.innerText = '?';
+                temp.el.innerText = '?';
+            }, 1000);
         }
-        table += '</tr>';
+        firstCard = null;
     }
-    table += '</table>';
-    container.innerHTML = table;
+    if (matchedPairs.length === database.B2_Memory.length) setTimeout(showResults, 2000);
+}
+        function renderCrossword() {
+    const data = database.B2_Crossword;
+    const container = document.getElementById("app-container");
+    let gridHtml = `<div class="crossword-grid" style="display:grid; grid-template-columns:repeat(10, 35px); gap:2px; justify-content:center;">`;
     
-    B2_Crossword.clues.forEach(clue => {
-        for (let i = 0; i < clue.a.length; i++) {
-            let row = clue.d === "V" ? clue.r + i : clue.r;
-            let col = clue.d === "H" ? clue.c + i : clue.c;
-            let cell = document.getElementById(`cw-${row}-${col}`);
-            cell.style.background = "#fff";
-            if (i === 0) {
-                const num = document.createElement('span');
-                num.innerText = clue.id;
-                num.style.cssText = "position: absolute; top: 1px; left: 1px; font-size: 9px; color: #666;";
-                cell.appendChild(num);
+    for (let r = 0; r < 10; r++) {
+        for (let c = 0; c < 10; c++) {
+            const cell = data.grid.find(i => i.r === r && i.c === c);
+            if (cell) {
+                gridHtml += `
+                    <div style="position:relative">
+                        ${cell.n ? `<span style="position:absolute; font-size:10px; top:0; left:2px">${cell.n}</span>` : ''}
+                        <input type="text" class="form-control p-0 text-center cw-cell" 
+                               maxlength="1" data-r="${r}" data-c="${c}" 
+                               style="width:35px; height:35px; text-transform:uppercase">
+                    </div>`;
+            } else {
+                gridHtml += `<div style="width:35px; height:35px; background:#333; border-radius:3px"></div>`;
             }
         }
-    });
-}
-        function populateClues() {
-    const select = document.getElementById('cw-clue-select');
-    B2_Crossword.clues.forEach((clue, index) => {
-        const opt = document.createElement('option');
-        opt.value = index;
-        opt.innerText = `Clue ${clue.id} (${clue.d === 'H' ? 'Across' : 'Down'})`;
-        select.appendChild(opt);
-    });
-    updateClueText();
+    }
+    gridHtml += `</div>`;
+
+    container.innerHTML = `
+        <div class="card p-3">
+            <div class="row">
+                <div class="col-md-7">${gridHtml}</div>
+                <div class="col-md-5">
+                    <h5>Clues</h5>
+                    <div class="small">
+                        <h6>Across</h6>
+                        ${data.clues.across.map(clue => `<p>${clue}</p>`).join('')}
+                        <h6>Down</h6>
+                        ${data.clues.down.map(clue => `<p>${clue}</p>`).join('')}
+                    </div>
+                    <button class="btn btn-primary w-100 mt-3" onclick="checkCrossword()">Check Crossword</button>
+                </div>
+            </div>
+        </div>
+    `;
 }
 
-function updateClueText() {
-    const select = document.getElementById('cw-clue-select');
-    const display = document.getElementById('cw-clue-display');
-    const clue = B2_Crossword.clues[select.value];
-    display.innerText = clue.q;
-    document.getElementById('cw-user-input').value = "";
-    document.getElementById('cw-user-input').focus();
-}
-        function checkCwAnswer() {
-    const select = document.getElementById('cw-clue-select');
-    const clue = B2_Crossword.clues[select.value];
-    const input = document.getElementById('cw-user-input');
-    const val = input.value.toUpperCase().trim();
+function checkCrossword() {
+    const cells = document.querySelectorAll('.cw-cell');
+    const gridData = database.B2_Crossword.grid;
+    let correctCount = 0;
 
-    if (val === clue.a) {
-        for (let i = 0; i < clue.a.length; i++) {
-            let row = clue.d === "V" ? clue.r + i : clue.r;
-            let col = clue.d === "H" ? clue.c + i : clue.c;
-            const cell = document.getElementById(`cw-${row}-${col}`);
-            
-            const span = cell.querySelector('span');
-            cell.innerText = clue.a[i];
-            if (span) cell.appendChild(span);
+    cells.forEach(cell => {
+        const r = parseInt(cell.dataset.r);
+        const c = parseInt(cell.dataset.c);
+        const data = gridData.find(i => i.r === r && i.c === c);
+        if (cell.value.toUpperCase() === data.v.toUpperCase()) {
+            cell.classList.add('bg-success', 'text-white');
+            correctCount++;
+        } else {
+            cell.classList.add('bg-danger', 'text-white');
         }
-        
-        input.value = "";
-        solvedWords++;
-        
-        if (solvedWords === B2_Crossword.clues.length) {
-            finishCwModule();
-        }
+    });
+
+    if (correctCount === gridData.length) {
+        score = 1; 
+        setTimeout(showResults, 1500);
     }
 }
-        function finishCwModule() {
-    if (timerInterval) clearInterval(timerInterval);
-    showScreen('screen-results');
-    const display = document.getElementById('final-score-display');
-    if (display) {
-        display.innerText = `${user}, Correct! Module completed.`;
+
+document.addEventListener('DOMContentLoaded', () => {
+    const nav = document.querySelector('.navbar-nav');
+    if (nav) {
+        nav.innerHTML = `
+            <li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_MC')">Multiple Choice</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_Stones')">Stones/Eggshells</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_Writing')">Writing</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_Matching')">Matching</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_Abstraction')">Abstraction</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_WordBank')">Word Bank</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_Reading')">Reading</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_Memory')">Memory</a></li>
+            <li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_Crossword')">Crossword</a></li>
+        `;
+    }
+});
+        :root {
+    --primary-color: #0d6efd;
+    --success-color: #198754;
+    --danger-color: #dc3545;
+    --light-bg: #f8f9fa;
+}
+
+body {
+    background-color: var(--light-bg);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#app-container {
+    min-height: 400px;
+    margin-top: 20px;
+}
+
+.scrollable-text {
+    max-height: 500px;
+    overflow-y: auto;
+    line-height: 1.8;
+    font-size: 1.1rem;
+    padding-right: 15px;
+}
+
+.memory-card {
+    transition: transform 0.3s, background-color 0.3s;
+    border: 2px solid var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    user-select: none;
+    background: white;
+}
+
+.memory-card:hover {
+    background-color: #e7f1ff;
+    transform: translateY(-2px);
+}
+
+.cw-cell {
+    font-weight: bold;
+    font-size: 1.2rem;
+    border: 1px solid #999 !important;
+}
+
+.cw-cell:focus {
+    background-color: #fff3cd;
+    outline: none;
+    box-shadow: none;
+}
+
+.line-height-lg {
+    line-height: 2.5;
+}
+
+.blank-input {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+    padding: 0 5px;
+    text-align: center;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.card {
+    border: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.btn-outline-secondary {
+    border-width: 2px;
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .crossword-grid {
+        grid-template-columns: repeat(10, 28px) !important;
+    }
+    .cw-cell {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 0.9rem;
     }
 }
-    }
+database.B2_Crossword.grid = [
+    {r:1, c:1, v:"D", n:1}, {r:1, c:2, v:"E"}, {r:1, c:3, v:"P"}, {r:1, c:4, v:"E"}, {r:1, c:5, v:"N"}, {r:1, c:6, v:"D"}, {r:1, c:7, v:"E"}, {r:1, c:8, v:"N"}, {r:1, c:9, v:"T"},
+    {r:0, c:2, v:"E", n:2}, {r:1, c:2, v:"E"}, {r:2, c:2, v:"M"}, {r:3, c:2, v:"P"}, {r:4, c:2, v:"L"}, {r:5, c:2, v:"O"}, {r:6, c:2, v:"Y"}, {r:7, c:2, v:"E"}, {r:8, c:2, v:"E"},
+    {r:0, c:8, v:"P", n:3}, {r:1, c:8, v:"O"}, {r:2, c:8, v:"S"}, {r:3, c:8, v:"S"}, {r:4, c:8, v:"I"}, {r:5, c:8, v:"B"}, {r:6, c:8, v:"I"}, {r:7, c:8, v:"L"}, {r:8, c:8, v:"I"}, {r:9, c:8, v:"T"}, {r:10, c:8, v:"Y"},
+    {r:4, c:1, v:"D", n:4}, {r:4, c:2, v:"A"}, {r:4, c:3, v:"N"}, {r:4, c:4, v:"G"}, {r:4, c:5, v:"E"}, {r:4, c:6, v:"R"}, {r:4, c:7, v:"O"}, {r:4, c:8, v:"U"}, {r:4, c:9, v:"S"},
+    {r:7, c:3, v:"S", n:5}, {r:7, c:4, v:"U"}, {r:7, c:5, v:"C"}, {r:7, c:6, v:"C"}, {r:7, c:7, v:"E"}, {r:7, c:8, v:"S"}, {r:7, c:9, v:"S"},
+    {r:3, c:4, v:"A", n:6}, {r:4, c:4, v:"D"}, {r:5, c:4, v:"V"}, {r:6, c:4, v:"E"}, {r:7, c:4, v:"N"}, {r:8, c:4, v:"T"}, {r:9, c:4, v:"U"}, {r:10, c:4, v:"R"}, {r:11, c:4, v:"O"}, {r:12, c:4, v:"U"}, {r:13, c:4, v:"S"},
+    {r:9, c:1, v:"H", n:7}, {r:9, c:2, v:"E"}, {r:9, c:3, v:"A"}, {r:9, c:4, v:"L"}, {r:9, c:5, v:"T"}, {r:9, c:6, v:"H"}, {r:9, c:7, v:"Y"},
+    {r:2, c:6, v:"C", n:8}, {r:3, c:6, v:"R"}, {r:4, c:6, v:"E"}, {r:5, c:6, v:"A"}, {r:6, c:6, v:"T"}, {r:7, c:6, v:"I"}, {r:8, c:6, v:"O"}, {r:9, c:6, v:"N"},
+    {r:1, c:0, v:"C", n:9}, {r:2, c:0, v:"O"}, {r:3, c:0, v:"M"}, {r:4, c:0, v:"F"}, {r:5, c:0, v:"O"}, {r:6, c:0, v:"R"}, {r:7, c:0, v:"T"}, {r:8, c:0, v:"A"}, {r:9, c:0, v:"B"}, {r:10, c:0, v:"L"}, {r:11, c:0, v:"E"},
+    {r:6, c:0, v:"S", n:10}, {r:6, c:1, v:"U"}, {r:6, c:2, v:"R"}, {r:6, c:3, v:"E"}, {r:6, c:4, v:"L"}, {r:6, c:5, v:"Y"}
+];
+
+database.B2_Crossword.clues = {
+    across: ["1. DEPEND (Adj)", "4. DANGER (Adj)", "5. SUCCEED (Noun)", "7. HEALTH (Adj)", "10. SURE (Adv)"],
+    down: ["2. EMPLOY (Noun - person)", "3. POSSIBLE (Noun)", "6. ADVENTURE (Adj)", "8. CREATE (Noun)", "9. COMFORT (Adj)"]
+};
+
 </script>
 </body>
 </html>
