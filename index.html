@@ -151,7 +151,7 @@ const database = {
         {q: "The surgery was put __________ until the patient stabilized.", o: ["off", "out", "away"], a: 0, r: "'Put off' = postpone."},
         {q: "I wish I __________ more during the lecture.", o: ["focused", "had focused", "would focus"], a: 1, r: "Past regret."},
         {q: "By the end of the year, she __________ her residency.", o: ["will finish", "will have finished", "finishes"], a: 1, r: "Future Perfect."},
-        {q: "The laboratory, __________ was renovated, is top-notch.", o: ["which", "that", "whose"], a: 0, r: "Non-defining relative clause."},
+        {r: "The laboratory, __________ was renovated, is top-notch.", o: ["which", "that", "whose"], a: 0, r: "Non-defining relative clause."},
         {q: "I'd rather you __________ smoke in the waiting area.", o: ["don't", "didn't", "not"], a: 1, r: "'Would rather' + subject + Past Simple."},
         {q: "The medicine needs __________ with food.", o: ["to take", "to be taken", "taking"], a: 1, r: "Passive infinitive."},
         {q: "Seldom __________ such a dedicated medical team.", o: ["have I seen", "I have seen", "did I saw"], a: 0, r: "Inversion after 'Seldom'."}
@@ -265,22 +265,35 @@ const database = {
         ]
     },
     "B2_Crossword": {
-        gridSize: 10,
+        gridSize: 14,
         clues: [
-            { id: 1, r: 1, c: 1, d: "H", q: "DEPEND (Adjective)", a: "DEPENDENT" },
-            { id: 2, r: 0, c: 2, d: "V", q: "EMPLOY (Noun - person)", a: "EMPLOYEE" },
-            { id: 3, r: 0, c: 8, d: "V", q: "POSSIBLE (Noun)", a: "POSSIBILITY" },
-            { id: 4, r: 4, c: 1, d: "H", q: "DANGER (Adjective)", a: "DANGEROUS" },
-            { id: 5, r: 7, c: 3, d: "H", q: "SUCCEED (Noun)", a: "SUCCESS" },
-            { id: 6, r: 3, c: 4, d: "V", q: "ADVENTURE (Adjective)", a: "ADVENTUROUS" },
-            { id: 7, r: 9, c: 1, d: "H", q: "HEALTH (Adjective)", a: "HEALTHY" },
-            { id: 8, r: 2, c: 6, d: "V", q: "CREATE (Noun)", a: "CREATION" },
-            { id: 9, r: 1, c: 0, d: "V", q: "COMFORT (Adjective)", a: "COMFORTABLE" },
-            { id: 10, r: 6, c: 0, d: "H", q: "SURE (Adverb)", a: "SURELY" }
+            { id: 1, d: "H", q: "DEPEND (Adjective)", a: "DEPENDENT" },
+            { id: 4, d: "H", q: "DANGER (Adjective)", a: "DANGEROUS" },
+            { id: 5, d: "H", q: "SUCCEED (Noun)", a: "SUCCESS" },
+            { id: 7, d: "H", q: "HEALTH (Adjective)", a: "HEALTHY" },
+            { id: 10, d: "H", q: "SURE (Adverb)", a: "SURELY" },
+            { id: 2, d: "V", q: "EMPLOY (Noun - person)", a: "EMPLOYEE" },
+            { id: 3, d: "V", q: "POSSIBLE (Noun)", a: "POSSIBILITY" },
+            { id: 6, d: "V", q: "ADVENTURE (Adjective)", a: "ADVENTUROUS" },
+            { id: 8, d: "V", q: "CREATE (Noun)", a: "CREATION" },
+            { id: 9, d: "V", q: "COMFORT (Adjective)", a: "COMFORTABLE" }
+        ],
+        grid: [
+            {r:1, c:1, v:"D", n:1}, {r:1, c:2, v:"E"}, {r:1, c:3, v:"P"}, {r:1, c:4, v:"E"}, {r:1, c:5, v:"N"}, {r:1, c:6, v:"D"}, {r:1, c:7, v:"E"}, {r:1, c:8, v:"N"}, {r:1, c:9, v:"T"},
+            {r:0, c:2, v:"E", n:2}, {r:1, c:2, v:"E"}, {r:2, c:2, v:"M"}, {r:3, c:2, v:"P"}, {r:4, c:2, v:"L"}, {r:5, c:2, v:"O"}, {r:6, c:2, v:"Y"}, {r:7, c:2, v:"E"}, {r:8, c:2, v:"E"},
+            {r:0, c:8, v:"P", n:3}, {r:1, c:8, v:"O"}, {r:2, c:8, v:"S"}, {r:3, c:8, v:"S"}, {r:4, c:8, v:"I"}, {r:5, c:8, v:"B"}, {r:6, c:8, v:"I"}, {r:7, c:8, v:"L"}, {r:8, c:8, v:"I"}, {r:9, c:8, v:"T"}, {r:10, c:8, v:"Y"},
+            {r:4, c:1, v:"D", n:4}, {r:4, c:2, v:"A"}, {r:4, c:3, v:"N"}, {r:4, c:4, v:"G"}, {r:4, c:5, v:"E"}, {r:4, c:6, v:"R"}, {r:4, c:7, v:"O"}, {r:4, c:8, v:"U"}, {r:4, c:9, v:"S"},
+            {r:7, c:3, v:"S", n:5}, {r:7, c:4, v:"U"}, {r:7, c:5, v:"C"}, {r:7, c:6, v:"C"}, {r:7, c:7, v:"E"}, {r:7, c:8, v:"S"}, {r:7, c:9, v:"S"},
+            {r:3, c:4, v:"A", n:6}, {r:4, c:4, v:"D"}, {r:5, c:4, v:"V"}, {r:6, c:4, v:"E"}, {r:7, c:4, v:"N"}, {r:8, c:4, v:"T"}, {r:9, c:4, v:"U"}, {r:10, c:4, v:"R"}, {r:11, c:4, v:"O"}, {r:12, c:4, v:"U"}, {r:13, c:4, v:"S"},
+            {r:9, c:1, v:"H", n:7}, {r:9, c:2, v:"E"}, {r:9, c:3, v:"A"}, {r:9, c:4, v:"L"}, {r:9, c:5, v:"T"}, {r:9, c:6, v:"H"}, {r:9, c:7, v:"Y"},
+            {r:2, c:6, v:"C", n:8}, {r:3, c:6, v:"R"}, {r:4, c:6, v:"E"}, {r:5, c:6, v:"A"}, {r:6, c:6, v:"T"}, {r:7, c:6, v:"I"}, {r:8, c:6, v:"O"}, {r:9, c:6, v:"N"},
+            {r:1, c:0, v:"C", n:9}, {r:2, c:0, v:"O"}, {r:3, c:0, v:"M"}, {r:4, c:0, v:"F"}, {r:5, c:0, v:"O"}, {r:6, c:0, v:"R"}, {r:7, c:0, v:"T"}, {r:8, c:0, v:"A"}, {r:9, c:0, v:"B"}, {r:10, c:0, v:"L"}, {r:11, c:0, v:"E"},
+            {r:6, c:0, v:"S", n:10}, {r:6, c:1, v:"U"}, {r:6, c:2, v:"R"}, {r:6, c:3, v:"E"}, {r:6, c:4, v:"L"}, {r:6, c:5, v:"Y"}
         ]
     }
 };
-        let currentMode = "";
+<script>
+let currentMode = "";
 let currentQuestionIndex = 0;
 let score = 0;
 let matchedPairs = [];
@@ -311,6 +324,7 @@ function startApp(mode) {
         renderCrossword();
     }
 }
+
 function renderQuiz() {
     const data = database[currentMode][currentQuestionIndex];
     const container = document.getElementById("app-container");
@@ -351,6 +365,7 @@ function checkQuiz(index) {
         }
     }, 2000);
 }
+
 function renderReading() {
     const data = database.B2_Reading;
     const container = document.getElementById("app-container");
@@ -394,6 +409,7 @@ function checkReading(val) {
         }
     }, 2500);
 }
+
 function showResults() {
     const container = document.getElementById("app-container");
     let total = 0;
@@ -404,6 +420,8 @@ function showResults() {
         total = database[currentMode].questions.length;
     } else if (database[currentMode].answers) {
         total = database[currentMode].answers.length;
+    } else if (currentMode === "B2_Crossword") {
+        total = database.B2_Crossword.grid.length;
     }
 
     container.innerHTML = `
@@ -414,7 +432,8 @@ function showResults() {
         </div>
     `;
 }
-        function renderWriting() {
+
+function renderWriting() {
     const data = database.B2_Writing[currentQuestionIndex];
     const container = document.getElementById("app-container");
     container.innerHTML = `
@@ -565,12 +584,14 @@ function flipCard(el, id, type) {
     }
     if (matchedPairs.length === database.B2_Memory.length) setTimeout(showResults, 2000);
 }
-        function renderCrossword() {
+
+function renderCrossword() {
     const data = database.B2_Crossword;
     const container = document.getElementById("app-container");
     let gridHtml = `<div class="crossword-grid" style="display:grid; grid-template-columns:repeat(10, 35px); gap:2px; justify-content:center;">`;
     
-    for (let r = 0; r < 10; r++) {
+    // El bucle lee hasta la fila 13 inclusive para abarcar todo el mapa físico de ADVENTUROUS
+    for (let r = 0; r < data.gridSize; r++) {
         for (let c = 0; c < 10; c++) {
             const cell = data.grid.find(i => i.r === r && i.c === c);
             if (cell) {
@@ -588,6 +609,9 @@ function flipCard(el, id, type) {
     }
     gridHtml += `</div>`;
 
+    const acrossClues = data.clues.filter(clue => clue.d === "H");
+    const downClues = data.clues.filter(clue => clue.d === "V");
+
     container.innerHTML = `
         <div class="card p-3">
             <div class="row">
@@ -596,9 +620,9 @@ function flipCard(el, id, type) {
                     <h5>Clues</h5>
                     <div class="small">
                         <h6>Across</h6>
-                        ${data.clues.across.map(clue => `<p>${clue}</p>`).join('')}
+                        ${acrossClues.map(clue => `<p>${clue.id}. ${clue.q}</p>`).join('')}
                         <h6>Down</h6>
-                        ${data.clues.down.map(clue => `<p>${clue}</p>`).join('')}
+                        ${downClues.map(clue => `<p>${clue.id}. ${clue.q}</p>`).join('')}
                     </div>
                     <button class="btn btn-primary w-100 mt-3" onclick="checkCrossword()">Check Crossword</button>
                 </div>
@@ -625,8 +649,26 @@ function checkCrossword() {
     });
 
     if (correctCount === gridData.length) {
-        score = 1; 
+        score = gridData.length; 
         setTimeout(showResults, 1500);
+    }
+}
+
+function login() {
+    const name = document.getElementById("student-name").value.trim();
+    if (name === "") {
+        alert("Por favor, introduce tu nombre.");
+        return;
+    }
+    document.getElementById("screen-login").style.display = "none";
+    const appContainer = document.getElementById("app-container");
+    if (appContainer) {
+        appContainer.innerHTML = `
+            <div class="text-center p-5">
+                <h2>Bienvenide, ${name}</h2>
+                <p>Selecciona una actividad del menú superior para comenzar.</p>
+            </div>
+        `;
     }
 }
 
@@ -646,15 +688,11 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
     }
 });
-        :root {
-    --primary-color: #0d6efd;
-    --success-color: #198754;
-    --danger-color: #dc3545;
-    --light-bg: #f8f9fa;
-}
+</script>
 
+<style>
 body {
-    background-color: var(--light-bg);
+    background-color: #f8f9fa;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
@@ -673,7 +711,7 @@ body {
 
 .memory-card {
     transition: transform 0.3s, background-color 0.3s;
-    border: 2px solid var(--primary-color);
+    border: 2px solid #0d6efd;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -711,7 +749,7 @@ body {
     padding: 0 5px;
     text-align: center;
     font-weight: bold;
-    color: var(--primary-color);
+    color: #0d6efd;
 }
 
 .card {
@@ -734,60 +772,6 @@ body {
         font-size: 0.9rem;
     }
 }
-database.B2_Crossword.grid = [
-    {r:1, c:1, v:"D", n:1}, {r:1, c:2, v:"E"}, {r:1, c:3, v:"P"}, {r:1, c:4, v:"E"}, {r:1, c:5, v:"N"}, {r:1, c:6, v:"D"}, {r:1, c:7, v:"E"}, {r:1, c:8, v:"N"}, {r:1, c:9, v:"T"},
-    {r:0, c:2, v:"E", n:2}, {r:1, c:2, v:"E"}, {r:2, c:2, v:"M"}, {r:3, c:2, v:"P"}, {r:4, c:2, v:"L"}, {r:5, c:2, v:"O"}, {r:6, c:2, v:"Y"}, {r:7, c:2, v:"E"}, {r:8, c:2, v:"E"},
-    {r:0, c:8, v:"P", n:3}, {r:1, c:8, v:"O"}, {r:2, c:8, v:"S"}, {r:3, c:8, v:"S"}, {r:4, c:8, v:"I"}, {r:5, c:8, v:"B"}, {r:6, c:8, v:"I"}, {r:7, c:8, v:"L"}, {r:8, c:8, v:"I"}, {r:9, c:8, v:"T"}, {r:10, c:8, v:"Y"},
-    {r:4, c:1, v:"D", n:4}, {r:4, c:2, v:"A"}, {r:4, c:3, v:"N"}, {r:4, c:4, v:"G"}, {r:4, c:5, v:"E"}, {r:4, c:6, v:"R"}, {r:4, c:7, v:"O"}, {r:4, c:8, v:"U"}, {r:4, c:9, v:"S"},
-    {r:7, c:3, v:"S", n:5}, {r:7, c:4, v:"U"}, {r:7, c:5, v:"C"}, {r:7, c:6, v:"C"}, {r:7, c:7, v:"E"}, {r:7, c:8, v:"S"}, {r:7, c:9, v:"S"},
-    {r:3, c:4, v:"A", n:6}, {r:4, c:4, v:"D"}, {r:5, c:4, v:"V"}, {r:6, c:4, v:"E"}, {r:7, c:4, v:"N"}, {r:8, c:4, v:"T"}, {r:9, c:4, v:"U"}, {r:10, c:4, v:"R"}, {r:11, c:4, v:"O"}, {r:12, c:4, v:"U"}, {r:13, c:4, v:"S"},
-    {r:9, c:1, v:"H", n:7}, {r:9, c:2, v:"E"}, {r:9, c:3, v:"A"}, {r:9, c:4, v:"L"}, {r:9, c:5, v:"T"}, {r:9, c:6, v:"H"}, {r:9, c:7, v:"Y"},
-    {r:2, c:6, v:"C", n:8}, {r:3, c:6, v:"R"}, {r:4, c:6, v:"E"}, {r:5, c:6, v:"A"}, {r:6, c:6, v:"T"}, {r:7, c:6, v:"I"}, {r:8, c:6, v:"O"}, {r:9, c:6, v:"N"},
-    {r:1, c:0, v:"C", n:9}, {r:2, c:0, v:"O"}, {r:3, c:0, v:"M"}, {r:4, c:0, v:"F"}, {r:5, c:0, v:"O"}, {r:6, c:0, v:"R"}, {r:7, c:0, v:"T"}, {r:8, c:0, v:"A"}, {r:9, c:0, v:"B"}, {r:10, c:0, v:"L"}, {r:11, c:0, v:"E"},
-    {r:6, c:0, v:"S", n:10}, {r:6, c:1, v:"U"}, {r:6, c:2, v:"R"}, {r:6, c:3, v:"E"}, {r:6, c:4, v:"L"}, {r:6, c:5, v:"Y"}
-];
-
-database.B2_Crossword.clues = {
-    across: ["1. DEPEND (Adj)", "4. DANGER (Adj)", "5. SUCCEED (Noun)", "7. HEALTH (Adj)", "10. SURE (Adv)"],
-    down: ["2. EMPLOY (Noun - person)", "3. POSSIBLE (Noun)", "6. ADVENTURE (Adj)", "8. CREATE (Noun)", "9. COMFORT (Adj)"]
-};
-
-</script>
-    <script>
-function login() {
-const name = document.getElementById("student-name").value.trim();
-if (name === "") {
-alert("Por favor, introduce tu nombre.");
-return;
-}
-document.getElementById("screen-login").style.display = "none";
-const appContainer = document.getElementById("app-container");
-if (appContainer) {
-appContainer.innerHTML = `
-<div class="text-center p-5">
-<h2>Bienvenide, ${name}</h2>
-<p>Selecciona una actividad del menú superior para comenzar.</p>
-</div>
-`;
-}
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-const nav = document.querySelector('.navbar-nav');
-if (nav) {
-nav.innerHTML = `
-<li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_MC')">Multiple Choice</a></li>
-<li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_Stones')">Stones/Eggshells</a></li>
-<li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_Writing')">Writing</a></li>
-<li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_Matching')">Matching</a></li>
-<li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_Abstraction')">Abstraction</a></li>
-<li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_WordBank')">Word Bank</a></li>
-<li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_Reading')">Reading</a></li>
-<li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_Memory')">Memory</a></li>
-<li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_Crossword')">Crossword</a></li>
-`;
-}
-});
-</script>
+</style>
 </body>
 </html>
