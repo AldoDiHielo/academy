@@ -292,11 +292,30 @@ const database = {
         ]
     }
 };
+<script>
 let currentMode = "";
 let currentQuestionIndex = 0;
 let score = 0;
 let matchedPairs = [];
 let selectedWord = null;
+
+function showScreen(screenId) {
+    const screens = [
+        'screen-login', 'screen-branch', 'screen-levels-selector', 
+        'screen-levels', 'screen-quiz', 'screen-memory', 
+        'screen-matching', 'screen-results', 'screen-b2-dynamic'
+    ];
+    screens.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            if (id === screenId) {
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+    });
+}
 
 function startApp(mode) {
     currentMode = mode;
@@ -304,7 +323,8 @@ function startApp(mode) {
     score = 0;
     matchedPairs = [];
     
-    const container = document.getElementById("app-container");
+    showScreen('screen-b2-dynamic');
+    const container = document.getElementById("b2-activity-wrapper");
     container.innerHTML = ""; 
 
     if (mode === "B2_MC" || mode === "B2_Stones") {
@@ -326,16 +346,16 @@ function startApp(mode) {
 
 function renderQuiz() {
     const data = database[currentMode][currentQuestionIndex];
-    const container = document.getElementById("app-container");
+    const container = document.getElementById("b2-activity-wrapper");
     
     let html = `
-        <div class="card p-4">
-            <h3 class="mb-4">${data.q}</h3>
-            <div class="d-grid gap-2">
+        <div class="card p-4" style="text-align: left;">
+            <h3 class="mb-4" style="text-align: center;">${data.q}</h3>
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
                 ${data.o.map((opt, i) => `
-                    <button class="btn btn-outline-primary text-start" onclick="checkQuiz(${i})">
+                    <div class="option" onclick="checkQuiz(${i})">
                         ${opt}
-                    </button>
+                    </div>
                 `).join('')}
             </div>
             <div id="feedback" class="mt-3"></div>
@@ -347,12 +367,18 @@ function renderQuiz() {
 function checkQuiz(index) {
     const data = database[currentMode][currentQuestionIndex];
     const feedback = document.getElementById("feedback");
+    const options = document.querySelectorAll("#b2-activity-wrapper .option");
     
+    options.forEach(opt => opt.style.pointerEvents = "none");
+
     if (index === data.a) {
         score++;
-        feedback.innerHTML = `<div class="alert alert-success">Correct! ${data.r}</div>`;
+        options[index].classList.add("correct");
+        feedback.innerHTML = `<div style="color: var(--success); margin-top: 15px; font-weight: bold;">Correct! ${data.r}</div>`;
     } else {
-        feedback.innerHTML = `<div class="alert alert-danger">Incorrect. ${data.r}</div>`;
+        options[index].classList.add("wrong");
+        options[data.a].classList.add("correct");
+        feedback.innerHTML = `<div style="color: var(--danger); margin-top: 15px; font-weight: bold;">Incorrect. ${data.r}</div>`;
     }
 
     setTimeout(() => {
@@ -362,27 +388,25 @@ function checkQuiz(index) {
         } else {
             showResults();
         }
-    }, 2000);
+    }, 2500);
 }
 
 function renderReading() {
     const data = database.B2_Reading;
-    const container = document.getElementById("app-container");
+    const container = document.getElementById("b2-activity-wrapper");
     const q = data.questions[currentQuestionIndex];
 
     container.innerHTML = `
-        <div class="row">
-            <div class="col-md-6 scrollable-text p-3 border rounded bg-light">
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+            <div class="article-box">
                 ${data.article}
             </div>
-            <div class="col-md-6 p-3">
-                <div class="card p-3">
-                    <p class="fw-bold">Question ${currentQuestionIndex + 1} of ${data.questions.length}:</p>
-                    <p>${q.q}</p>
-                    <button class="btn btn-success mb-2" onclick="checkReading(true)">True</button>
-                    <button class="btn btn-danger" onclick="checkReading(false)">False</button>
-                    <div id="feedback" class="mt-3"></div>
-                </div>
+            <div class="card p-3" style="border: 2px solid #eee; padding: 1.5rem; border-radius: 12px;">
+                <p class="fw-bold" style="font-size: 0.9rem; color: #7f8c8d;">Question ${currentQuestionIndex + 1} of ${data.questions.length}:</p>
+                <p style="font-size: 1.1rem; font-weight: bold; margin-bottom: 20px;">${q.q}</p>
+                <button class="main-btn" style="background: var(--success);" onclick="checkReading(true)">True</button>
+                <button class="main-btn" style="background: var(--danger);" onclick="checkReading(false)">False</button>
+                <div id="feedback" class="mt-3"></div>
             </div>
         </div>
     `;
@@ -394,9 +418,9 @@ function checkReading(val) {
     
     if (val === q.a) {
         score++;
-        feedback.innerHTML = `<div class="alert alert-success">Correcte! ${q.r}</div>`;
+        feedback.innerHTML = `<div style="color: var(--success); margin-top: 15px; font-weight: bold;">Correcte! ${q.r}</div>`;
     } else {
-        feedback.innerHTML = `<div class="alert alert-danger">Incorrecte. ${q.r}</div>`;
+        feedback.innerHTML = `<div style="color: var(--danger); margin-top: 15px; font-weight: bold;">Incorrecte. ${q.r}</div>`;
     }
 
     setTimeout(() => {
@@ -410,7 +434,7 @@ function checkReading(val) {
 }
 
 function showResults() {
-    const container = document.getElementById("app-container");
+    const container = document.getElementById("b2-activity-wrapper");
     let total = 0;
     
     if (Array.isArray(database[currentMode])) {
@@ -420,26 +444,28 @@ function showResults() {
     } else if (database[currentMode].answers) {
         total = database[currentMode].answers.length;
     } else if (currentMode === "B2_Crossword") {
-        total = database.B2_Crossword.grid.length;
+        total = database.B2_Crossword.clues.length;
     }
 
     container.innerHTML = `
-        <div class="text-center p-5 card">
+        <div style="padding: 2rem; text-align: center;">
             <h2>Activity Finished!</h2>
-            <p class="display-4">${score} / ${total}</p>
-            <button class="btn btn-primary" onclick="location.reload()">Return to Menu</button>
+            <p style="font-size: 3rem; font-weight: bold; color: var(--primary); margin: 20px 0;">${score} / ${total}</p>
+            <button class="main-btn" onclick="showScreen('screen-levels')">Return to Modules</button>
         </div>
     `;
 }
 
 function renderWriting() {
     const data = database.B2_Writing[currentQuestionIndex];
-    const container = document.getElementById("app-container");
+    const container = document.getElementById("b2-activity-wrapper");
     container.innerHTML = `
         <div class="card p-4">
             <h3>Complete the sentence:</h3>
-            <p class="fs-5">${data.q.replace('__________', '<input type="text" id="writing-answer" class="form-control d-inline-block w-auto" autocomplete="off">')}</p>
-            <button class="btn btn-primary mt-3" onclick="checkWriting()">Submit</button>
+            <p style="font-size: 1.2rem; margin: 20px 0; line-height: 2;">
+                ${data.q.replace('__________', '<input type="text" id="writing-answer" style="width: auto; max-width: 250px; display: inline-block; margin: 0 10px; padding: 5px 10px;" autocomplete="off">')}
+            </p>
+            <button class="main-btn" onclick="checkWriting()">Submit</button>
             <div id="feedback" class="mt-3"></div>
         </div>
     `;
@@ -447,65 +473,84 @@ function renderWriting() {
 }
 
 function checkWriting() {
-    const userAnswer = document.getElementById("writing-answer").value.trim().toLowerCase();
+    const inputEl = document.getElementById("writing-answer");
+    const userAnswer = inputEl.value.trim().toLowerCase();
     const data = database.B2_Writing[currentQuestionIndex];
     const feedback = document.getElementById("feedback");
+    
     if (userAnswer === data.a.toLowerCase()) {
         score++;
-        feedback.innerHTML = `<div class="alert alert-success">Correcte! ${data.r}</div>`;
+        inputEl.style.borderColor = "var(--success)";
+        feedback.innerHTML = `<div style="color: var(--success); margin-top: 15px; font-weight: bold;">Correcte! ${data.r}</div>`;
     } else {
-        feedback.innerHTML = `<div class="alert alert-danger">Incorrecte. Expected: <b>${data.a}</b>. ${data.r}</div>`;
+        inputEl.style.borderColor = "var(--danger)";
+        feedback.innerHTML = `<div style="color: var(--danger); margin-top: 15px; font-weight: bold;">Incorrecte. Expected: <b>${data.a}</b>. ${data.r}</div>`;
     }
     setTimeout(() => {
         currentQuestionIndex++;
         if (currentQuestionIndex < database.B2_Writing.length) renderWriting();
         else showResults();
-    }, 2000);
+    }, 2500);
 }
 
 function renderMatching() {
-    const container = document.getElementById("app-container");
+    const container = document.getElementById("b2-activity-wrapper");
     const data = database.B2_Matching;
     let colA = [...data].sort(() => Math.random() - 0.5);
     let colB = [...data].sort(() => Math.random() - 0.5);
+    
     container.innerHTML = `
-        <div class="row">
-            <div class="col-6" id="col-a">
-                ${colA.map(item => `<button class="btn btn-outline-secondary w-100 mb-2" onclick="selectMatch('${item.a}', 'a', this)">${item.a}</button>`).join('')}
+        <h3 style="margin-bottom: 20px;">Collocations Match</h3>
+        <div class="matching-container">
+            <div class="match-col" id="col-a">
+                ${colA.map(item => `<div class="match-item" style="border: 2px solid #eee; padding: 10px; border-radius: 8px; margin-bottom: 8px; text-align: center;" onclick="selectMatch('${item.a}', 'a', this)">${item.a}</div>`).join('')}
             </div>
-            <div class="col-6" id="col-b">
-                ${colB.map(item => `<button class="btn btn-outline-secondary w-100 mb-2" onclick="selectMatch('${item.b}', 'b', this)">${item.b}</button>`).join('')}
+            <div class="match-col" id="col-b">
+                ${colB.map(item => `<div class="match-item" style="border: 2px solid #eee; padding: 10px; border-radius: 8px; margin-bottom: 8px; text-align: center;" onclick="selectMatch('${item.b}', 'b', this)">${item.b}</div>`).join('')}
             </div>
         </div>
     `;
 }
 
-function selectMatch(val, side, btn) {
+function selectMatch(val, side, el) {
+    if (el.classList.contains('matched-pair')) return;
+
     if (!selectedWord) {
-        selectedWord = { val, side, btn };
-        btn.classList.replace('btn-outline-secondary', 'btn-warning');
+        selectedWord = { val, side, el };
+        el.style.borderColor = "var(--secondary)";
+        el.style.background = "#d6eaf8";
     } else {
         if (selectedWord.side === side) {
-            selectedWord.btn.classList.replace('btn-warning', 'btn-outline-secondary');
-            selectedWord = { val, side, btn };
-            btn.classList.replace('btn-outline-secondary', 'btn-warning');
+            selectedWord.el.style.borderColor = "transparent";
+            selectedWord.el.style.background = "#f1f1f1";
+            selectedWord = { val, side, el };
+            el.style.borderColor = "var(--secondary)";
+            el.style.background = "#d6eaf8";
             return;
         }
         const pair = side === 'a' ? { a: val, b: selectedWord.val } : { a: selectedWord.val, b: val };
         const match = database.B2_Matching.find(m => m.a === pair.a && m.b === pair.b);
         if (match) {
             score++;
-            btn.classList.replace('btn-outline-secondary', 'btn-success');
-            selectedWord.btn.classList.replace('btn-warning', 'btn-success');
-            btn.disabled = true;
-            selectedWord.btn.disabled = true;
+            el.style.background = "#d4edda";
+            el.style.borderColor = "var(--success)";
+            el.classList.add('matched-pair');
+            
+            selectedWord.el.style.background = "#d4edda";
+            selectedWord.el.style.borderColor = "var(--success)";
+            selectedWord.el.classList.add('matched-pair');
             matchedPairs.push(pair);
         } else {
-            btn.classList.replace('btn-outline-secondary', 'btn-danger');
-            selectedWord.btn.classList.replace('btn-warning', 'btn-danger');
+            el.style.background = "#f8d7da";
+            el.style.borderColor = "var(--danger)";
+            selectedWord.el.style.background = "#f8d7da";
+            selectedWord.el.style.borderColor = "var(--danger)";
+            const temp = selectedWord.el;
             setTimeout(() => {
-                btn.classList.replace('btn-danger', 'btn-outline-secondary');
-                selectedWord.btn.classList.replace('btn-danger', 'btn-outline-secondary');
+                el.style.background = "#f1f1f1";
+                el.style.borderColor = "transparent";
+                temp.style.background = "#f1f1f1";
+                temp.style.borderColor = "transparent";
             }, 500);
         }
         selectedWord = null;
@@ -515,17 +560,19 @@ function selectMatch(val, side, btn) {
 
 function renderFillInBlanks(mode) {
     const data = database[mode];
-    const container = document.getElementById("app-container");
+    const container = document.getElementById("b2-activity-wrapper");
     let textHtml = data.summary || data.text;
+    
     data.answers.forEach((_, i) => {
-        textHtml = textHtml.replace(`(${i + 1}) __________`, `<input type="text" class="form-control d-inline-block w-auto blank-input" data-index="${i}" style="width:120px !important">`);
+        textHtml = textHtml.replace(`(${i + 1}) __________`, `<input type="text" class="abs-input blank-input" data-index="${i}">`);
     });
+    
     container.innerHTML = `
-        <div class="card p-4">
-            ${data.article ? `<div class="alert alert-info small">${data.article}</div>` : ''}
-            ${data.bank ? `<div class="mb-3 p-2 border rounded bg-light"><b>Word Bank:</b> ${data.bank.join(' | ')}</div>` : ''}
-            <div class="line-height-lg">${textHtml}</div>
-            <button class="btn btn-primary mt-4" onclick="checkBlanks('${mode}')">Check Answers</button>
+        <div class="card p-4" style="text-align: justify;">
+            ${data.article ? `<div class="article-box" style="margin-bottom: 20px;">${data.article}</div>` : ''}
+            ${data.bank ? `<div class="word-bank"><b>Word Bank:</b><br>${data.bank.map(w => `<span class="word-item">${w}</span>`).join('')}</div>` : ''}
+            <div style="line-height: 2.2; font-size: 1.05rem;">${textHtml}</div>
+            <button class="main-btn" style="margin-top: 25px;" onclick="checkBlanks('${mode}')">Check Answers</button>
         </div>
     `;
 }
@@ -536,9 +583,11 @@ function checkBlanks(mode) {
     inputs.forEach((input, i) => {
         if (input.value.trim().toLowerCase() === correctAnswers[i].toLowerCase()) {
             score++;
-            input.classList.add('is-valid');
+            input.style.borderBottomColor = "var(--success)";
+            input.style.color = "var(--success)";
         } else {
-            input.classList.add('is-invalid');
+            input.style.borderBottomColor = "var(--danger)";
+            input.style.color = "var(--danger)";
             input.value += ` (${correctAnswers[i]})`;
         }
     });
@@ -546,38 +595,58 @@ function checkBlanks(mode) {
 }
 
 function renderMemory() {
-    const container = document.getElementById("app-container");
+    const container = document.getElementById("b2-activity-wrapper");
     const cards = [];
     database.B2_Memory.forEach((item, i) => {
         cards.push({ text: item.v, id: i, type: 'v' });
         cards.push({ text: item.m, id: i, type: 'm' });
     });
     cards.sort(() => Math.random() - 0.5);
-    container.innerHTML = `<div class="row g-2">${cards.map((c, i) => `
-        <div class="col-3">
-            <div class="card memory-card text-center p-2" onclick="flipCard(this, ${c.id}, '${c.type}')" style="cursor:pointer; height:80px; font-size:0.8rem">?</div>
-        </div>`).join('')}</div>`;
+    
+    container.innerHTML = `
+        <h3 style="margin-bottom: 20px;">Memory Match</h3>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+            ${cards.map((c, i) => `
+                <div class="level-card" onclick="flipCard(this, ${c.id}, '${c.type}')" style="height:90px; padding:5px; display:flex; align-items:center; justify-content:center; font-size:0.85rem; font-weight:bold; user-select:none;">
+                    ?
+                </div>
+            `).join('')}
+        </div>
+    `;
 }
 
 let firstCard = null;
 function flipCard(el, id, type) {
-    if (el.classList.contains('bg-success') || el === firstCard?.el) return;
+    if (el.style.background === "var(--success)" || el === firstCard?.el) return;
     const item = database.B2_Memory[id];
     el.innerText = type === 'v' ? item.v : item.m;
+    el.style.background = "#e7f1ff";
+    el.style.borderColor = "var(--secondary)";
+
     if (!firstCard) {
         firstCard = { el, id };
     } else {
         if (firstCard.id === id) {
             score++;
-            el.classList.add('bg-success', 'text-white');
-            firstCard.el.classList.add('bg-success', 'text-white');
+            el.style.background = "var(--success)";
+            el.style.color = "white";
+            el.style.borderColor = "var(--success)";
+            
+            firstCard.el.style.background = "var(--success)";
+            firstCard.el.style.color = "white";
+            firstCard.el.style.borderColor = "var(--success)";
             matchedPairs.push(id);
         } else {
             const temp = firstCard;
             setTimeout(() => {
                 el.innerText = '?';
+                el.style.background = "var(--white)";
+                el.style.borderColor = "#eee";
+                
                 temp.el.innerText = '?';
-            }, 1000);
+                temp.el.style.background = "var(--white)";
+                temp.el.style.borderColor = "#eee";
+            }, 1200);
         }
         firstCard = null;
     }
@@ -586,23 +655,23 @@ function flipCard(el, id, type) {
 
 function renderCrossword() {
     const data = database.B2_Crossword;
-    const container = document.getElementById("app-container");
-    let gridHtml = `<div class="crossword-grid" style="display:grid; grid-template-columns:repeat(10, 35px); gap:2px; justify-content:center;">`;
+    const container = document.getElementById("b2-activity-wrapper");
     
-    // El bucle lee hasta la fila 13 inclusive para abarcar todo el mapa físico de ADVENTUROUS
+    let gridHtml = `<div style="display:grid; grid-template-columns:repeat(14, 32px); gap:2px; justify-content:center; margin-bottom: 20px;">`;
+    
     for (let r = 0; r < data.gridSize; r++) {
-        for (let c = 0; c < 10; c++) {
+        for (let c = 0; c < 14; c++) {
             const cell = data.grid.find(i => i.r === r && i.c === c);
             if (cell) {
                 gridHtml += `
-                    <div style="position:relative">
-                        ${cell.n ? `<span style="position:absolute; font-size:10px; top:0; left:2px">${cell.n}</span>` : ''}
-                        <input type="text" class="form-control p-0 text-center cw-cell" 
+                    <div style="position:relative; width:32px; height:32px;">
+                        ${cell.n ? `<span style="position:absolute; font-size:9px; top:1px; left:2px; color:#555; font-weight:bold;">${cell.n}</span>` : ''}
+                        <input type="text" class="cw-cell" 
                                maxlength="1" data-r="${r}" data-c="${c}" 
-                               style="width:35px; height:35px; text-transform:uppercase">
+                               style="width:100%; height:100%; text-align:center; text-transform:uppercase; font-weight:bold; border:1px solid #999; border-radius:3px; padding:0;">
                     </div>`;
             } else {
-                gridHtml += `<div style="width:35px; height:35px; background:#333; border-radius:3px"></div>`;
+                gridHtml += `<div style="width:32px; height:32px; background:#2c3e50; border-radius:3px;"></div>`;
             }
         }
     }
@@ -613,17 +682,22 @@ function renderCrossword() {
 
     container.innerHTML = `
         <div class="card p-3">
-            <div class="row">
-                <div class="col-md-7">${gridHtml}</div>
-                <div class="col-md-5">
-                    <h5>Clues</h5>
-                    <div class="small">
-                        <h6>Across</h6>
-                        ${acrossClues.map(clue => `<p>${clue.id}. ${clue.q}</p>`).join('')}
-                        <h6>Down</h6>
-                        ${downClues.map(clue => `<p>${clue.id}. ${clue.q}</p>`).join('')}
+            <h3 style="margin-bottom:20px;">Prefixes & Suffixes Crossword</h3>
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                <div style="overflow-x: auto; padding: 10px;">${gridHtml}</div>
+                <div style="text-align: left; padding: 10px; border-top: 1px solid #eee;">
+                    <h5 style="font-weight: bold; color: var(--primary);">Clues</h5>
+                    <div style="display: flex; gap: 20px; font-size: 0.9rem;">
+                        <div style="flex: 1;">
+                            <h6 style="font-weight: bold; color: var(--secondary);">Across</h6>
+                            ${acrossClues.map(clue => `<p style="margin:4px 0;"><b>${clue.id}.</b> ${clue.q}</p>`).join('')}
+                        </div>
+                        <div style="flex: 1;">
+                            <h6 style="font-weight: bold; color: var(--success);">Down</h6>
+                            ${downClues.map(clue => `<p style="margin:4px 0;"><b>${clue.id}.</b> ${clue.q}</p>`).join('')}
+                        </div>
                     </div>
-                    <button class="btn btn-primary w-100 mt-3" onclick="checkCrossword()">Check Crossword</button>
+                    <button class="main-btn" style="width: 100%; margin-top: 20px;" onclick="checkCrossword()">Check Crossword</button>
                 </div>
             </div>
         </div>
@@ -640,15 +714,17 @@ function checkCrossword() {
         const c = parseInt(cell.dataset.c);
         const data = gridData.find(i => i.r === r && i.c === c);
         if (cell.value.toUpperCase() === data.v.toUpperCase()) {
-            cell.classList.add('bg-success', 'text-white');
+            cell.style.background = "var(--success)";
+            cell.style.color = "white";
             correctCount++;
         } else {
-            cell.classList.add('bg-danger', 'text-white');
+            cell.style.background = "var(--danger)";
+            cell.style.color = "white";
         }
     });
 
     if (correctCount === gridData.length) {
-        score = gridData.length; 
+        score = database.B2_Crossword.clues.length; 
         setTimeout(showResults, 1500);
     }
 }
@@ -659,118 +735,49 @@ function login() {
         alert("Por favor, introduce tu nombre.");
         return;
     }
-    document.getElementById("screen-login").style.display = "none";
-    const appContainer = document.getElementById("app-container");
-    if (appContainer) {
-        appContainer.innerHTML = `
-            <div class="text-center p-5">
-                <h2>Bienvenide, ${name}</h2>
-                <p>Selecciona una actividad del menú superior para comenzar.</p>
+    showScreen('screen-branch');
+}
+
+function selectLevel(level) {
+    if (level === 'B2') {
+        showScreen('screen-levels');
+        document.getElementById('lvl-title').innerText = "B2 - Upper Intermediate Modules";
+        const menuContainer = document.getElementById('quiz-list-container');
+        
+        menuContainer.innerHTML = `
+            <div class="level-card" onclick="startApp('B2_MC')"><h3>Multiple Choice</h3></div>
+            <div class="level-card" onclick="startApp('B2_Stones')"><h3>Stones vs Eggshells</h3></div>
+            <div class="level-card" onclick="startApp('B2_Writing')"><h3>Sentence Writing</h3></div>
+            <div class="level-card" onclick="startApp('B2_Matching')"><h3>Collocations Match</h3></div>
+            <div class="level-card" onclick="startApp('B2_Abstraction')"><h3>Text Abstraction</h3></div>
+            <div class="level-card" onclick="startApp('B2_WordBank')"><h3>Medical Word Bank</h3></div>
+            <div class="level-card" onclick="startApp('B2_Reading')"><h3>Reading Comprehension</h3></div>
+            <div class="level-card" onclick="startApp('B2_Memory')"><h3>Phrasal Verb Memory</h3></div>
+            <div class="level-card" onclick="startApp('B2_Crossword')"><h3>Crossword Puzzle</h3></div>
+        `;
+    } else {
+        showScreen('screen-levels');
+        document.getElementById('lvl-title').innerText = `${level} Modules`;
+        document.getElementById('quiz-list-container').innerHTML = `
+            <div style="grid-column: 1/-1; padding: 20px; color: #7f8c8d;">
+                Módulos de ${level} en desarrollo para el Path seleccionado.
             </div>
         `;
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const nav = document.querySelector('.navbar-nav');
-    if (nav) {
-        nav.innerHTML = `
-            <li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_MC')">Multiple Choice</a></li>
-            <li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_Stones')">Stones/Eggshells</a></li>
-            <li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_Writing')">Writing</a></li>
-            <li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_Matching')">Matching</a></li>
-            <li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_Abstraction')">Abstraction</a></li>
-            <li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_WordBank')">Word Bank</a></li>
-            <li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_Reading')">Reading</a></li>
-            <li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_Memory')">Memory</a></li>
-            <li class="nav-item"><a class="nav-link" href="#" onclick="startApp('B2_Crossword')">Crossword</a></li>
+    if (!document.getElementById('screen-b2-dynamic')) {
+        const newScreen = document.createElement('div');
+        newScreen.id = 'screen-b2-dynamic';
+        newScreen.className = 'container hidden';
+        newScreen.innerHTML = `
+            <div id="b2-activity-wrapper"></div>
+            <button class="main-btn" style="background:#7f8c8d; margin-top:20px;" onclick="showScreen('screen-levels')">Exit Activity</button>
         `;
+        document.body.appendChild(newScreen);
     }
 });
 </script>
-
-<style>
-body {
-    background-color: #f8f9fa;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-#app-container {
-    min-height: 400px;
-    margin-top: 20px;
-}
-
-.scrollable-text {
-    max-height: 500px;
-    overflow-y: auto;
-    line-height: 1.8;
-    font-size: 1.1rem;
-    padding-right: 15px;
-}
-
-.memory-card {
-    transition: transform 0.3s, background-color 0.3s;
-    border: 2px solid #0d6efd;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    user-select: none;
-    background: white;
-}
-
-.memory-card:hover {
-    background-color: #e7f1ff;
-    transform: translateY(-2px);
-}
-
-.cw-cell {
-    font-weight: bold;
-    font-size: 1.2rem;
-    border: 1px solid #999 !important;
-}
-
-.cw-cell:focus {
-    background-color: #fff3cd;
-    outline: none;
-    box-shadow: none;
-}
-
-.line-height-lg {
-    line-height: 2.5;
-}
-
-.blank-input {
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-radius: 0;
-    padding: 0 5px;
-    text-align: center;
-    font-weight: bold;
-    color: #0d6efd;
-}
-
-.card {
-    border: none;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.btn-outline-secondary {
-    border-width: 2px;
-    font-weight: 500;
-}
-
-@media (max-width: 768px) {
-    .crossword-grid {
-        grid-template-columns: repeat(10, 28px) !important;
-    }
-    .cw-cell {
-        width: 28px !important;
-        height: 28px !important;
-        font-size: 0.9rem;
-    }
-}
-</style>
 </body>
 </html>
