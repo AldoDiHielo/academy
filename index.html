@@ -293,6 +293,7 @@ const database = {
     }
 };
 
+let currentPath = "";
 let currentMode = "";
 let currentQuestionIndex = 0;
 let score = 0;
@@ -738,25 +739,35 @@ function login() {
     showScreen('screen-branch');
 }
 function setPath(path) {
+    currentPath = path;
     showScreen('screen-levels-selector');
 }
 function selectLevel(level) {
-    if (level === 'B2') {
+if (level === 'B2') {
         showScreen('screen-levels');
-        document.getElementById('lvl-title').innerText = "B2 - Upper Intermediate Modules";
+        document.getElementById('lvl-title').innerText = `B2 - Upper Intermediate (${currentPath})`;
         const menuContainer = document.getElementById('quiz-list-container');
         
-        menuContainer.innerHTML = `
-            <div class="level-card" onclick="startApp('B2_MC')"><h3>Multiple Choice</h3></div>
-            <div class="level-card" onclick="startApp('B2_Stones')"><h3>Stones vs Eggshells</h3></div>
-            <div class="level-card" onclick="startApp('B2_Writing')"><h3>Sentence Writing</h3></div>
-            <div class="level-card" onclick="startApp('B2_Matching')"><h3>Collocations Match</h3></div>
-            <div class="level-card" onclick="startApp('B2_Abstraction')"><h3>Text Abstraction</h3></div>
-            <div class="level-card" onclick="startApp('B2_WordBank')"><h3>Medical Word Bank</h3></div>
-            <div class="level-card" onclick="startApp('B2_Reading')"><h3>Reading Comprehension</h3></div>
-            <div class="level-card" onclick="startApp('B2_Memory')"><h3>Phrasal Verb Memory</h3></div>
-            <div class="level-card" onclick="startApp('B2_Crossword')"><h3>Crossword Puzzle</h3></div>
-        `;
+        if (currentPath === 'General') {
+            menuContainer.innerHTML = `
+                <div class="level-card" onclick="startApp('B2_MC')"><h3>Multiple Choice</h3></div>
+                <div class="level-card" onclick="startApp('B2_Memory')"><h3>Phrasal Verb Memory</h3></div>
+                <div class="level-card" onclick="startApp('B2_Crossword')"><h3>Crossword Puzzle</h3></div>
+            `;
+        } else {
+            menuContainer.innerHTML = `
+                <div class="level-card" onclick="startApp('B2_MC')"><h3>Multiple Choice</h3></div>
+                <div class="level-card" onclick="startApp('B2_Stones')"><h3>Stones vs Eggshells</h3></div>
+                <div class="level-card" onclick="startApp('B2_Writing')"><h3>Sentence Writing</h3></div>
+                <div class="level-card" onclick="startApp('B2_Matching')"><h3>Collocations Match</h3></div>
+                <div class="level-card" onclick="startApp('B2_Abstraction')"><h3>Text Abstraction</h3></div>
+                <div class="level-card" onclick="startApp('B2_WordBank')"><h3>Medical Word Bank</h3></div>
+                <div class="level-card" onclick="startApp('B2_Reading')"><h3>Reading Comprehension</h3></div>
+                <div class="level-card" onclick="startApp('B2_Memory')"><h3>Phrasal Verb Memory</h3></div>
+                <div class="level-card" onclick="startApp('B2_Crossword')"><h3>Crossword Puzzle</h3></div>
+            `;
+        }
+    }
     } else {
         showScreen('screen-levels');
         document.getElementById('lvl-title').innerText = `${level} Modules`;
