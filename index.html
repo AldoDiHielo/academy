@@ -13,7 +13,7 @@
         }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
         header { background: var(--primary); color: var(--white); width: 100%; padding: 1.5rem 0; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .container { width: 90%; max-width: 800px; background: var(--white); padding: 2rem; margin-top: 2rem; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); text-align: center; }
+        .container { width: 90%; max-width: 800px; background: var(--white); padding: 2rem; margin-top: 2rem; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); text-align: center; box-sizing: border-box; }
         .hidden { display: none !important; }
         input[type="text"] { padding: 12px 15px; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem; width: 80%; margin-bottom: 1rem; outline: none; }
         .main-btn { background: var(--secondary); color: var(--white); padding: 12px 30px; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; transition: 0.2s; margin: 5px; }
@@ -23,24 +23,28 @@
         .option { background: #f8f9fa; border: 2px solid #eee; padding: 1rem; margin: 0.8rem 0; border-radius: 10px; cursor: pointer; text-align: left; }
         .option.correct { background: #d4edda; border-color: var(--success); color: #155724; }
         .option.wrong { background: #f8d7da; border-color: var(--danger); color: #721c24; }
-        .abs-input { width: 140px; border: none; border-bottom: 2px solid var(--secondary); background: transparent; text-align: center; font-weight: bold; color: var(--primary); outline: none; margin: 0 5px; padding: 2px; }
         .article-box { text-align: justify; line-height: 1.6; background: #fdfdfd; padding: 25px; border-left: 5px solid var(--secondary); margin-bottom: 20px; font-size: 0.95rem; max-height: 400px; overflow-y: auto; }
         .word-bank { background: #eef2f3; padding: 15px; border-radius: 8px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 20px; border: 1px dashed var(--secondary); }
         .word-item { background: var(--white); padding: 5px 12px; border-radius: 5px; font-size: 0.85rem; font-weight: bold; color: var(--secondary); }
-        .memory-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
-        .memory-card { height: 80px; position: relative; transform-style: preserve-3d; transition: 0.5s; cursor: pointer; }
+        .text-mod-input-wrapper { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+        .text-mod-label { font-weight: bold; width: 100px; text-align: left; color: var(--primary); }
+        .text-mod-input { flex: 1; padding: 10px; border: 2px solid #ddd; border-radius: 6px; outline: none; font-size: 1rem; }
+        .memory-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; perspective: 1000px; margin-top: 1.5rem; }
+        .memory-card { height: 100px; position: relative; transform-style: preserve-3d; transition: 0.6s; cursor: pointer; }
         .memory-card.flipped { transform: rotateY(180deg); }
-        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: bold; border-radius: 8px; padding: 5px; text-align: center; }
-        .card-front { background: var(--primary); color: white; }
-        .card-back { background: var(--success); color: white; transform: rotateY(180deg); }
-        .matching-container { display: flex; justify-content: space-between; gap: 20px; }
+        .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: bold; border-radius: 8px; padding: 8px; text-align: center; box-sizing: border-box; }
+        .card-front { background: var(--secondary); color: white; font-size: 1.5rem; }
+        .card-back { background: #fff; color: var(--primary); border: 2px solid var(--secondary); transform: rotateY(180deg); }
+        .matching-container { display: flex; justify-content: space-between; gap: 20px; margin-top: 1.5rem; }
         .match-col { flex: 1; }
-        .match-item { padding: 12px; margin: 8px 0; background: #f1f1f1; border-radius: 8px; cursor: pointer; border: 2px solid transparent; }
+        .match-item { padding: 12px; margin: 8px 0; background: #f1f1f1; border-radius: 8px; cursor: pointer; border: 2px solid transparent; transition: 0.2s; text-align: center; font-weight: 500; }
         .match-item.selected { border-color: var(--secondary); background: #d6eaf8; }
-        .match-item.matched-pair { background: #d4edda !important; pointer-events: none; border-color: var(--success) !important; }
+        .match-item.matched-pair { background: #d4edda !important; pointer-events: none; border-color: var(--success) !important; color: #155724; }
+        .match-item.wrong-match { background: #f8d7da !important; border-color: var(--danger) !important; color: #721c24; }
         .progress-container { width: 100%; height: 10px; background: #eee; border-radius: 5px; margin: 1rem 0; overflow: hidden; }
         #progress-fill { height: 100%; background: var(--success); width: 0%; transition: 0.3s; }
-        #screen-login { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; }
+        #screen-login { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; }
+        .cw-cell { font-size: 16px; width: 100%; height: 100%; text-align: center; border: none; font-weight: bold; text-transform: uppercase; color: var(--primary); background: transparent; outline: none; }
         .clues-container { display: flex; justify-content: space-between; gap: 20px; margin-top: 20px; text-align: left; }
         .clues-box { flex: 1; background: #f8f9fa; padding: 15px; border-radius: 8px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); }
         .clues-box h4 { margin-top: 0; color: var(--primary); border-bottom: 2px solid #ddd; padding-bottom: 5px; }
@@ -88,7 +92,7 @@
 
     <div id="screen-quiz" class="container hidden">
         <div class="progress-container"><div id="progress-fill"></div></div>
-        <p id="q-text"></p>
+        <p id="q-text" style="font-size: 1.15rem; font-weight: 500; text-align: left; margin-bottom: 1.5rem;"></p>
         <div id="options-box"></div>
         <div id="feedback-box" class="option hidden" style="cursor:default"></div>
         <button class="main-btn hidden" id="btn-continue" onclick="nextQuestion()">Continue</button>
@@ -97,7 +101,7 @@
 
     <div id="screen-memory" class="container hidden">
         <h3>Memory Match</h3>
-        <p>Pairs Matched: <span id="memory-counter">0</span> / 10</p>
+        <p>Pairs Matched: <span id="memory-counter">0</span> / <span id="memory-total">0</span></p>
         <div id="memory-board" class="memory-grid"></div>
         <button class="main-btn" style="background:#7f8c8d; margin-top:20px;" onclick="goBackToList()">Exit</button>
     </div>
@@ -109,7 +113,9 @@
     </div>
 
     <div id="screen-crossword" class="container hidden">
-        <div id="b2-activity-wrapper"></div>
+        <h3>Crossword Challenge</h3>
+        <div id="b2-activity-wrapper" style="margin-bottom: 20px;"></div>
+        <div id="crossword-clues" class="clues-container"></div>
         <button class="main-btn" onclick="checkCrosswordAnswers()">Verify Crossword</button>
         <button class="main-btn" style="background:#7f8c8d;" onclick="goBackToList()">Exit</button>
     </div>
@@ -119,16 +125,17 @@
         <div id="text-module-article" class="article-box hidden"></div>
         <div id="text-module-bank" class="word-bank hidden"></div>
         <div id="text-module-content" style="text-align: justify; line-height: 1.8; margin-bottom: 20px;"></div>
-        <button class="main-btn" onclick="verifyTextModule()">Verify Answers</button>
-        <button class="main-btn" style="background:#7f8c8d;" onclick="goBackToList()">Exit</button>
+        <div id="text-module-inputs" style="margin-top: 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px;"></div>
+        <button class="main-btn" onclick="verifyTextModule()" style="margin-top: 20px;">Verify Answers</button>
+        <button class="main-btn" style="background:#7f8c8d; margin-top: 20px;" onclick="goBackToList()">Exit</button>
     </div>
 
     <div id="screen-results" class="container hidden">
         <h2 id="final-score-display"></h2>
-        <button class="main-btn" onclick="showQuizzes()">Back to Modules</button>
+        <button class="main-btn" onclick="goBackToList()">Back to Modules</button>
     </div>
 
-    <script>
+<script>
     let selectedPath = "";
     let selectedLevelCode = "";
     let currentPath = "";
@@ -174,36 +181,11 @@
             {q: "Seldom __________ such a dedicated medical team.", o: ["have I seen", "I have seen", "did I saw"], a: 0, r: "Inversion after 'Seldom'."}
         ],
         "B2_Writing": [
-            {q: "By next summer, I __________ (finish) my master's degree.", a: "will have finished", r: "Future Perfect."},
-            {q: "I'd rather you __________ (not / smoke) in the house.", a: "didn't smoke", r: "Would rather + subject + Past Simple."},
-            {q: "Seldom __________ (we / see) such a beautiful sunset.", a: "have we seen", r: "Inversion after 'Seldom'."},
-            {q: "If I had known you were coming, I __________ (bake) a cake.", a: "would have baked", r: "Third Conditional."},
-            {q: "I'm looking forward to __________ (meet) your family.", a: "meeting", r: "'To' as a preposition + gerund."},
-            {q: "The boss suggested __________ (postpone) the meeting.", a: "postponing", r: "'Suggest' + gerund."},
-            {q: "He is believed __________ (be) very rich.", a: "to be", r: "Passive reporting structure."},
-            {q: "I wish I __________ (not / eat) so much chocolate yesterday.", a: "hadn't eaten", r: "Regret about the past."},
-            {q: "It's high time you __________ (start) looking for a job.", a: "started", r: "It's high time + Past Simple."},
-            {q: "Hardly __________ (the plane / land) when it started to rain.", a: "had the plane landed", r: "Inversion with 'Hardly'."},
-            {q: "I was used to __________ (drive) on the left.", a: "driving", r: "'Be used to' + gerund."},
-            {q: "No sooner __________ (I / arrive) home than it rained.", a: "had i arrived", r: "Inversion with 'No sooner'."},
-            {q: "You __________ (had) better call her now.", a: "had", r: "'Had better' structure."},
-            {q: "The house __________ (clean) by the time we got back.", a: "had been cleaned", r: "Past Perfect Passive."},
-            {q: "Suppose you __________ (win) the lottery, what would you do?", a: "won", r: "Second conditional (imaginary)."},
-            {q: "I don't mind __________ (wait) for you.", a: "waiting", r: "'Mind' + gerund."},
-            {q: "The information __________ (be) very helpful.", a: "is", r: "'Information' is always singular."},
-            {q: "We've run __________ (out) of coffee.", a: "out", r: "Phrasal verb: to have none left."},
-            {q: "If only I __________ (can / speak) French!", a: "could", r: "Wish about ability."},
-            {q: "The thief admitted __________ (steal) the jewelry.", a: "stealing", r: "'Admit' + gerund."},
-            {q: "You shouldn't have __________ (tell) him.", a: "told", r: "Should have + past participle."},
-            {q: "I'm not accustomed to __________ (be / treat) like this.", a: "being treated", r: "Passive gerund."},
-            {q: "The project, __________ (which) was led by Sarah, was a success.", a: "which", r: "Non-defining relative clause."},
-            {q: "He tried to avoid __________ (answer) my question.", a: "answering", r: "'Avoid' + gerund."},
-            {q: "Unless you __________ (study) harder, you'll fail.", a: "study", r: "Unless + present simple."},
-            {q: "I forgot __________ (lock) the door.", a: "to lock", r: "Forget + to-infinitive (didn't do it)."},
-            {q: "The news __________ (be) shocking.", a: "was", r: "'News' is singular."},
-            {q: "By the time we arrive, the movie __________ (start).", a: "will have started", r: "Future Perfect."},
-            {q: "It was a mistake __________ (not / take) the map before we left.", a: "not to take", r: "Negative infinitive."},
-            {q: "I'd rather __________ (stay) home tonight.", a: "stay", r: "'Would rather' (no subject change) + bare infinitive."}
+            {q: "By next summer, I __________ (finish) my master's degree.", o: ["will finish", "will have finished", "have finished"], a: 1, r: "Future Perfect."},
+            {q: "I'd rather you __________ (not / smoke) in the house.", o: ["don't smoke", "didn't smoke", "not smoke"], a: 1, r: "Would rather + subject + Past Simple."},
+            {q: "Seldom __________ (we / see) such a beautiful sunset.", o: ["we have seen", "have we seen", "did we saw"], a: 1, r: "Inversion after 'Seldom'."},
+            {q: "If I had known you were coming, I __________ (bake) a cake.", o: ["would bake", "would have baked", "had baked"], a: 1, r: "Third Conditional."},
+            {q: "I'm looking forward to __________ (meet) your family.", o: ["meet", "meeting", "to meet"], a: 1, r: "'To' as a preposition + gerund."}
         ],
         "B2_Stones": [
             {q: "Look after", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Look the baby after'."},
@@ -215,27 +197,7 @@
             {q: "Come across", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Come an old friend across'."},
             {q: "Call off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Call it off'."},
             {q: "Deal with", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Deal the issue with'."},
-            {q: "Fill out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Fill it out'."},
-            {q: "Take off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Take your shoes off'."},
-            {q: "Put away", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Put your clothes away'."},
-            {q: "Hand in", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Hand your essay in'."},
-            {q: "Give up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Give it up'."},
-            {q: "Throw away", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Throw those old papers away'."},
-            {q: "Look up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Look the word up'."},
-            {q: "Put on", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Put your coat on'."},
-            {q: "Back up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Back your files up'."},
-            {q: "Cut off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Cut the power off'."},
-            {q: "Cheer up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Cheer her up'."},
-            {q: "Figure out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Figure it out'."},
-            {q: "Leave out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Leave details out'."},
-            {q: "Point out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Point the mistake out'."},
-            {q: "Look into", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Look into the matter'."},
-            {q: "Wait on", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Wait on someone'."},
-            {q: "Depend on", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Depend on them'."},
-            {q: "Stand by", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Stand by me'."},
-            {q: "Care for", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Care for pets'."},
-            {q: "Break into", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Break into a house'."},
-            {q: "Believe in", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Believe in ghosts'."}
+            {q: "Fill out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Fill it out'."}
         ],
         "B2_Memory": [
             {v: "Brush up on", m: "To improve or refresh knowledge"},
@@ -257,36 +219,17 @@
             { a: "Blood", b: "sample" }, { a: "Chronic", b: "condition" }, { a: "Shortness", b: "of breath" }
         ],
         "B2_Abstraction": {
-            _tags: ["MP"],
-            article: `The global escalation of Metabolic Syndrome has positioned Type 2 Diabetes Mellitus (T2DM) as a critical health priority for modern healthcare systems. Current clinical guidelines emphasize that while pharmacological interventions, such as the administration of Metformin, remain the gold standard for initial glycemic control, long-term remission is rarely achieved through monotherapy alone due to the progressive nature of beta-cell decline. This longitudinal study evaluates the efficacy of the MET-LIFE Protocol, a rigorous 24-month randomized controlled trial involving a cohort of 1,200 participants across diverse clinical settings. The protocol is designed as a multimodal strategy that integrates high-intensity interval training (HIIT) to enhance mitochondrial biogenesis, a plant-based ketogenic diet aimed at reducing systemic inflammation, and standardized pharmacological support. Furthermore, the trial utilizes continuous glucose monitoring (CGM) as a primary tool to evaluate metabolic flexibility—the body's capacity to switch efficiently between carbohydrate and lipid oxidation. Preliminary data suggests that addressing the lifestyle-pharmacology intersection is paramount for sustained clinical success. During the follow-up phase, the experimental group showed a significant 1.8% decrease in HbA1c levels, contrasting with the control group’s stagnant metrics. It is worth noting that nearly half of these patients reached a state of partial remission, defined as maintaining sub-diabetic glycemic levels for at least six months without the need for active medication. These results were consistent across various age groups, provided that adherence to the HIIT and ketogenic components remained high. Ultimately, the researchers concluded that while Metformin provides a necessary foundation, lifestyle changes must be applied with maximum rigor and clinical supervision to successfully reverse long-standing metabolic impairment and restore beta-cell functionality.`,
+            article: "The global escalation of Metabolic Syndrome has positioned Type 2 Diabetes Mellitus (T2DM) as a critical health priority for modern healthcare systems. Current clinical guidelines emphasize that while pharmacological interventions, such as the administration of Metformin, remain the gold standard for initial glycemic control, long-term remission is rarely achieved through monotherapy alone due to the progressive nature of beta-cell decline. This longitudinal study evaluates the efficacy of the MET-LIFE Protocol, a rigorous 24-month randomized controlled trial involving a cohort of 1,200 participants across diverse clinical settings. The protocol is designed as a multimodal strategy that integrates high-intensity interval training (HIIT) to enhance mitochondrial biogenesis, a plant-based ketogenic diet aimed at reducing systemic inflammation, and standardized pharmacological support. Furthermore, the trial utilizes continuous glucose monitoring (CGM) as a primary tool to evaluate metabolic flexibility—the body's capacity to switch efficiently between carbohydrate and lipid oxidation. Preliminary data suggests that addressing the lifestyle-pharmacology intersection is paramount for sustained clinical success. During the follow-up phase, the experimental group showed a significant 1.8% decrease in HbA1c levels, contrasting with the control group’s stagnant metrics. It is worth noting that nearly half of these patients reached a state of partial remission, defined as maintaining sub-diabetic glycemic levels for at least six months without the need for active medication. These results were consistent across various age groups, provided that adherence to the HIIT and ketogenic components remained high. Ultimately, the researchers concluded that while Metformin provides a necessary foundation, lifestyle changes must be applied with maximum rigor and clinical supervision to successfully reverse long-standing metabolic impairment and restore beta-cell functionality.",
             summary: "The MET-LIFE study was conducted to address T2DM, a condition for which single-drug treatment rarely (1) __________ long-term results. Unlike standard care, this protocol (2) __________ a specific exercise regimen known as (3) __________ with a nutritional plan. A central pillar of the trial was (4) __________, which refers to the organism's (5) __________ to alternate between different energy substrates. Regarding the outcomes, the experimental group (6) __________ a 1.8% decrease in HbA1c levels. It is (7) __________ noting that nearly half of these patients reached a state of (8) __________, meaning they no longer required drugs. The researchers (9) __________ that lifestyle changes must be applied with (10) __________ to successfully reverse metabolic impairment.",
             answers: ["achieves", "integrated", "HIIT", "metabolic flexibility", "ability", "showed", "worth", "partial remission", "concluded", "rigor"]
         },
         "B2_WordBank": {
-            _tags: ["MP"],
             bank: ["was admitted", "had been experiencing", "reported", "hadn't had", "referred", "had occurred", "had subsided", "was noted", "being", "was scheduled"],
             text: "The patient is a 54-year-old male who (1) __________ to the Emergency Department following a syncopal episode during moderate physical activity. According to his wife, who witnessed the event, the patient (2) __________ lightheadedness and palpitations for approximately twenty minutes before losing consciousness. Upon arrival, the patient (3) __________ that he (4) __________ any significant health issues prior to this month; however, he (5) __________ that a similar, albeit shorter, episode (6) __________ two weeks ago while gardening. He mentioned that the previous symptoms (7) __________ spontaneously without medical intervention. A mild systolic murmur (8) __________ during the initial physical examination. Although the patient denied (9) __________ in pain at the moment of admission, his heart rate remained elevated. Consequently, an urgent echocardiogram (10) __________ for the following morning to rule out structural heart disease.",
             answers: ["was admitted", "had been experiencing", "reported", "hadn't had", "referred", "had occurred", "had subsided", "was noted", "being", "was scheduled"]
         },
-        "B2_Reading": {
-            _tags: ["GP", "MP"],
-            article: `The genesis of the Olympic Games dates back to 776 BC in ancient Olympia, Greece. Originally, the festival was held to honor Zeus, the king of the gods. While modern spectators are used to a vast array of sports, the first recorded Olympics featured only one event: a short footrace called the stade. For centuries, the games were a cornerstone of Greek culture, fostering a period of "sacred truce" where conflicts between city-states were temporarily suspended to allow athletes to travel safely. However, as the Roman Empire’s influence grew, the games began to lose their religious significance. In 393 AD, Emperor Theodosius I, who had recently converted to Christianity, abolished the festival, claiming it was a pagan ritual. <br><br>The Olympics remained dormant for over 1,500 years until a French educator named Baron Pierre de Coubertin proposed their revival. Coubertin believed that international competition could promote global peace and physical education. His vision culminated in the first modern Olympic Games, which took place in Athens in 1896. Although the event featured only male athletes from 14 nations, it was considered a massive success. It is a common misconception that the marathon was part of the ancient games; in reality, it was introduced in 1896 to commemorate a legendary run from the city of Marathon to Athens. Since their revival, the Games have evolved into a global celebration, withstanding the test of time, though it is important to note that the competition was officially cancelled during the years of the major World Wars.`,
-            questions: [
-                {q: "The original Olympics were primarily a secular sporting event.", a: false, r: "False. They were religious festivals held to honor Zeus."},
-                {q: "In the very beginning, there was only one type of competition.", a: true, r: "True. The first recorded games only had the 'stade' footrace."},
-                {q: "The 'sacred truce' meant that all Greek wars were suspended permanently.", a: false, r: "False. Conflicts were only temporarily suspended for the games."},
-                {q: "Emperor Theodosius I stopped the games because he disliked sports.", a: false, r: "False. He abolished them claiming they were pagan rituals."},
-                {q: "The Olympics were not celebrated for more than fifteen centuries.", a: true, r: "True. They were dormant for over 1,500 years."},
-                {q: "Pierre de Coubertin’s main goal was exclusively to find the world's best athletes.", a: false, r: "False. He also aimed to promote global peace."},
-                {q: "The first modern Olympics in 1896 included participants from all genders.", a: false, r: "False. The text states they only featured male athletes."},
-                {q: "The marathon race is a modern addition not found in the ancient games.", a: true, r: "True. It was introduced in 1896."},
-                {q: "The city of Athens hosted both the first ancient and first modern games.", a: false, r: "False. Ancient games were in Olympia; modern in Athens."},
-                {q: "The modern Games have been held every four years without any official cancellations.", a: false, r: "False. They were cancelled during the World Wars."}
-            ]
-        },
-                "B2_Crossword": {
-            _tags: ["GP", "MP"],
-            gridSize: 15,
+        "B2_Crossword": {
+            gridSize: 17,
             clues: [
                 { id: 1, d: "H", q: "DEVELOP (Noun)", a: "DEVELOPMENT" },
                 { id: 2, d: "V", q: "SURE (Adverb)", a: "SURELY" },
@@ -300,19 +243,19 @@
                 { id: 10, d: "V", q: "USUAL (Antonym Adjective)", a: "UNUSUAL" }
             ],
             grid: [
-                {r:0, c:0, v:"D", n:1}, {r:0, c:1, v:"E"}, {r:0, c:2, v:"V"}, {r:0, c:3, v:"E"}, {r:0, c:4, v:"L"}, {r:0, c:5, v:"O"}, {r:0, c:6, v:"P"}, {r:0, c:7, v:"M"}, {r:0, c:8, v:"E"}, {r:0, c:9, v:"N"}, {r:0, c:10, v:"T"},
-                {r:0, c:3, v:"E"}, {r:1, c:3, v:"S"}, {r:2, c:3, v:"U"}, {r:3, c:3, v:"R"}, {r:4, c:3, v:"E"}, {r:5, c:3, v:"L"}, {r:6, c:3, v:"Y"},
-                {r:2, c:3, v:"U"}, {r:2, c:4, v:"C"}, {r:2, c:5, v:"C"}, {r:2, c:6, v:"E"}, {r:2, c:7, v:"S"}, {r:2, c:8, v:"S"}, {r:2, c:9, v:"F"}, {r:2, c:10, v:"U"}, {r:2, c:11, v:"L"},
-                {r:0, c:5, v:"O"}, {r:1, c:5, v:"M"}, {r:2, c:5, v:"C"}, {r:3, c:5, v:"F"}, {r:4, c:5, v:"O"}, {r:5, c:5, v:"R"}, {r:6, c:5, v:"T"}, {r:7, c:5, v:"A"}, {r:8, c:5, v:"B"}, {r:9, c:5, v:"L"}, {r:10, c:5, v:"E"},
-                {r:4, c:3, v:"E"}, {r:4, c:4, v:"R"}, {r:4, c:5, v:"O"}, {r:4, c:6, v:"U"}, {r:4, c:7, v:"S"},
-                {r:0, c:7, v:"M"}, {r:1, c:7, v:"P"}, {r:2, c:7, v:"S"}, {r:3, c:7, v:"I"}, {r:4, c:7, v:"S"}, {r:5, c:7, v:"I"}, {r:6, c:7, v:"B"}, {r:7, c:7, v:"I"}, {r:8, c:7, v:"L"}, {r:9, c:7, v:"I"}, {r:10, c:7, v:"T"}, {r:11, c:7, v:"Y"},
-                {r:6, c:3, v:"Y"}, {r:6, c:4, v:"C"}, {r:6, c:5, v:"T"}, {r:6, c:6, v:"R"}, {r:6, c:7, v:"B"}, {r:6, c:8, v:"A"}, {r:6, c:9, v:"T"}, {r:6, c:10, v:"I"}, {r:6, c:11, v:"O"}, {r:6, c:12, v:"N"},
-                {r:0, c:9, v:"N"}, {r:1, c:9, v:"D"}, {r:2, c:9, v:"F"}, {r:3, c:9, v:"E"}, {r:4, c:9, v:"P"}, {r:5, c:9, v:"E"}, {r:6, c:9, v:"N"}, {r:7, c:9, v:"D"}, {r:8, c:9, v:"E"}, {r:9, c:9, v:"N"}, {r:10, c:9, v:"T"},
-                {r:8, c:3, v:"H"}, {r:8, c:4, v:"E"}, {r:8, c:5, v:"B"}, {r:8, c:6, v:"A"}, {r:8, c:7, v:"L"}, {r:8, c:8, v:"T"}, {r:8, c:9, v:"H"}, {r:8, c:10, v:"Y"},
-                {r:2, c:11, v:"L"}, {r:3, c:11, v:"U"}, {r:4, c:11, v:"N"}, {r:5, c:11, v:"U"}, {r:6, c:11, v:"S"}, {r:7, c:11, v:"U"}, {r:8, c:11, v:"A"}, {r:9, c:11, v:"L"}
+                {r:1, c:1, v:"D", n:1}, {r:1, c:2, v:"E"}, {r:1, c:3, v:"V"}, {r:1, c:4, v:"E"}, {r:1, c:5, v:"L"}, {r:1, c:6, v:"O"}, {r:1, c:7, v:"P"}, {r:1, c:8, v:"M"}, {r:1, c:9, v:"E"}, {r:1, c:10, v:"N"}, {r:1, c:11, v:"T"},
+                {r:1, c:4, v:"E", n:2}, {r:2, c:4, v:"S"}, {r:3, c:4, v:"U"}, {r:4, c:4, v:"R"}, {r:5, c:4, v:"E"}, {r:6, c:4, v:"L"}, {r:7, c:4, v:"Y"},
+                {r:3, c:2, v:"S", n:3}, {r:3, c:3, v:"U"}, {r:3, c:4, v:"C"}, {r:3, c:5, v:"C"}, {r:3, c:6, v:"E"}, {r:3, c:7, v:"S"}, {r:3, c:8, v:"S"}, {r:3, c:9, v:"F"}, {r:3, c:10, v:"U"}, {r:3, c:11, v:"L"},
+                {r:3, c:5, v:"C", n:4}, {r:4, c:5, v:"O"}, {r:5, c:5, v:"M"}, {r:6, c:5, v:"F"}, {r:7, c:5, v:"O"}, {r:8, c:5, v:"R"}, {r:9, c:5, v:"T"}, {r:10, c:5, v:"A"}, {r:11, c:5, v:"B"}, {r:12, c:5, v:"L"}, {r:13, c:5, v:"E"},
+                {r:5, c:2, v:"D", n:5}, {r:5, c:3, v:"A"}, {r:5, c:4, v:"N"}, {r:5, c:5, v:"G"}, {r:5, c:6, v:"E"}, {r:5, c:7, v:"R"}, {r:5, c:8, v:"O"}, {r:5, c:9, v:"U"}, {r:5, c:10, v:"S"},
+                {r:5, c:7, v:"E", n:6}, {r:6, c:7, v:"X"}, {r:7, c:7, v:"P"}, {r:8, c:7, v:"E"}, {r:9, c:7, v:"R"}, {r:10, c:7, v:"I"}, {r:11, c:7, v:"E"}, {r:12, c:7, v:"N"}, {r:13, c:7, v:"C"}, {r:14, c:7, v:"E"},
+                {r:7, c:1, v:"C", n:7}, {r:7, c:2, v:"R"}, {r:7, c:3, v:"E"}, {r:7, c:4, v:"A"}, {r:7, c:5, v:"T"}, {r:7, c:6, v:"I"}, {r:7, c:7, v:"O"}, {r:7, c:8, v:"N"},
+                {r:7, c:3, v:"E", n:8}, {r:8, c:3, v:"F"}, {r:9, c:3, v:"F"}, {r:10, c:3, v:"E"}, {r:11, c:3, v:"C"}, {r:12, c:3, v:"T"}, {r:13, c:3, v:"I"}, {r:14, c:3, v:"V"}, {r:15, c:3, v:"E"},
+                {r:9, c:2, v:"H", n:9}, {r:9, c:3, v:"E"}, {r:9, c:4, v:"A"}, {r:9, c:5, v:"L"}, {r:9, c:6, v:"T"}, {r:9, c:7, v:"H"}, {r:9, c:8, v:"Y"},
+                {r:9, c:8, v:"Y", n:10}, {r:10, c:8, v:"E"}, {r:11, c:8, v:"S"}, {r:12, c:8, v:"T"}, {r:13, c:8, v:"E"}, {r:14, c:8, v:"R"}, {r:15, c:8, v:"D"}, {r:16, c:8, v:"A"}, {r:17, c:8, v:"Y"}
             ]
-        };
-
+        }
+    };
 
     database.B2_MC._tags = ["GP", "MP"];
     database.B2_Writing._tags = ["GP", "MP"];
@@ -321,7 +264,6 @@
     database.B2_Matching._tags = ["MP"];
     database.B2_Abstraction._tags = ["MP"];
     database.B2_WordBank._tags = ["MP"];
-    database.B2_Reading._tags = ["GP", "MP"];
     database.B2_Crossword._tags = ["GP", "MP"];
 
     function showScreen(screenId) {
@@ -331,7 +273,9 @@
     }
 
     function login() {
-        if (document.getElementById('student-name').value.trim()) showScreen('screen-branch');
+        if (document.getElementById('student-name').value.trim()) {
+            showScreen('screen-branch');
+        }
     }
 
     function setPath(path) {
@@ -349,15 +293,14 @@
         if (!container) return;
         container.innerHTML = "";
         document.getElementById('lvl-title').innerText = `${selectedLevelCode} Modules`;
-        
+
         Object.keys(database).forEach(key => {
             if (key.startsWith(selectedLevelCode)) {
                 const module = database[key];
-                const tags = module._tags;
-                if (tags && tags.includes(selectedPath)) {
+                if (module._tags && module._tags.includes(selectedPath)) {
                     const card = document.createElement('div');
                     card.className = 'level-card';
-                    card.innerHTML = `<h3>${key.replace(`${selectedLevelCode}_`, " ")}</h3>`;
+                    card.innerHTML = `<h3>${key.replace(`${selectedLevelCode}_`, " ").replace("_", " ")}</h3>`;
                     card.onclick = () => launchModule(key);
                     container.appendChild(card);
                 }
@@ -366,40 +309,48 @@
         showScreen('screen-levels');
     }
 
+    function goBackToList() {
+        showQuizzes();
+    }
+
     function launchModule(moduleKey) {
         currentPath = moduleKey;
         currentQuestionIndex = 0;
         score = 0;
-        
-        if (moduleKey.includes('MC') || moduleKey.includes('Stones')) {
+        if (moduleKey.includes('MC') || moduleKey.includes('Stones') || moduleKey.includes('Writing')) {
             loadQuestion();
             showScreen('screen-quiz');
-        } else if (moduleKey.includes('Memory')) {
+        }
+        else if (moduleKey.includes('Memory')) {
             initMemoryModule();
             showScreen('screen-memory');
-        } else if (moduleKey.includes('Matching')) {
+        }
+        else if (moduleKey.includes('Matching')) {
             initMatchingModule();
             showScreen('screen-matching');
-        } else if (moduleKey.includes('Crossword')) {
+        }
+        else if (moduleKey.includes('Crossword')) {
             renderCrossword();
             showScreen('screen-crossword');
-        } else if (moduleKey.includes('Abstraction') || moduleKey.includes('WordBank') || moduleKey.includes('Reading') || moduleKey.includes('Writing')) {
+        }
+        else {
             initTextModule();
             showScreen('screen-text-module');
         }
     }
-
-    function goBackToList() { showQuizzes(); }
 
     function loadQuestion() {
         const questions = database[currentPath];
         const q = questions[currentQuestionIndex];
         document.getElementById('progress-fill').style.width = `${(currentQuestionIndex / questions.length) * 100}%`;
         document.getElementById('q-text').innerText = q.q;
-        
         const optionsBox = document.getElementById('options-box');
         optionsBox.innerHTML = "";
-        document.getElementById('feedback-box').classList.add('hidden');
+        
+        const fbox = document.getElementById('feedback-box');
+        fbox.classList.add('hidden');
+        fbox.className = 'option hidden';
+        
         document.getElementById('btn-continue').classList.add('hidden');
 
         q.o.forEach((opt, idx) => {
@@ -414,14 +365,15 @@
     function checkAnswer(selectedIdx, optionEl) {
         const q = database[currentPath][currentQuestionIndex];
         const options = document.getElementById('options-box').children;
-        for (let opt of options) opt.removeAttribute('onclick');
-
+        for (let opt of options) {
+            opt.removeAttribute('onclick');
+        }
         if (selectedIdx === q.a) {
             optionEl.classList.add('correct');
             score++;
         } else {
             optionEl.classList.add('wrong');
-            options[q.a].classList.add('correct');
+            if (options[q.a]) options[q.a].classList.add('correct');
         }
         const fbox = document.getElementById('feedback-box');
         fbox.innerText = q.r;
@@ -443,21 +395,25 @@
         const data = database[currentPath];
         const leftCol = document.getElementById('col-left');
         const rightCol = document.getElementById('col-right');
-        leftCol.innerHTML = ""; rightCol.innerHTML = "";
-        selectedWord = null; matchedPairs = [];
+        leftCol.innerHTML = "";
+        rightCol.innerHTML = "";
+        selectedWord = null;
+        matchedPairs = [];
 
         const leftItems = data.map(item => item.a);
         const rightItems = data.map(item => item.b).sort(() => Math.random() - 0.5);
 
         leftItems.forEach(text => {
             const div = document.createElement('div');
-            div.className = 'match-item'; div.innerText = text;
+            div.className = 'match-item';
+            div.innerText = text;
             div.onclick = () => selectMatchWord(div, 'left');
             leftCol.appendChild(div);
         });
         rightItems.forEach(text => {
             const div = document.createElement('div');
-            div.className = 'match-item'; div.innerText = text;
+            div.className = 'match-item';
+            div.innerText = text;
             div.onclick = () => selectMatchWord(div, 'right');
             rightCol.appendChild(div);
         });
@@ -475,28 +431,28 @@
                 el.classList.add('selected');
                 return;
             }
-            const data = database[currentPath];
-            const isMatch = data.some(item => 
-                (item.a === selectedWord.text && item.b === el.innerText) || 
+            const isMatch = database[currentPath].some(item =>
+                (item.a === selectedWord.text && item.b === el.innerText) ||
                 (item.b === selectedWord.text && item.a === el.innerText)
             );
-
             if (isMatch) {
                 el.classList.add('matched-pair');
                 selectedWord.el.classList.add('matched-pair');
                 matchedPairs.push(selectedWord.text, el.innerText);
-                if (matchedPairs.length === data.length * 2) {
+                if (matchedPairs.length === database[currentPath].length * 2) {
                     setTimeout(() => {
-                        document.getElementById('final-score-display').innerText = "Perfect Alignment Achieved!";
+                        document.getElementById('final-score-display').innerText = `Module finished! Perfect Match!`;
                         showScreen('screen-results');
-                    }, 500);
+                    }, 1000);
                 }
             } else {
-                el.style.borderColor = 'var(--danger)';
-                selectedWord.el.style.borderColor = 'var(--danger)';
+                const item1 = selectedWord.el;
+                const item2 = el;
+                item1.classList.add('wrong-match');
+                item2.classList.add('wrong-match');
                 setTimeout(() => {
-                    el.style.borderColor = 'transparent';
-                    selectedWord.el.style.borderColor = 'transparent';
+                    item1.classList.remove('wrong-match');
+                    item2.classList.remove('wrong-match');
                 }, 500);
             }
             selectedWord.el.classList.remove('selected');
@@ -505,19 +461,18 @@
     }
 
     function initMemoryModule() {
-        const data = database[currentPath];
         const board = document.getElementById('memory-board');
         board.innerHTML = "";
-        document.getElementById('memory-counter').innerText = "0";
-        firstCard = null; secondCard = null; lockBoard = false; score = 0;
-
         let cardsData = [];
-        data.forEach((pair, idx) => {
-            cardsData.push({ text: pair.v, pairId: idx, type: 'v' });
-            cardsData.push({ text: pair.m, pairId: idx, type: 'm' });
+        const totalPairs = database[currentPath].length;
+        document.getElementById('memory-counter').innerText = "0";
+        document.getElementById('memory-total').innerText = totalPairs;
+
+        database[currentPath].forEach((pair, idx) => {
+            cardsData.push({ text: pair.v, pairId: idx });
+            cardsData.push({ text: pair.m, pairId: idx });
         });
         cardsData.sort(() => Math.random() - 0.5);
-
         cardsData.forEach(card => {
             const cardEl = document.createElement('div');
             cardEl.className = 'memory-card';
@@ -529,218 +484,179 @@
     }
 
     function flipCard(card) {
-        if (lockBoard || card === firstCard || card.classList.contains('flipped')) return;
+        if (lockBoard || card.classList.contains('flipped')) return;
         card.classList.add('flipped');
-        if (!firstCard) { firstCard = card; return; }
+        if (!firstCard) {
+            firstCard = card;
+            return;
+        }
         secondCard = card;
         lockBoard = true;
-        firstCard.dataset.pairId === secondCard.dataset.pairId ? disableCards() : unflipCards();
-    }
+        const totalPairs = database[currentPath].length;
 
-    function disableCards() {
-        score++;
-        document.getElementById('memory-counter').innerText = score;
-        resetBoard();
-        if (score === 10) {
+        if (firstCard.dataset.pairId === secondCard.dataset.pairId) {
+            score++;
+            document.getElementById('memory-counter').innerText = score;
+            resetBoard();
+            if (score === totalPairs) {
+                setTimeout(() => {
+                    document.getElementById('final-score-display').innerText = `Module finished! Score: ${score} / ${totalPairs}`;
+                    showScreen('screen-results');
+                }, 1000);
+            }
+        } else {
             setTimeout(() => {
-                document.getElementById('final-score-display').innerText = "Memory Challenge Concluded!";
-                showScreen('screen-results');
-            }, 600);
+                firstCard.classList.remove('flipped');
+                secondCard.classList.remove('flipped');
+                resetBoard();
+            }, 1000);
         }
     }
 
-    function unflipCards() {
-        setTimeout(() => {
-            firstCard.classList.remove('flipped');
-            secondCard.classList.remove('flipped');
-            resetBoard();
-        }, 1000);
+    function resetBoard() {
+        firstCard = null;
+        secondCard = null;
+        lockBoard = false;
     }
-
-    function resetBoard() { [firstCard, secondCard, lockBoard] = [null, null, false]; }
 
     function renderCrossword() {
         const data = database.B2_Crossword;
         const container = document.getElementById("b2-activity-wrapper");
-        
-        let gridHtml = `<div style="display:grid; grid-template-columns:repeat(16, 32px); gap:2px; justify-content:center; margin-bottom: 20px;">`;
-        
-        for (let r = 0; r < data.gridSize; r++) {
-            for (let c = 0; c < 16; c++) {
-                const cell = data.grid.find(i => i.r === r && i.c === c);
+        const cluesContainer = document.getElementById("crossword-clues");
+
+        let maxRow = 0;
+        let maxCol = 0;
+        data.grid.forEach(cell => {
+            if (cell.r > maxRow) maxRow = cell.r;
+            if (cell.c > maxCol) maxCol = cell.c;
+        });
+
+        let gridHtml = `<div style="display:grid; grid-template-columns:repeat(${maxCol + 1}, 32px); gap:2px; justify-content:center; background:var(--primary); padding:15px; border-radius:10px; width:fit-content; margin:0 auto;">`;
+
+        for (let r = 0; r <= maxRow; r++) {
+            for (let c = 0; c <= maxCol; c++) {
+                const cell = data.grid.find(i => parseInt(i.r) === r && parseInt(i.c) === c);
                 if (cell) {
                     gridHtml += `
-                        <div style="position:relative; width:32px; height:32px;">
-                            ${cell.n ? `<span style="position:absolute; font-size:9px; top:1px; left:2px; color:#555; font-weight:bold;">${cell.n}</span>` : ''}
-                            <input type="text" class="cw-cell" 
-                                   maxlength="1" data-r="${r}" data-c="${c}" 
-                                   style="width:100%; height:100%; text-align:center; text-transform:uppercase; font-weight:bold; border:1px solid #999; border-radius:3px; padding:0;">
+                        <div style="position:relative; width:32px; height:32px; background:white; border:1px solid #ddd; box-sizing:border-box;">
+                            ${cell.n ? `<span style="position:absolute; font-size:9px; top:1px; left:2px; font-weight:bold; color:var(--primary);">${cell.n}</span>` : ''}
+                            <input type="text" class="cw-cell" maxlength="1" data-r="${r}" data-c="${c}">
                         </div>`;
                 } else {
-                    gridHtml += `<div style="width:32px; height:32px; background:#2c3e50; border-radius:3px;"></div>`;
+                    gridHtml += `<div style="width:32px; height:32px; background:var(--primary);"></div>`;
                 }
             }
         }
-        gridHtml += `</div>`;
+        container.innerHTML = gridHtml + `</div>`;
 
-        const acrossClues = data.clues.filter(clue => clue.d === "H");
-        const downClues = data.clues.filter(clue => clue.d === "V");
-
-        let acrossHtml = acrossClues.map(c => `<li><strong>${c.id}.</strong> ${c.q}</li>`).join('');
-        let downHtml = downClues.map(c => `<li><strong>${c.id}.</strong> ${c.q}</li>`).join('');
-
-        container.innerHTML = `
-            <div class="card p-3">
-                <h3 style="margin-bottom:20px;">Prefixes & Suffixes Crossword</h3>
-                <div style="display: flex; flex-direction: column; gap: 20px;">
-                    <div style="overflow-x: auto; padding: 10px;">${gridHtml}</div>
-                    <div class="clues-container">
-                        <div class="clues-box">
-                            <h4>Across</h4>
-                            <ul>${acrossHtml}</ul>
-                        </div>
-                        <div class="clues-box">
-                            <h4>Down</h4>
-                            <ul>${downHtml}</ul>
-                        </div>
-                    </div>
-                </div>
-            </div>`;
+        let cluesHtml = `<div class="clues-box"><h4>Across</h4><ul>`;
+        data.clues.filter(c => c.d === "H").forEach(c => {
+            cluesHtml += `<li><strong>${c.id}.</strong> ${c.q}</li>`;
+        });
+        cluesHtml += `</ul></div><div class="clues-box"><h4>Down</h4><ul>`;
+        data.clues.filter(c => c.d === "V").forEach(c => {
+            cluesHtml += `<li><strong>${c.id}.</strong> ${c.q}</li>`;
+        });
+        cluesHtml += `</ul></div>`;
+        cluesContainer.innerHTML = cluesHtml;
     }
 
     function checkCrosswordAnswers() {
-        const data = database.B2_Crossword;
-        const inputs = document.querySelectorAll('.cw-cell');
         let allCorrect = true;
+        const inputs = document.querySelectorAll('.cw-cell');
 
         inputs.forEach(input => {
-            const r = parseInt(input.dataset.r);
-            const c = parseInt(input.dataset.c);
-            const cell = data.grid.find(i => i.r === r && i.c === c);
-            
+            const row = parseInt(input.dataset.r);
+            const col = parseInt(input.dataset.c);
+            const cell = database.B2_Crossword.grid.find(i => parseInt(i.r) === row && parseInt(i.c) === col);
+
             if (cell) {
                 if (input.value.toUpperCase() === cell.v.toUpperCase()) {
-                    input.style.backgroundColor = '#d4edda';
-                    input.style.borderColor = 'var(--success)';
+                    input.style.backgroundColor = "#d4edda";
+                    input.style.color = "var(--success)";
                 } else {
-                    input.style.backgroundColor = '#f8d7da';
-                    input.style.borderColor = 'var(--danger)';
+                    input.style.backgroundColor = "#f8d7da";
+                    input.style.color = "var(--danger)";
                     allCorrect = false;
                 }
             }
         });
 
-        if (allCorrect) {
+        if (allCorrect && inputs.length > 0) {
             setTimeout(() => {
                 document.getElementById('final-score-display').innerText = "Crossword Completed Successfully!";
                 showScreen('screen-results');
-            }, 600);
+            }, 1000);
         }
     }
 
     function initTextModule() {
-        const data = database[currentPath];
-        const title = document.getElementById('text-module-title');
         const articleBox = document.getElementById('text-module-article');
         const bankBox = document.getElementById('text-module-bank');
         const contentBox = document.getElementById('text-module-content');
+        const inputsBox = document.getElementById('text-module-inputs');
 
         articleBox.classList.add('hidden');
         bankBox.classList.add('hidden');
-        contentBox.innerHTML = "";
+        inputsBox.innerHTML = "";
 
-        if (currentPath.includes('Abstraction')) {
-            title.innerText = "Medical Abstraction Exercise";
-            articleBox.innerHTML = data.article;
+        const module = database[currentPath];
+
+        if (currentPath === "B2_Abstraction") {
+            document.getElementById('text-module-title').innerText = "B2 Abstraction Challenge";
+            articleBox.innerHTML = `<strong>Reading Text:</strong><br>${module.article}`;
             articleBox.classList.remove('hidden');
-            contentBox.innerHTML = parseTextWithInputs(data.summary);
-        } else if (currentPath.includes('WordBank')) {
-            title.innerText = "Medical Word Bank Exercise";
-            bankBox.innerHTML = data.bank.map(w => `<span class="word-item">${w}</span>`).join('');
-            bankBox.classList.remove('hidden');
-            contentBox.innerHTML = parseTextWithInputs(data.text);
-        } else if (currentPath.includes('Reading')) {
-            title.innerText = "General Reading Comprehension";
-            articleBox.innerHTML = data.article;
-            articleBox.classList.remove('hidden');
+            contentBox.innerHTML = `<strong>Summary Exercise:</strong><br>${module.summary}`;
             
-            let html = "<ol>";
-            data.questions.forEach((q, idx) => {
-                html += `<li style="margin-bottom:15px;">
-                            <p>${q.q}</p>
-                            <label><input type="radio" name="q_${idx}" value="true"> True</label> &nbsp;&nbsp;
-                            <label><input type="radio" name="q_${idx}" value="false"> False</label>
-                         </li>`;
-            });
-            html += "</ol>";
-            contentBox.innerHTML = html;
-        } else if (currentPath.includes('Writing')) {
-            title.innerText = "Sentence Architecture & Grammatical Writing";
-            let html = "<ol>";
-            data.forEach((item, idx) => {
-                if(item.q) {
-                    html += `<li style="margin-bottom:15px;">
-                                <p>${item.q}</p>
-                                <input type="text" class="text-mod-input" data-idx="${idx}" style="width:60%; display:inline-block; margin-top:5px;">
-                             </li>`;
-                }
-            });
-            html += "</ol>";
-            contentBox.innerHTML = html;
+            inputsBox.innerHTML = module.answers.map((_, idx) => `
+                <div class="text-mod-input-wrapper">
+                    <span class="text-mod-label">Concept ${idx + 1}:</span>
+                    <input type="text" class="text-mod-input" data-idx="${idx}" placeholder="Type missing element...">
+                </div>
+            `).join('');
+        } else if (currentPath === "B2_WordBank") {
+            document.getElementById('text-module-title').innerText = "B2 Word Bank Exercise";
+            bankBox.innerHTML = module.bank.map(word => `<span class="word-item">${word}</span>`).join('');
+            bankBox.classList.remove('hidden');
+            contentBox.innerHTML = `<strong>Exercise Text:</strong><br>${module.text}`;
+            
+            inputsBox.innerHTML = module.answers.map((_, idx) => `
+                <div class="text-mod-input-wrapper">
+                    <span class="text-mod-label">Word ${idx + 1}:</span>
+                    <input type="text" class="text-mod-input" data-idx="${idx}" placeholder="Type correct word...">
+                </div>
+            `).join('');
         }
-    }
-
-    function parseTextWithInputs(text) {
-        return text.replace(/\((\d+)\) __________+/g, (match, num) => {
-            return `(${num}) <input type="text" class="abs-input text-mod-input" data-idx="${parseInt(num) - 1}">`;
-        });
     }
 
     function verifyTextModule() {
-        const data = database[currentPath];
-        let correctCount = 0;
-        let totalCount = 0;
+        const module = database[currentPath];
+        const inputs = document.querySelectorAll('.text-mod-input');
+        let allCorrect = true;
+        let localScore = 0;
 
-        if (currentPath.includes('Abstraction') || currentPath.includes('WordBank')) {
-            const inputs = document.querySelectorAll('.text-mod-input');
-            totalCount = data.answers.length;
-            inputs.forEach(input => {
-                const idx = parseInt(input.dataset.idx);
-                if (input.value.trim().toLowerCase() === data.answers[idx].toLowerCase()) {
-                    input.style.borderBottomColor = 'var(--success)';
-                    correctCount++;
-                } else {
-                    input.style.borderBottomColor = 'var(--danger)';
-                    input.value = `${input.value} (${data.answers[idx]})`;
-                }
-            });
-        } else if (currentPath.includes('Reading')) {
-            totalCount = data.questions.length;
-            data.questions.forEach((q, idx) => {
-                const selected = document.querySelector(`input[name="q_${idx}"]:checked`);
-                if (selected && (selected.value === "true") === q.a) {
-                    correctCount++;
-                }
-            });
-        } else if (currentPath.includes('Writing')) {
-            const inputs = document.querySelectorAll('.text-mod-input');
-            totalCount = inputs.length;
-            inputs.forEach(input => {
-                const idx = parseInt(input.dataset.idx);
-                if (input.value.trim().toLowerCase() === data[idx].a.toLowerCase()) {
-                    input.style.borderColor = 'var(--success)';
-                    correctCount++;
-                } else {
-                    input.style.borderColor = 'var(--danger)';
-                    input.value = `${input.value} -> [${data[idx].a}]`;
-                }
-            });
+        inputs.forEach(input => {
+            const idx = parseInt(input.dataset.idx);
+            const userAnswer = input.value.trim().toUpperCase();
+            const correctAnswer = module.answers[idx].toUpperCase();
+
+            if (userAnswer === correctAnswer) {
+                input.style.borderColor = "var(--success)";
+                input.style.backgroundColor = "#d4edda";
+                localScore++;
+            } else {
+                input.style.borderColor = "var(--danger)";
+                input.style.backgroundColor = "#f8d7da";
+                allCorrect = false;
+            }
+        });
+
+        score = localScore;
+        document.getElementById('final-score-display').innerText = `Module finished! Score: ${score} / ${module.answers.length}`;
+
+        if (allCorrect && inputs.length > 0) {
+            setTimeout(() => { showScreen('screen-results'); }, 1000);
         }
-
-        setTimeout(() => {
-            document.getElementById('final-score-display').innerText = `Activity Concluded! Score: ${correctCount} / ${totalCount}`;
-            showScreen('screen-results');
-        }, 500);
     }
 </script>
 </body>
