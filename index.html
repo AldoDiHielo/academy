@@ -185,8 +185,8 @@ const database = {
         {q: "I forgot __________ (lock) the door.", a: "to lock", r: "Forget + to-infinitive (didn't do it)."},
         {q: "The news __________ (be) shocking.", a: "was", r: "'News' is singular."},
         {q: "By the time we arrive, the movie __________ (start).", a: "will have started", r: "Future Perfect."},
-        {q: "It was a mistake __________ (not / take) the map before we left.", a: "not to take", r: "Negative infinitive."},
-        {q: "I'd rather __________ (stay) home tonight.", a: "stay", a: "stay", r: "'Would rather' (no subject change) + bare infinitive."}
+        {r: "It was a mistake __________ (not / take) the map before we left.", a: "not to take", r: "Negative infinitive."},
+        {q: "I'd rather __________ (stay) home tonight.", a: "stay", r: "'Would rather' (no subject change) + bare infinitive."}
     ],
     "B2_Stones": [
         {q: "Look after", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Look the baby after'."},
@@ -206,7 +206,7 @@ const database = {
         {q: "Throw away", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Throw those old papers away'."},
         {q: "Look up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Look the word up'."},
         {q: "Put on", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Put your coat on'."},
-        {r: "Back up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Back your files up'."},
+        {q: "Back up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Back your files up'."},
         {q: "Cut off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Cut the power off'."},
         {q: "Cheer up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Cheer her up'."},
         {q: "Figure out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Figure it out'."},
@@ -240,16 +240,19 @@ const database = {
         { a: "Blood", b: "sample" }, { a: "Chronic", b: "condition" }, { a: "Shortness", b: "of breath" }
     ],
     "B2_Abstraction": {
+        _tags: ["MP"],
         article: `The global escalation of Metabolic Syndrome has positioned Type 2 Diabetes Mellitus (T2DM) as a critical health priority for modern healthcare systems. Current clinical guidelines emphasize that while pharmacological interventions, such as the administration of Metformin, remain the gold standard for initial glycemic control, long-term remission is rarely achieved through monotherapy alone due to the progressive nature of beta-cell decline. This longitudinal study evaluates the efficacy of the MET-LIFE Protocol, a rigorous 24-month randomized controlled trial involving a cohort of 1,200 participants across diverse clinical settings. The protocol is designed as a multimodal strategy that integrates high-intensity interval training (HIIT) to enhance mitochondrial biogenesis, a plant-based ketogenic diet aimed at reducing systemic inflammation, and standardized pharmacological support. Furthermore, the trial utilizes continuous glucose monitoring (CGM) as a primary tool to evaluate metabolic flexibility—the body's capacity to switch efficiently between carbohydrate and lipid oxidation. Preliminary data suggests that addressing the lifestyle-pharmacology intersection is paramount for sustained clinical success. During the follow-up phase, the experimental group showed a significant 1.8% decrease in HbA1c levels, contrasting with the control group’s stagnant metrics. It is worth noting that nearly half of these patients reached a state of partial remission, defined as maintaining sub-diabetic glycemic levels for at least six months without the need for active medication. These results were consistent across various age groups, provided that adherence to the HIIT and ketogenic components remained high. Ultimately, the researchers concluded that while Metformin provides a necessary foundation, lifestyle changes must be applied with maximum rigor and clinical supervision to successfully reverse long-standing metabolic impairment and restore beta-cell functionality.`,
         summary: "The MET-LIFE study was conducted to address T2DM, a condition for which single-drug treatment rarely (1) __________ long-term results. Unlike standard care, this protocol (2) __________ a specific exercise regimen known as (3) __________ with a nutritional plan. A central pillar of the trial was (4) __________, which refers to the organism's (5) __________ to alternate between different energy substrates. Regarding the outcomes, the experimental group (6) __________ a 1.8% decrease in HbA1c levels. It is (7) __________ noting that nearly half of these patients reached a state of (8) __________, meaning they no longer required drugs. The researchers (9) __________ that lifestyle changes must be applied with (10) __________ to successfully reverse metabolic impairment.",
         answers: ["achieves", "integrated", "HIIT", "metabolic flexibility", "ability", "showed", "worth", "partial remission", "concluded", "rigor"]
     },
     "B2_WordBank": {
+        _tags: ["MP"],
         bank: ["was admitted", "had been experiencing", "reported", "hadn't had", "referred", "had occurred", "had subsided", "was noted", "being", "was scheduled"],
         text: "The patient is a 54-year-old male who (1) __________ to the Emergency Department following a syncopal episode during moderate physical activity. According to his wife, who witnessed the event, the patient (2) __________ lightheadedness and palpitations for approximately twenty minutes before losing consciousness. Upon arrival, the patient (3) __________ that he (4) __________ any significant health issues prior to this month; however, he (5) __________ that a similar, albeit shorter, episode (6) __________ two weeks ago while gardening. He mentioned that the previous symptoms (7) __________ spontaneously without medical intervention. A mild systolic murmur (8) __________ during the initial physical examination. Although the patient denied (9) __________ in pain at the moment of admission, his heart rate remained elevated. Consequently, an urgent echocardiogram (10) __________ for the following morning to rule out structural heart disease.",
         answers: ["was admitted", "had been experiencing", "reported", "hadn't had", "referred", "had occurred", "had subsided", "was noted", "being", "was scheduled"]
     },
     "B2_Reading": {
+        _tags: ["GP", "MP"],
         article: `The genesis of the Olympic Games dates back to 776 BC in ancient Olympia, Greece. Originally, the festival was held to honor Zeus, the king of the gods. While modern spectators are used to a vast array of sports, the first recorded Olympics featured only one event: a short footrace called the stade. For centuries, the games were a cornerstone of Greek culture, fostering a period of "sacred truce" where conflicts between city-states were temporarily suspended to allow athletes to travel safely. However, as the Roman Empire’s influence grew, the games began to lose their religious significance. In 393 AD, Emperor Theodosius I, who had recently converted to Christianity, abolished the festival, claiming it was a pagan ritual. <br><br>The Olympics remained dormant for over 1,500 years until a French educator named Baron Pierre de Coubertin proposed their revival. Coubertin believed that international competition could promote global peace and physical education. His vision culminated in the first modern Olympic Games, which took place in Athens in 1896. Although the event featured only male athletes from 14 nations, it was considered a massive success. It is a common misconception that the marathon was part of the ancient games; in reality, it was introduced in 1896 to commemorate a legendary run from the city of Marathon to Athens. Since their revival, the Games have evolved into a global celebration, withstanding the test of time, though it is important to note that the competition was officially cancelled during the years of the major World Wars.`,
         questions: [
             {q: "The original Olympics were primarily a secular sporting event.", a: false, r: "False. They were religious festivals held to honor Zeus."},
@@ -265,6 +268,7 @@ const database = {
         ]
     },
     "B2_Crossword": {
+        _tags: ["GP", "MP"],
         gridSize: 14,
         clues: [
             { id: 1, d: "H", q: "DEPEND (Adjective)", a: "DEPENDENT" },
@@ -288,7 +292,7 @@ const database = {
             {r:9, c:1, v:"H", n:7}, {r:9, c:2, v:"E"}, {r:9, c:3, v:"A"}, {r:9, c:4, v:"L"}, {r:9, c:5, v:"T"}, {r:9, c:6, v:"Y"}, {r:9, c:7, v:"Y"},
             {r:2, c:6, v:"C", n:8}, {r:3, c:6, v:"R"}, {r:4, c:6, v:"E"}, {r:5, c:6, v:"A"}, {r:6, c:6, v:"T"}, {r:7, c:6, v:"I"}, {r:8, c:6, v:"O"}, {r:9, c:6, v:"N"},
             {r:1, c:0, v:"C", n:9}, {r:2, c:0, v:"O"}, {r:3, c:0, v:"M"}, {r:4, c:0, v:"F"}, {r:5, c:0, v:"O"}, {r:6, c:0, v:"R"}, {r:7, c:0, v:"T"}, {r:8, c:0, v:"A"}, {r:9, c:0, v:"B"}, {r:10, c:0, v:"L"}, {r:11, c:0, v:"E"},
-            {r:6, c:0, v:"S", n:10}, {r:6, c:1, v:"U"}, {r:6, c:2, v:"R"}, {r:6, c:3, v:"E"}, {r:6, c:4, v:"L"}, {r:6, c:5, v:"Y"}
+{r:6, c:0, v:"S", n:10}, {r:6, c:1, v:"U"}, {r:6, c:2, v:"R"}, {r:6, c:3, v:"E"}, {r:6, c:4, v:"L"}, {r:6, c:5, v:"Y"}
         ]
     }
 };
@@ -297,11 +301,7 @@ database.B2_MC._tags = ["GP", "MP"];
 database.B2_Writing._tags = ["GP", "MP"];
 database.B2_Stones._tags = ["GP", "MP"];
 database.B2_Memory._tags = ["GP", "MP"];
-database.B2_Crossword._tags = ["GP", "MP"];
 database.B2_Matching._tags = ["MP"];
-database.B2_Abstraction._tags = ["MP"];
-database.B2_WordBank._tags = ["MP"];
-database.B2_Reading._tags = ["GP", "MP"];
 
 let currentPath = "";
 let currentMode = "";
