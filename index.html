@@ -313,7 +313,7 @@
         {r:12, c:4, v:"H", n:9}, {r:12, c:5, v:"E"}, {r:12, c:6, v:"A"}, {r:12, c:7, v:"L"}, {r:12, c:10, v:"T"}, {r:12, c:11, v:"H"}, {r:12, c:12, v:"Y"},
         {r:7, c:6, v:"U", n:10}, {r:9, c:6, v:"N"}, {r:10, c:6, v:"U"}, {r:11, c:6, v:"S"}, {r:13, c:6, v:"L"}
     ]
-}
+};
 
 
     database.B2_MC._tags = ["GP", "MP"];
@@ -326,7 +326,6 @@
     database.B2_Reading._tags = ["GP", "MP"];
     database.B2_Crossword._tags = ["GP", "MP"];
 
-    // --- ENRUTAMIENTO Y MANEJO DE INTERFAZ GENERAL ---
     function showScreen(screenId) {
         document.querySelectorAll('.container').forEach(s => s.classList.add('hidden'));
         const target = document.getElementById(screenId);
@@ -394,7 +393,6 @@
 
     function goBackToList() { showQuizzes(); }
 
-    // --- ENGINES DE JUEGO (PARTE 3) ---
     function loadQuestion() {
         const questions = database[currentPath];
         const q = questions[currentQuestionIndex];
