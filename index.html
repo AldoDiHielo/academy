@@ -151,7 +151,7 @@ const database = {
         {q: "The surgery was put __________ until the patient stabilized.", o: ["off", "out", "away"], a: 0, r: "'Put off' = postpone."},
         {q: "I wish I __________ more during the lecture.", o: ["focused", "had focused", "would focus"], a: 1, r: "Past regret."},
         {q: "By the end of the year, she __________ her residency.", o: ["will finish", "will have finished", "finishes"], a: 1, r: "Future Perfect."},
-        {r: "The laboratory, __________ was renovated, is top-notch.", o: ["which", "that", "whose"], a: 0, r: "Non-defining relative clause."},
+        {q: "The laboratory, __________ was renovated, is top-notch.", o: ["which", "that", "whose"], a: 0, r: "Non-defining relative clause."},
         {q: "I'd rather you __________ smoke in the waiting area.", o: ["don't", "didn't", "not"], a: 1, r: "'Would rather' + subject + Past Simple."},
         {q: "The medicine needs __________ with food.", o: ["to take", "to be taken", "taking"], a: 1, r: "Passive infinitive."},
         {q: "Seldom __________ such a dedicated medical team.", o: ["have I seen", "I have seen", "did I saw"], a: 0, r: "Inversion after 'Seldom'."}
@@ -168,7 +168,7 @@ const database = {
         {q: "It's high time you __________ (start) looking for a job.", a: "started", r: "It's high time + Past Simple."},
         {q: "Hardly __________ (the plane / land) when it started to rain.", a: "had the plane landed", r: "Inversion with 'Hardly'."},
         {q: "I was used to __________ (drive) on the left.", a: "driving", r: "'Be used to' + gerund."},
-        {q: "No sooner __________ (I / arrive) home than it rained.", a: "had I arrived", r: "Inversion with 'No sooner'."},
+        {q: "No sooner __________ (I / arrive) home than it rained.", a: "had i arrived", r: "Inversion with 'No sooner'."},
         {q: "You __________ (had) better call her now.", a: "had", r: "'Had better' structure."},
         {q: "The house __________ (clean) by the time we got back.", a: "had been cleaned", r: "Past Perfect Passive."},
         {q: "Suppose you __________ (win) the lottery, what would you do?", a: "won", r: "Second conditional (imaginary)."},
@@ -186,7 +186,7 @@ const database = {
         {q: "The news __________ (be) shocking.", a: "was", r: "'News' is singular."},
         {q: "By the time we arrive, the movie __________ (start).", a: "will have started", r: "Future Perfect."},
         {q: "It was a mistake __________ (not / take) the map before we left.", a: "not to take", r: "Negative infinitive."},
-        {q: "I'd rather __________ (stay) home tonight.", a: "stay", r: "'Would rather' (no subject change) + bare infinitive."}
+        {q: "I'd rather __________ (stay) home tonight.", a: "stay", a: "stay", r: "'Would rather' (no subject change) + bare infinitive."}
     ],
     "B2_Stones": [
         {q: "Look after", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Look the baby after'."},
@@ -206,7 +206,7 @@ const database = {
         {q: "Throw away", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Throw those old papers away'."},
         {q: "Look up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Look the word up'."},
         {q: "Put on", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Put your coat on'."},
-        {q: "Back up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Back your files up'."},
+        {r: "Back up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Back your files up'."},
         {q: "Cut off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Cut the power off'."},
         {q: "Cheer up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Cheer her up'."},
         {q: "Figure out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Figure it out'."},
@@ -285,13 +285,23 @@ const database = {
             {r:4, c:1, v:"D", n:4}, {r:4, c:2, v:"A"}, {r:4, c:3, v:"N"}, {r:4, c:4, v:"G"}, {r:4, c:5, v:"E"}, {r:4, c:6, v:"R"}, {r:4, c:7, v:"O"}, {r:4, c:8, v:"U"}, {r:4, c:9, v:"S"},
             {r:7, c:3, v:"S", n:5}, {r:7, c:4, v:"U"}, {r:7, c:5, v:"C"}, {r:7, c:6, v:"C"}, {r:7, c:7, v:"E"}, {r:7, c:8, v:"S"}, {r:7, c:9, v:"S"},
             {r:3, c:4, v:"A", n:6}, {r:4, c:4, v:"D"}, {r:5, c:4, v:"V"}, {r:6, c:4, v:"E"}, {r:7, c:4, v:"N"}, {r:8, c:4, v:"T"}, {r:9, c:4, v:"U"}, {r:10, c:4, v:"R"}, {r:11, c:4, v:"O"}, {r:12, c:4, v:"U"}, {r:13, c:4, v:"S"},
-            {r:9, c:1, v:"H", n:7}, {r:9, c:2, v:"E"}, {r:9, c:3, v:"A"}, {r:9, c:4, v:"L"}, {r:9, c:5, v:"T"}, {r:9, c:6, v:"H"}, {r:9, c:7, v:"Y"},
+            {r:9, c:1, v:"H", n:7}, {r:9, c:2, v:"E"}, {r:9, c:3, v:"A"}, {r:9, c:4, v:"L"}, {r:9, c:5, v:"T"}, {r:9, c:6, v:"Y"}, {r:9, c:7, v:"Y"},
             {r:2, c:6, v:"C", n:8}, {r:3, c:6, v:"R"}, {r:4, c:6, v:"E"}, {r:5, c:6, v:"A"}, {r:6, c:6, v:"T"}, {r:7, c:6, v:"I"}, {r:8, c:6, v:"O"}, {r:9, c:6, v:"N"},
             {r:1, c:0, v:"C", n:9}, {r:2, c:0, v:"O"}, {r:3, c:0, v:"M"}, {r:4, c:0, v:"F"}, {r:5, c:0, v:"O"}, {r:6, c:0, v:"R"}, {r:7, c:0, v:"T"}, {r:8, c:0, v:"A"}, {r:9, c:0, v:"B"}, {r:10, c:0, v:"L"}, {r:11, c:0, v:"E"},
             {r:6, c:0, v:"S", n:10}, {r:6, c:1, v:"U"}, {r:6, c:2, v:"R"}, {r:6, c:3, v:"E"}, {r:6, c:4, v:"L"}, {r:6, c:5, v:"Y"}
         ]
     }
 };
+
+database.B2_MC._tags = ["GP", "MP"];
+database.B2_Writing._tags = ["GP", "MP"];
+database.B2_Stones._tags = ["GP", "MP"];
+database.B2_Memory._tags = ["GP", "MP"];
+database.B2_Crossword._tags = ["GP", "MP"];
+database.B2_Matching._tags = ["MP"];
+database.B2_Abstraction._tags = ["MP"];
+database.B2_WordBank._tags = ["MP"];
+database.B2_Reading._tags = ["GP", "MP"];
 
 let currentPath = "";
 let currentMode = "";
@@ -686,111 +696,3 @@ function renderCrossword() {
             <h3 style="margin-bottom:20px;">Prefixes & Suffixes Crossword</h3>
             <div style="display: flex; flex-direction: column; gap: 20px;">
                 <div style="overflow-x: auto; padding: 10px;">${gridHtml}</div>
-                <div style="text-align: left; padding: 10px; border-top: 1px solid #eee;">
-                    <h5 style="font-weight: bold; color: var(--primary);">Clues</h5>
-                    <div style="display: flex; gap: 20px; font-size: 0.9rem;">
-                        <div style="flex: 1;">
-                            <h6 style="font-weight: bold; color: var(--secondary);">Across</h6>
-                            ${acrossClues.map(clue => `<p style="margin:4px 0;"><b>${clue.id}.</b> ${clue.q}</p>`).join('')}
-                        </div>
-                        <div style="flex: 1;">
-                            <h6 style="font-weight: bold; color: var(--success);">Down</h6>
-                            ${downClues.map(clue => `<p style="margin:4px 0;"><b>${clue.id}.</b> ${clue.q}</p>`).join('')}
-                        </div>
-                    </div>
-                    <button class="main-btn" style="width: 100%; margin-top: 20px;" onclick="checkCrossword()">Check Crossword</button>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-function checkCrossword() {
-    const cells = document.querySelectorAll('.cw-cell');
-    const gridData = database.B2_Crossword.grid;
-    let correctCount = 0;
-
-    cells.forEach(cell => {
-        const r = parseInt(cell.dataset.r);
-        const c = parseInt(cell.dataset.c);
-        const data = gridData.find(i => i.r === r && i.c === c);
-        if (cell.value.toUpperCase() === data.v.toUpperCase()) {
-            cell.style.background = "var(--success)";
-            cell.style.color = "white";
-            correctCount++;
-        } else {
-            cell.style.background = "var(--danger)";
-            cell.style.color = "white";
-        }
-    });
-
-    if (correctCount === gridData.length) {
-        score = database.B2_Crossword.clues.length; 
-        setTimeout(showResults, 1500);
-    }
-}
-
-function login() {
-    const name = document.getElementById("student-name").value.trim();
-    if (name === "") {
-        alert("Por favor, introduce tu nombre.");
-        return;
-    }
-    showScreen('screen-branch');
-}
-function setPath(path) {
-    currentPath = path;
-    showScreen('screen-levels-selector');
-}
-function selectLevel(level) {
-if (level === 'B2') {
-        showScreen('screen-levels');
-        document.getElementById('lvl-title').innerText = `B2 - Upper Intermediate (${currentPath})`;
-        const menuContainer = document.getElementById('quiz-list-container');
-        
-        if (currentPath === 'General') {
-            menuContainer.innerHTML = `
-                <div class="level-card" onclick="startApp('B2_MC')"><h3>Multiple Choice</h3></div>
-                <div class="level-card" onclick="startApp('B2_Memory')"><h3>Phrasal Verb Memory</h3></div>
-                <div class="level-card" onclick="startApp('B2_Crossword')"><h3>Crossword Puzzle</h3></div>
-            `;
-        } else {
-            menuContainer.innerHTML = `
-                <div class="level-card" onclick="startApp('B2_MC')"><h3>Multiple Choice</h3></div>
-                <div class="level-card" onclick="startApp('B2_Stones')"><h3>Stones vs Eggshells</h3></div>
-                <div class="level-card" onclick="startApp('B2_Writing')"><h3>Sentence Writing</h3></div>
-                <div class="level-card" onclick="startApp('B2_Matching')"><h3>Collocations Match</h3></div>
-                <div class="level-card" onclick="startApp('B2_Abstraction')"><h3>Text Abstraction</h3></div>
-                <div class="level-card" onclick="startApp('B2_WordBank')"><h3>Medical Word Bank</h3></div>
-                <div class="level-card" onclick="startApp('B2_Reading')"><h3>Reading Comprehension</h3></div>
-                <div class="level-card" onclick="startApp('B2_Memory')"><h3>Phrasal Verb Memory</h3></div>
-                <div class="level-card" onclick="startApp('B2_Crossword')"><h3>Crossword Puzzle</h3></div>
-            `;
-        }
-    }
-    } else {
-        showScreen('screen-levels');
-        document.getElementById('lvl-title').innerText = `${level} Modules`;
-        document.getElementById('quiz-list-container').innerHTML = `
-            <div style="grid-column: 1/-1; padding: 20px; color: #7f8c8d;">
-                Módulos de ${level} en desarrollo para el Path seleccionado.
-            </div>
-        `;
-    }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    if (!document.getElementById('screen-b2-dynamic')) {
-        const newScreen = document.createElement('div');
-        newScreen.id = 'screen-b2-dynamic';
-        newScreen.className = 'container hidden';
-        newScreen.innerHTML = `
-            <div id="b2-activity-wrapper"></div>
-            <button class="main-btn" style="background:#7f8c8d; margin-top:20px;" onclick="showScreen('screen-levels')">Exit Activity</button>
-        `;
-        document.body.appendChild(newScreen);
-    }
-});
-</script>
-</body>
-</html>
