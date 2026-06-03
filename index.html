@@ -41,8 +41,6 @@
         .progress-container { width: 100%; height: 10px; background: #eee; border-radius: 5px; margin: 1rem 0; overflow: hidden; }
         #progress-fill { height: 100%; background: var(--success); width: 0%; transition: 0.3s; }
         #screen-login { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; }
-        
-        /* Estilos específicos para la sección de pistas del crucigrama */
         .clues-container { display: flex; justify-content: space-between; gap: 20px; margin-top: 20px; text-align: left; }
         .clues-box { flex: 1; background: #f8f9fa; padding: 15px; border-radius: 8px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05); }
         .clues-box h4 { margin-top: 0; color: var(--primary); border-bottom: 2px solid #ddd; padding-bottom: 5px; }
@@ -286,34 +284,35 @@
                 {q: "The modern Games have been held every four years without any official cancellations.", a: false, r: "False. They were cancelled during the World Wars."}
             ]
         },
-"B2_Crossword": {
-    _tags: ["GP", "MP"],
-    gridSize: 16,
-    clues: [
-        { id: 1, d: "H", q: "DEVELOP (Noun)", a: "DEVELOPMENT" },
-        { id: 2, d: "V", q: "SURE (Adverb)", a: "SURELY" },
-        { id: 3, d: "H", q: "SUCCESS (Adjective)", a: "SUCCESSFUL" },
-        { id: 4, d: "V", q: "COMFORT (Adjective)", a: "COMFORTABLE" },
-        { id: 5, d: "H", q: "DANGER (Adjective)", a: "DANGEROUS" },
-        { id: 6, d: "V", q: "POSSIBLE (Noun)", a: "POSSIBILITY" },
-        { id: 7, d: "H", q: "CREATE (Noun)", a: "CREATION" },
-        { id: 8, d: "V", q: "DEPEND (Adjective)", a: "DEPENDENT" },
-        { id: 9, d: "H", q: "HEALTH (Adjective)", a: "HEALTHY" },
-        { id: 10, d: "V", q: "USUAL (Antonym Adjective)", a: "UNUSUAL" }
-    ],
-    grid: [
-        {r:3, c:1, v:"D", n:1}, {r:3, c:2, v:"E"}, {r:3, c:3, v:"V"}, {r:3, c:4, v:"E"}, {r:3, c:5, v:"L"}, {r:3, c:6, v:"O"}, {r:3, c:7, v:"P"}, {r:3, c:8, v:"M"}, {r:3, c:9, v:"E"}, {r:3, c:10, v:"N"}, {r:3, c:11, v:"T"},
-        {r:2, c:3, v:"S", n:2}, {r:4, c:3, v:"R"}, {r:5, c:3, v:"E"}, {r:6, c:3, v:"L"}, {r:7, c:3, v:"Y"},
-        {r:5, c:2, v:"S", n:3}, {r:5, c:4, v:"C"}, {r:5, c:5, v:"C"}, {r:5, c:6, v:"E"}, {r:5, c:7, v:"S"}, {r:5, c:8, v:"S"}, {r:5, c:9, v:"F"}, {r:5, c:10, v:"U"}, {r:5, c:11, v:"L"},
-        {r:1, c:8, v:"C", n:4}, {r:2, c:8, v:"O"}, {r:4, c:8, v:"F"}, {r:6, c:8, v:"O"}, {r:7, c:8, v:"R"}, {r:8, c:8, v:"T"}, {r:9, c:8, v:"A"}, {r:10, c:8, v:"B"}, {r:11, c:8, v:"L"}, {r:12, c:8, v:"E"},
-        {r:8, c:5, v:"D", n:5}, {r:8, c:6, v:"A"}, {r:8, c:7, v:"N"}, {r:8, c:9, v:"E"}, {r:8, c:10, v:"R"}, {r:8, c:11, v:"O"}, {r:8, c:12, v:"U"}, {r:8, c:13, v:"S"},
-        {r:4, c:13, v:"P", n:6}, {r:5, c:13, v:"O"}, {r:6, c:13, v:"S"}, {r:7, c:13, v:"S"}, {r:9, c:13, v:"I"}, {r:10, c:13, v:"B"}, {r:11, c:13, v:"I"}, {r:12, c:13, v:"L"}, {r:13, c:13, v:"I"}, {r:14, c:13, v:"T"}, {r:15, c:13, v:"Y"},
-        {r:10, c:7, v:"C", n:7}, {r:10, c:8, v:"R"}, {r:10, c:9, v:"E"}, {r:10, c:10, v:"A"}, {r:10, c:11, v:"T"}, {r:10, c:12, v:"I"}, {r:10, c:14, v:"O"}, {r:10, c:15, v:"N"},
-        {r:6, c:9, v:"D", n:8}, {r:7, c:9, v:"E"}, {r:8, c:9, v:"P"}, {r:9, c:9, v:"E"}, {r:11, c:9, v:"N"}, {r:12, c:9, v:"D"}, {r:13, c:9, v:"E"}, {r:14, c:9, v:"N"}, {r:15, c:9, v:"T"},
-        {r:12, c:4, v:"H", n:9}, {r:12, c:5, v:"E"}, {r:12, c:6, v:"A"}, {r:12, c:7, v:"L"}, {r:12, c:10, v:"T"}, {r:12, c:11, v:"H"}, {r:12, c:12, v:"Y"},
-        {r:7, c:6, v:"U", n:10}, {r:9, c:6, v:"N"}, {r:10, c:6, v:"U"}, {r:11, c:6, v:"S"}, {r:13, c:6, v:"L"}
-    ]
-},
+        "B2_Crossword": {
+            _tags: ["GP", "MP"],
+            gridSize: 16,
+            clues: [
+                { id: 1, d: "H", q: "DEVELOP (Noun)", a: "DEVELOPMENT" },
+                { id: 2, d: "V", q: "SURE (Adverb)", a: "SURELY" },
+                { id: 3, d: "H", q: "SUCCESS (Adjective)", a: "SUCCESSFUL" },
+                { id: 4, d: "V", q: "COMFORT (Adjective)", a: "COMFORTABLE" },
+                { id: 5, d: "H", q: "DANGER (Adjective)", a: "DANGEROUS" },
+                { id: 6, d: "V", q: "POSSIBLE (Noun)", a: "POSSIBILITY" },
+                { id: 7, d: "H", q: "CREATE (Noun)", a: "CREATION" },
+                { id: 8, d: "V", q: "DEPEND (Adjective)", a: "DEPENDENT" },
+                { id: 9, d: "H", q: "HEALTH (Adjective)", a: "HEALTHY" },
+                { id: 10, d: "V", q: "USUAL (Antonym Adjective)", a: "UNUSUAL" }
+            ],
+            grid: [
+                {r:3, c:1, v:"D", n:1}, {r:3, c:2, v:"E"}, {r:3, c:3, v:"V"}, {r:3, c:4, v:"E"}, {r:3, c:5, v:"L"}, {r:3, c:6, v:"O"}, {r:3, c:7, v:"P"}, {r:3, c:8, v:"M"}, {r:3, c:9, v:"E"}, {r:3, c:10, v:"N"}, {r:3, c:11, v:"T"},
+                {r:2, c:3, v:"S", n:2}, {r:4, c:3, v:"R"}, {r:5, c:3, v:"E"}, {r:6, c:3, v:"L"}, {r:7, c:3, v:"Y"},
+                {r:5, c:2, v:"S", n:3}, {r:5, c:4, v:"C"}, {r:5, c:5, v:"C"}, {r:5, c:6, v:"E"}, {r:5, c:7, v:"S"}, {r:5, c:8, v:"S"}, {r:5, c:9, v:"F"}, {r:5, c:10, v:"U"}, {r:5, c:11, v:"L"},
+                {r:1, c:8, v:"C", n:4}, {r:2, c:8, v:"O"}, {r:4, c:8, v:"F"}, {r:6, c:8, v:"O"}, {r:7, c:8, v:"R"}, {r:8, c:8, v:"T"}, {r:9, c:8, v:"A"}, {r:10, c:8, v:"B"}, {r:11, c:8, v:"L"}, {r:12, c:8, v:"E"},
+                {r:8, c:5, v:"D", n:5}, {r:8, c:6, v:"A"}, {r:8, c:7, v:"N"}, {r:8, c:9, v:"E"}, {r:8, c:10, v:"R"}, {r:8, c:11, v:"O"}, {r:8, c:12, v:"U"}, {r:8, c:13, v:"S"},
+                {r:4, c:13, v:"P", n:6}, {r:5, c:13, v:"O"}, {r:6, c:13, v:"S"}, {r:7, c:13, v:"S"}, {r:9, c:13, v:"I"}, {r:10, c:13, v:"B"}, {r:11, c:13, v:"I"}, {r:12, c:13, v:"L"}, {r:13, c:13, v:"I"}, {r:14, c:13, v:"T"}, {r:15, c:13, v:"Y"},
+                {r:10, c:7, v:"C", n:7}, {r:10, c:8, v:"R"}, {r:10, c:9, v:"E"}, {r:10, c:10, v:"A"}, {r:10, c:11, v:"T"}, {r:10, c:12, v:"I"}, {r:10, c:14, v:"O"}, {r:10, c:15, v:"N"},
+                {r:6, c:9, v:"D", n:8}, {r:7, c:9, v:"E"}, {r:8, c:9, v:"P"}, {r:9, c:9, v:"E"}, {r:11, c:9, v:"N"}, {r:12, c:9, v:"D"}, {r:13, c:9, v:"E"}, {r:14, c:9, v:"N"}, {r:15, c:9, v:"T"},
+                {r:12, c:4, v:"H", n:9}, {r:12, c:5, v:"E"}, {r:12, c:6, v:"A"}, {r:12, c:7, v:"L"}, {r:12, c:10, v:"T"}, {r:12, c:11, v:"H"}, {r:12, c:12, v:"Y"},
+                {r:7, c:6, v:"U", n:10}, {r:9, c:6, v:"N"}, {r:10, c:6, v:"U"}, {r:11, c:6, v:"S"}, {r:13, c:6, v:"L"}
+            ]
+        }
+    };
 
     database.B2_MC._tags = ["GP", "MP"];
     database.B2_Writing._tags = ["GP", "MP"];
@@ -560,15 +559,14 @@
 
     function resetBoard() { [firstCard, secondCard, lockBoard] = [null, null, false]; }
 
-    // --- REPARACIÓN Y CIERRE SINTÁCTICO DEL CRUCIGRAMA ---
     function renderCrossword() {
         const data = database.B2_Crossword;
         const container = document.getElementById("b2-activity-wrapper");
         
-        let gridHtml = `<div style="display:grid; grid-template-columns:repeat(14, 32px); gap:2px; justify-content:center; margin-bottom: 20px;">`;
+        let gridHtml = `<div style="display:grid; grid-template-columns:repeat(16, 32px); gap:2px; justify-content:center; margin-bottom: 20px;">`;
         
         for (let r = 0; r < data.gridSize; r++) {
-            for (let c = 0; c < 14; c++) {
+            for (let c = 0; c < 16; c++) {
                 const cell = data.grid.find(i => i.r === r && i.c === c);
                 if (cell) {
                     gridHtml += `
@@ -640,7 +638,6 @@
         }
     }
 
-    // --- MÓDULO AUXILIAR PARA TEXTOS AVANZADOS (ABSTRACTION, WORD BANK, READING, WRITING) ---
     function initTextModule() {
         const data = database[currentPath];
         const title = document.getElementById('text-module-title');
