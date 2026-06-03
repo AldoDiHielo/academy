@@ -737,7 +737,9 @@ function login() {
     }
     showScreen('screen-branch');
 }
-
+function setPath(path) {
+    showScreen('screen-levels-selector');
+}
 function selectLevel(level) {
     if (level === 'B2') {
         showScreen('screen-levels');
