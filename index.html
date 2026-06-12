@@ -194,160 +194,214 @@
         document.getElementById(screenId).classList.remove('hidden');
     }
 
-    const database = {
-        "B2_MC": [
-            {q: "By the time the surgeon arrived, the nurses __________ the patient.", o: ["had already prepared", "have already prepared", "already prepared"], a: 0, r: "Past Perfect is for an action completed before another past action."},
-            {q: "If I __________ more attention, I would be able to answer this now.", o: ["paid", "had paid", "would have paid"], a: 1, r: "Mixed conditional: Past condition, present result."},
-            {q: "I need to __________ on the latest research.", o: ["brush up", "look for", "take in"], a: 0, r: "'Brush up on' means to refresh knowledge."},
-            {q: "The operating room __________ at the moment.", o: ["is repairing", "is being repaired", "has been repaired"], a: 1, r: "Present Continuous Passive is for ongoing actions."},
-            {q: "The specialist is very experienced __________ dealing with complex cases.", o: ["at", "with", "in"], a: 2, r: "'Experienced' collocates with 'in'."},
-            {q: "I suggest that he __________ a break.", o: ["take", "takes", "to take"], a: 0, r: "Subjunctive mood after 'suggest' uses base form."},
-            {q: "__________ the weather was terrible, the supplies arrived.", o: ["Despite", "Despite the fact that", "In spite of"], a: 1, r: "Followed by a full clause."},
-            {q: "We need to see __________ with our colleagues.", o: ["eye to eye", "face to face", "hand to hand"], a: 0, r: "Agree completely."},
-            {q: "I'm not used to __________ such long shifts.", o: ["work", "working", "be working"], a: 1, r: "'Be used to' + gerund."},
-            {q: "John told me he __________ call me the following day.", o: ["will", "would", "calls"], a: 1, r: "Reported speech backshifts 'will' to 'would'."},
-            {q: "I wish I __________ so much money last year.", o: ["didn't spend", "hadn't spent", "wouldn't spend"], a: 1, r: "Past regret uses Past Perfect."},
-            {q: "The manager __________ to give everyone a bonus.", o: ["suggested", "promised", "admitted"], a: 1, r: "'Promise' + to-infinitive."},
-            {q: "If the ambulance __________ earlier, they could have saved him.", o: ["arrived", "had arrived", "would arrive"], a: 1, r: "Third conditional (If + Past Perfect)."},
-            {q: "I found the medical conference very __________.", o: ["enlightening", "enlightened", "enlighten"], a: 0, r: "Adjective describing the event."},
-            {q: "The doctor needs to __________ a decision immediately.", o: ["do", "make", "get"], a: 1, r: "Collocation: 'make a decision'."},
-            {q: "Hardly __________ the door when the phone rang.", o: ["I had opened", "had I opened", "did I open"], a: 1, r: "Inversion: auxiliary before subject."},
-            {q: "The doctor __________ to have discovered a new variant.", o: ["claims", "suggests", "denies"], a: 0, r: "'Claim' for asserting facts."},
-            {q: "If we __________ the equipment yesterday, we could start today.", o: ["received", "had received", "would receive"], a: 1, r: "Mixed conditional."},
-            {q: "You __________ better see a specialist about that cough.", o: ["would", "should", "had"], a: 2, r: "'Had better' for strong advice."},
-            {q: "The patient is believed __________ from a rare condition.", o: ["to suffer", "to be suffering", "suffering"], a: 1, r: "Passive reporting structure."},
-            {q: "No sooner __________ the hospital than my pager went off.", o: ["I had left", "had I left", "did I leave"], a: 1, r: "Inversion with 'No sooner'."},
-            {q: "I'm not accustomed __________ such high levels of stress.", o: ["to handle", "to handling", "handling"], a: 1, r: "'Accustomed to' + gerund."},
-            {q: "She's very __________ on specializing in cardiology.", o: ["keen", "fond", "interested"], a: 0, r: "'Keen on'."},
-            {q: "The surgery was put __________ until the patient stabilized.", o: ["off", "out", "away"], a: 0, r: "'Put off' = postpone."},
-            {q: "I wish I __________ more during the lecture.", o: ["focused", "had focused", "would focus"], a: 1, r: "Past regret."},
-            {q: "By the end of the year, she __________ her residency.", o: ["will finish", "will have finished", "finishes"], a: 1, r: "Future Perfect."},
-            {q: "The laboratory, __________ was renovated, is top-notch.", o: ["which", "that", "whose"], a: 0, r: "Non-defining relative clause."},
-            {q: "I'd rather you __________ smoke in the waiting area.", o: ["don't", "didn't", "not"], a: 1, r: "'Would rather' + subject + Past Simple."},
-            {q: "The medicine needs __________ with food.", o: ["to take", "to be taken", "taking"], a: 1, r: "Passive infinitive."},
-            {q: "Seldom __________ such a dedicated medical team.", o: ["have I seen", "I have seen", "did I saw"], a: 0, r: "Inversion after 'Seldom'."}
+const database = {
+    "diagnostic": [
+        { id: 1, level: "A2", text: "She ______ to the office every morning by bus.", options: ["go", "goes", "going"], correct: 1 },
+        { id: 2, level: "A2", text: "They ______ watch the game last night because they were busy.", options: ["don't", "didn't", "haven't"], correct: 1 },
+        { id: 3, level: "A2", text: "Look at those clouds! It ______ to rain.", options: ["is going", "goes", "will"], correct: 0 },
+        { id: 4, level: "A2", text: "I have lived here ______ five years.", options: ["since", "for", "ago"], correct: 1 },
+        { id: 5, level: "A2", text: "He is ______ than his brother.", options: ["tall", "taller", "most tall"], correct: 1 },
+        { id: 6, level: "A2", text: "______ you like to come for dinner?", options: ["Do", "Are", "Would"], correct: 2 },
+        { id: 7, level: "A2", text: "I ______ my homework when the phone rang.", options: ["did", "was doing", "have done"], correct: 1 },
+        { id: 8, level: "A2", text: "This is the ______ book I have ever read.", options: ["good", "better", "best"], correct: 2 },
+        { id: 9, level: "A2", text: "She ______ her teeth twice a day.", options: ["brush", "brushes", "is brushing"], correct: 1 },
+        { id: 10, level: "A2", text: "Can you ______ me a favor, please?", options: ["do", "make", "give"], correct: 0 },
+        { id: 11, level: "B1", text: "If I ______ you, I would take that job.", options: ["am", "was", "were"], correct: 2 },
+        { id: 12, level: "B1", text: "I ______ this movie already.", options: ["saw", "have seen", "see"], correct: 1 },
+        { id: 13, level: "B1", text: "She ______ allowed to stay out late.", options: ["isn't", "doesn't", "hasn't"], correct: 0 },
+        { id: 14, level: "B1", text: "This house ______ in 1990.", options: ["was built", "built", "is built"], correct: 0 },
+        { id: 15, level: "B1", text: "I am interested ______ learning new languages.", options: ["at", "on", "in"], correct: 2 },
+        { id: 16, level: "B1", text: "How ______ sugar do you put in your coffee?", options: ["many", "much", "few"], correct: 1 },
+        { id: 17, level: "B1", text: "I'm really tired. I ______ all day.", options: ["work", "worked", "have been working"], correct: 2 },
+        { id: 18, level: "B1", text: "She suggests ______ to the park.", options: ["go", "to go", "going"], correct: 2 },
+        { id: 19, level: "B1", text: "We ______ each other since we were kids.", options: ["know", "have known", "knew"], correct: 1 },
+        { id: 20, level: "B1", text: "Would you mind ______ the window?", options: ["close", "closing", "to close"], correct: 1 },
+        { id: 21, level: "B2", text: "By this time next year, I ______ my degree.", options: ["will finish", "will have finished", "finish"], correct: 1 },
+        { id: 22, level: "B2", text: "Hard ______ she tried, she couldn't open the door.", options: ["as", "though", "even"], correct: 0 },
+        { id: 23, level: "B2", text: "I'd rather ______ at home tonight.", options: ["stay", "to stay", "staying"], correct: 0 },
+        { id: 24, level: "B2", text: "He ______ have been there; I saw him in another city.", options: ["shouldn't", "mustn't", "can't"], correct: 2 },
+        { id: 25, level: "B2", text: "______ the weather was bad, we enjoyed the trip.", options: ["Despite", "Although", "However"], correct: 1 },
+        { id: 26, level: "B2", text: "If he ______ earlier, he wouldn't have missed the flight.", options: ["arrived", "had arrived", "would arrive"], correct: 1 },
+        { id: 27, level: "B2", text: "She admitted ______ the money.", options: ["to steal", "stealing", "steal"], correct: 1 },
+        { id: 28, level: "B2", text: "Never ______ such a beautiful place.", options: ["I have seen", "have I seen", "I saw"], correct: 1 },
+        { id: 29, level: "B2", text: "He is used to ______ early.", options: ["wake up", "waking up", "woke up"], correct: 1 },
+        { id: 30, level: "B2", text: "The film, ______ I saw yesterday, was amazing.", options: ["that", "which", "who"], correct: 1 },
+        { id: 31, level: "B2/C1", text: "Scarcely ______ the house when it started to pour.", options: ["had I left", "I had left", "did I leave"], correct: 0 },
+        { id: 32, level: "B2/C1", text: "I wish I ______ more time to study.", options: ["have", "had", "would have"], correct: 1 },
+        { id: 33, level: "B2/C1", text: "She is ______ to be one of the best in her field.", options: ["said", "told", "spoken"], correct: 0 },
+        { id: 34, level: "B2/C1", text: "It's high time you ______ a decision.", options: ["make", "made", "will make"], correct: 1 },
+        { id: 35, level: "B2/C1", text: "Were ______ to help, we would finish on time.", options: ["you", "he", "we"], correct: 0 },
+        { id: 36, level: "B2/C1", text: "He ______ be working; his car is in the parking lot.", options: ["must", "can", "should"], correct: 0 },
+        { id: 37, level: "B2/C1", text: "Not only ______ he come late, but he also forgot his notes.", options: ["did", "has", "does"], correct: 0 },
+        { id: 38, level: "B2/C1", text: "I'd prefer you ______ that loud music.", options: ["to stop", "stop", "stopped"], correct: 2 },
+        { id: 39, level: "B2/C1", text: "They ______ to have been working there for years.", options: ["seem", "appear", "are"], correct: 0 },
+        { id: 40, level: "B2/C1", text: "The report is to ______ by tomorrow.", options: ["submit", "be submitted", "submitted"], correct: 1 },
+        { id: 41, level: "C1", text: "Little ______ about the surprise party.", options: ["did she know", "she knew", "she did know"], correct: 0 },
+        { id: 42, level: "C1", text: "Had I ______ that, I would have acted differently.", options: ["know", "known", "knew"], correct: 1 },
+        { id: 43, level: "C1", text: "Supposing you ______ the lottery, what would you do?", options: ["win", "won", "have won"], correct: 1 },
+        { id: 44, level: "C1", text: "It is essential that he ______ on time.", options: ["arrives", "arrive", "arrived"], correct: 1 },
+        { id: 45, level: "C1", text: "______ your help, we would have failed.", options: ["But for", "Because of", "Despite"], correct: 0 },
+        { id: 46, level: "C1", text: "She ______ as if she knows everything.", options: ["acts", "acted", "is acting"], correct: 0 },
+        { id: 47, level: "C1", text: "Under no circumstances ______ allowed to leave.", options: ["you are", "are you", "were you"], correct: 1 },
+        { id: 48, level: "C1", text: "I'd just as soon ______ it now.", options: ["do", "to do", "doing"], correct: 0 },
+        { id: 49, level: "C1", text: "The project is ______ completion.", options: ["on the verge of", "in the verge of", "at the verge of"], correct: 0 },
+        { id: 50, level: "C1", text: "______ it or not, I'm actually enjoying this.", options: ["Believe", "Believing", "To believe"], correct: 0 }
+    ],
+    "B2_MC": [
+        {q: "By the time the surgeon arrived, the nurses __________ the patient.", o: ["had already prepared", "have already prepared", "already prepared"], a: 0, r: "Past Perfect is for an action completed before another past action."},
+        {q: "If I __________ more attention, I would be able to answer this now.", o: ["paid", "had paid", "would have paid"], a: 1, r: "Mixed conditional: Past condition, present result."},
+        {q: "I need to __________ on the latest research.", o: ["brush up", "look for", "take in"], a: 0, r: "'Brush up on' means to refresh knowledge."},
+        {q: "The operating room __________ at the moment.", o: ["is repairing", "is being repaired", "has been repaired"], a: 1, r: "Present Continuous Passive is for ongoing actions."},
+        {q: "The specialist is very experienced __________ dealing with complex cases.", o: ["at", "with", "in"], a: 2, r: "'Experienced' collocates with 'in'."},
+        {q: "I suggest that he __________ a break.", o: ["take", "takes", "to take"], a: 0, r: "Subjunctive mood after 'suggest' uses base form."},
+        {q: "__________ the weather was terrible, the supplies arrived.", o: ["Despite", "Despite the fact that", "In spite of"], a: 1, r: "Followed by a full clause."},
+        {q: "We need to see __________ with our colleagues.", o: ["eye to eye", "face to face", "hand to hand"], a: 0, r: "Agree completely."},
+        {q: "I'm not used to __________ such long shifts.", o: ["work", "working", "be working"], a: 1, r: "'Be used to' + gerund."},
+        {q: "John told me he __________ call me the following day.", o: ["will", "would", "calls"], a: 1, r: "Reported speech backshifts 'will' to 'would'."},
+        {q: "I wish I __________ so much money last year.", o: ["didn't spend", "hadn't spent", "wouldn't spend"], a: 1, r: "Past regret uses Past Perfect."},
+        {q: "The manager __________ to give everyone a bonus.", o: ["suggested", "promised", "admitted"], a: 1, r: "'Promise' + to-infinitive."},
+        {q: "If the ambulance __________ earlier, they could have saved him.", o: ["arrived", "had arrived", "would arrive"], a: 1, r: "Third conditional (If + Past Perfect)."},
+        {q: "I found the medical conference very __________.", o: ["enlightening", "enlightened", "enlighten"], a: 0, r: "Adjective describing the event."},
+        {q: "The doctor needs to __________ a decision immediately.", o: ["do", "make", "get"], a: 1, r: "Collocation: 'make a decision'."},
+        {q: "Hardly __________ the door when the phone rang.", o: ["I had opened", "had I opened", "did I open"], a: 1, r: "Inversion: auxiliary before subject."},
+        {q: "The doctor __________ to have discovered a new variant.", o: ["claims", "suggests", "denies"], a: 0, r: "'Claim' for asserting facts."},
+        {q: "If we __________ the equipment yesterday, we could start today.", o: ["received", "had received", "would receive"], a: 1, r: "Mixed conditional."},
+        {q: "You __________ better see a specialist about that cough.", o: ["would", "should", "had"], a: 2, r: "'Had better' for strong advice."},
+        {q: "The patient is believed __________ from a rare condition.", o: ["to suffer", "to be suffering", "suffering"], a: 1, r: "Passive reporting structure."},
+        {q: "No sooner __________ the hospital than my pager went off.", o: ["I had left", "had I left", "did I leave"], a: 1, r: "Inversion with 'No sooner'."},
+        {q: "I'm not accustomed __________ such high levels of stress.", o: ["to handle", "to handling", "handling"], a: 1, r: "'Accustomed to' + gerund."},
+        {q: "She's very __________ on specializing in cardiology.", o: ["keen", "fond", "interested"], a: 0, r: "'Keen on'."},
+        {q: "The surgery was put __________ until the patient stabilized.", o: ["off", "out", "away"], a: 0, r: "'Put off' = postpone."},
+        {q: "I wish I __________ more during the lecture.", o: ["focused", "had focused", "would focus"], a: 1, r: "Past regret."},
+        {q: "By the end of the year, she __________ her residency.", o: ["will finish", "will have finished", "finishes"], a: 1, r: "Future Perfect."},
+        {q: "The laboratory, __________ was renovated, is top-notch.", o: ["which", "that", "whose"], a: 0, r: "Non-defining relative clause."},
+        {q: "I'd rather you __________ smoke in the waiting area.", o: ["don't", "didn't", "not"], a: 1, r: "'Would rather' + subject + Past Simple."},
+        {q: "The medicine needs __________ with food.", o: ["to take", "to be taken", "taking"], a: 1, r: "Passive infinitive."},
+        {q: "Seldom __________ such a dedicated medical team.", o: ["have I seen", "I have seen", "did I saw"], a: 0, r: "Inversion after 'Seldom'."}
+    ],
+    "B2_Writing": [
+        {q: "By next summer, I __________ (finish) my master's degree.", o: ["will finish", "will have finished", "have finished"], a: 1, r: "Future Perfect."},
+        {q: "I'd rather you __________ (not / smoke) in the house.", o: ["don't smoke", "didn't smoke", "not smoke"], a: 1, r: "Would rather + subject + Past Simple."},
+        {q: "Seldom __________ (we / see) such a beautiful sunset.", o: ["we have seen", "have we seen", "did we saw"], a: 1, r: "Inversion after 'Seldom'."},
+        {q: "If I had known you were coming, I __________ (bake) a cake.", o: ["would bake", "would have baked", "had baked"], a: 1, r: "Third Conditional."},
+        {q: "I'm looking forward to __________ (meet) your family.", o: ["meet", "meeting", "to meet"], a: 1, r: "'To' as a preposition + gerund."}
+    ],
+    "B2_Stones": [
+        {q: "Look after", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Look the baby after'."},
+        {q: "Turn off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Turn the light off'."},
+        {q: "Run into", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Run my friend into'."},
+        {q: "Pick up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Pick it up'."},
+        {q: "Get over", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Get the breakup over'."},
+        {q: "Bring up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Bring it up'."},
+        {q: "Come across", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Come an old friend across'."},
+        {q: "Call off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Call it off'."},
+        {q: "Deal with", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Deal the issue with'."},
+        {q: "Fill out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Fill it out'."},
+        {q: "Take off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Take your shoes off'."},
+        {q: "Put away", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Put your clothes away'."},
+        {q: "Hand in", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Hand your essay in'."},
+        {q: "Give up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Give it up'."},
+        {q: "Throw away", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Throw those old papers away'."},
+        {q: "Look up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Look the word up'."},
+        {q: "Put on", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Put your coat on'."},
+        {q: "Back up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Back your files up'."},
+        {q: "Cut off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Cut the power off'."},
+        {q: "Cheer up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Cheer her up'."},
+        {q: "Figure out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Figure it out'."},
+        {q: "Leave out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Leave details out'."},
+        {q: "Point out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Point the mistake out'."},
+        {q: "Look into", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Look into the matter'."},
+        {q: "Wait on", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Wait on someone'."},
+        {q: "Depend on", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Depend on them'."},
+        {q: "Stand by", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Stand by me'."},
+        {q: "Care for", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Care for pets'."},
+        {q: "Break into", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Break into a house'."},
+        {q: "Believe in", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Believe in ghosts'."}
+    ],
+    "B2_Reading": {
+        article: `The genesis of the Olympic Games dates back to 776 BC in ancient Olympia, Greece. Originally, the festival was held to honor Zeus, the king of the gods. While modern spectators are used to a vast array of sports, the first recorded Olympics featured only one event: a short footrace called the stade. For centuries, the games were a cornerstone of Greek culture, fostering a period of "sacred truce" where conflicts between city-states were temporarily suspended to allow athletes to travel safely. However, as the Roman Empire’s influence grew, the games began to lose their religious significance. In 393 AD, Emperor Theodosius I, who had recently converted to Christianity, abolished the festival, claiming it was a pagan ritual. <br><br>The Olympics remained dormant for over 1,500 years until a French educator named Baron Pierre de Coubertin proposed their revival. Coubertin believed that international competition could promote global peace and physical education. His vision culminated in the first modern Olympic Games, which took place in Athens in 1896. Although the event featured only male athletes from 14 nations, it was considered a massive success. It is a common misconception that the marathon was part of the ancient games; in reality, it was introduced in 1896 to commemorate a legendary run from the city of Marathon to Athens. Since their revival, the Games have evolved into a global celebration, withstanding the test of time, though it is important to note that the competition was officially cancelled during the years of the major World Wars.`,
+        questions: [
+            {q: "The original Olympics were primarily a secular sporting event.", a: false, r: "False. They were religious festivals held to honor Zeus."},
+            {q: "In the very beginning, there was only one type of competition.", a: true, r: "True. The first recorded games only had the 'stade' footrace."},
+            {q: "The 'sacred truce' meant that all Greek wars were suspended permanently.", a: false, r: "False. Conflicts were only temporarily suspended for the games."},
+            {q: "Emperor Theodosius I stopped the games because he disliked sports.", a: false, r: "False. He abolished them claiming they were pagan rituals."},
+            {q: "The Olympics were not celebrated for more than fifteen centuries.", a: true, r: "True. They were dormant for over 1,500 years."},
+            {q: "Pierre de Coubertin’s main goal was exclusively to find the world's best athletes.", a: false, r: "False. He also aimed to promote global peace."},
+            {q: "The first modern Olympics in 1896 included participants from all genders.", a: false, r: "False. The text states they only featured male athletes."},
+            {q: "The marathon race is a modern addition not found in the ancient games.", a: true, r: "True. It was introduced in 1896."},
+            {q: "The city of Athens hosted both the first ancient and first modern games.", a: false, r: "False. Ancient games were in Olympia; modern in Athens."},
+            {q: "The modern Games have been held every four years without any official cancellations.", a: false, r: "False. They were cancelled during the World Wars."}
+        ]
+    },
+    "B2_Memory": [
+        {v: "Brush up on", m: "To improve or refresh knowledge"},
+        {v: "Carry out", m: "To perform or complete a task"},
+        {v: "Come down with", m: "To become sick with something"},
+        {v: "Pass out", m: "To lose consciousness"},
+        {v: "Look into", m: "To investigate or examine"},
+        {v: "Put off", m: "To postpone or delay"},
+        {v: "Rule out", m: "To eliminate a possibility"},
+        {v: "Set back", m: "To delay progress"},
+        {v: "Think over", m: "To consider carefully"},
+        {v: "Back up", m: "To support or confirm"}
+    ],
+    "B2_Matching": [
+        { a: "Vital", b: "signs" }, { a: "Blood", b: "pressure" }, { a: "Heart", b: "rate" },
+        { a: "Chest", b: "pain" }, { a: "Informed", b: "consent" }, { a: "Surgical", b: "procedure" },
+        { a: "Physical", b: "examination" }, { a: "Medical", b: "history" }, { a: "Adverse", b: "reaction" },
+        { a: "Immune", b: "system" }, { a: "General", b: "anesthesia" }, { a: "Family", b: "practitioner" },
+        { a: "Blood", b: "sample" }, { a: "Chronic", b: "condition" }, { a: "Shortness", b: "of breath" }
+    ],
+    "B2_Abstraction": {
+        article: "The global escalation of Metabolic Syndrome has positioned Type 2 Diabetes Mellitus (T2DM) as a critical health priority for modern healthcare systems. Current clinical guidelines emphasize that while pharmacological interventions, such as the administration of Metformin, remain the gold standard for initial glycemic control, long-term remission is rarely achieved through monotherapy alone due to the progressive nature of beta-cell decline. This longitudinal study evaluates the efficacy of the MET-LIFE Protocol, a rigorous 24-month randomized controlled trial involving a cohort of 1,200 participants across diverse clinical settings. The protocol is designed as a multimodal strategy that integrates high-intensity interval training (HIIT) to enhance mitochondrial biogenesis, a plant-based ketogenic diet aimed at reducing systemic inflammation, and standardized pharmacological support. Furthermore, the trial utilizes continuous glucose monitoring (CGM) as a primary tool to evaluate metabolic flexibility—the body's capacity to switch efficiently between carbohydrate and lipid oxidation. Preliminary data suggests that addressing the lifestyle-pharmacology intersection is paramount for sustained clinical success. During the follow-up phase, the experimental group showed a significant 1.8% decrease in HbA1c levels, contrasting with the control group’s stagnant metrics. It is worth noting that nearly half of these patients reached a state of partial remission, defined as maintaining sub-diabetic glycemic levels for at least six months without the need for active medication. These results were consistent across various age groups, provided that adherence to the HIIT and ketogenic components remained high. Ultimately, the researchers concluded that while Metformin provides a necessary foundation, lifestyle changes must be applied with maximum rigor and clinical supervision to successfully reverse long-standing metabolic impairment and restore beta-cell functionality.",
+        summary: "The MET-LIFE study was conducted to address T2DM, a condition for which single-drug treatment rarely (1) __________ long-term results. Unlike standard care, this protocol (2) __________ a specific exercise regimen known as (3) __________ with a nutritional plan. A central pillar of the trial was (4) __________, which refers to the organism's (5) __________ to alternate between different energy substrates. Regarding the outcomes, the experimental group (6) __________ a 1.8% decrease in HbA1c levels. It is (7) __________ noting that nearly half of these patients reached a state of (8) __________, meaning they no longer required drugs. The researchers (9) __________ that lifestyle changes must be applied with (10) __________ to successfully reverse metabolic impairment.",
+        answers: ["achieves", "integrated", "HIIT", "metabolic flexibility", "ability", "showed", "worth", "partial remission", "concluded", "rigor"]
+    },
+    "B2_WordBank": {
+        bank: ["was admitted", "had been experiencing", "reported", "hadn't had", "referred", "had occurred", "had subsided", "was noted", "being", "was scheduled"],
+        text: "The patient is a 54-year-old male who (1) __________ to the Emergency Department following a syncopal episode during moderate physical activity. According to his wife, who witnessed the event, the patient (2) __________ lightheadedness and palpitations for approximately twenty minutes before losing consciousness. Upon arrival, the patient (3) __________ that he (4) __________ any significant health issues prior to this month; however, he (5) __________ that a similar, albeit shorter, episode (6) __________ two weeks ago while gardening. He mentioned that the previous symptoms (7) __________ spontaneously without medical intervention. A mild systolic murmur (8) __________ during the initial physical examination. Although the patient denied (9) __________ in pain at the moment of admission, his heart rate remained elevated. Consequently, an urgent echocardiogram (10) __________ for the following morning to rule out structural heart disease.",
+        answers: ["was admitted", "had been experiencing", "reported", "hadn't had", "referred", "had occurred", "had subsided", "was noted", "being", "was scheduled"]
+    },
+    "B2_Crossword": {
+        gridSize: 17,
+        clues: [
+            { id: 1, d: "H", q: "DEVELOP (Noun)", a: "DEVELOPMENT" },
+            { id: 2, d: "V", q: "SURE (Adverb)", a: "SURELY" },
+            { id: 3, d: "H", q: "SUCCESS (Adjective)", a: "SUCCESSFUL" },
+            { id: 4, d: "V", q: "COMFORT (Adjective)", a: "COMFORTABLE" },
+            { id: 5, d: "H", q: "DANGER (Adjective)", a: "DANGEROUS" },
+            { id: 6, d: "V", q: "POSSIBLE (Noun)", a: "POSSIBILITY" },
+            { id: 7, d: "H", q: "CREATE (Noun)", a: "CREATION" },
+            { id: 8, d: "V", q: "DEPEND (Adjective)", a: "DEPENDENT" },
+            { id: 9, d: "H", q: "HEALTH (Adjective)", a: "HEALTHY" },
+            { id: 10, d: "V", q: "USUAL (Antonym Adjective)", a: "UNUSUAL" }
         ],
-        "B2_Writing": [
-            {q: "By next summer, I __________ (finish) my master's degree.", o: ["will finish", "will have finished", "have finished"], a: 1, r: "Future Perfect."},
-            {q: "I'd rather you __________ (not / smoke) in the house.", o: ["don't smoke", "didn't smoke", "not smoke"], a: 1, r: "Would rather + subject + Past Simple."},
-            {q: "Seldom __________ (we / see) such a beautiful sunset.", o: ["we have seen", "have we seen", "did we saw"], a: 1, r: "Inversion after 'Seldom'."},
-            {q: "If I had known you were coming, I __________ (bake) a cake.", o: ["would bake", "would have baked", "had baked"], a: 1, r: "Third Conditional."},
-            {q: "I'm looking forward to __________ (meet) your family.", o: ["meet", "meeting", "to meet"], a: 1, r: "'To' as a preposition + gerund."}
-        ],
-        "B2_Stones": [
-            {q: "Look after", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Look the baby after'."},
-            {q: "Turn off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Turn the light off'."},
-            {q: "Run into", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Run my friend into'."},
-            {q: "Pick up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Pick it up'."},
-            {q: "Get over", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Get the breakup over'."},
-            {q: "Bring up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Bring it up'."},
-            {q: "Come across", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Come an old friend across'."},
-            {q: "Call off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Call it off'."},
-            {q: "Deal with", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Deal the issue with'."},
-            {q: "Fill out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Fill it out'."},
-            {q: "Take off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Take your shoes off'."},
-            {q: "Put away", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Put your clothes away'."},
-            {q: "Hand in", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Hand your essay in'."},
-            {q: "Give up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Give it up'."},
-            {q: "Throw away", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Throw those old papers away'."},
-            {q: "Look up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Look the word up'."},
-            {q: "Put on", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Put your coat on'."},
-            {q: "Back up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Back your files up'."},
-            {q: "Cut off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Cut the power off'."},
-            {q: "Cheer up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Cheer her up'."},
-            {q: "Figure out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Figure it out'."},
-            {q: "Leave out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Leave details out'."},
-            {q: "Point out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Point the mistake out'."},
-            {q: "Look into", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Look into the matter'."},
-            {q: "Wait on", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Wait on someone'."},
-            {q: "Depend on", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Depend on them'."},
-            {q: "Stand by", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Stand by me'."},
-            {q: "Care for", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Care for pets'."},
-            {q: "Break into", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Break into a house'."},
-            {q: "Believe in", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Believe in ghosts'."}
-        ],
-        "B2_Reading": {
-            article: `The genesis of the Olympic Games dates back to 776 BC in ancient Olympia, Greece. Originally, the festival was held to honor Zeus, the king of the gods. While modern spectators are used to a vast array of sports, the first recorded Olympics featured only one event: a short footrace called the stade. For centuries, the games were a cornerstone of Greek culture, fostering a period of "sacred truce" where conflicts between city-states were temporarily suspended to allow athletes to travel safely. However, as the Roman Empire’s influence grew, the games began to lose their religious significance. In 393 AD, Emperor Theodosius I, who had recently converted to Christianity, abolished the festival, claiming it was a pagan ritual. <br><br>The Olympics remained dormant for over 1,500 years until a French educator named Baron Pierre de Coubertin proposed their revival. Coubertin believed that international competition could promote global peace and physical education. His vision culminated in the first modern Olympic Games, which took place in Athens in 1896. Although the event featured only male athletes from 14 nations, it was considered a massive success. It is a common misconception that the marathon was part of the ancient games; in reality, it was introduced in 1896 to commemorate a legendary run from the city of Marathon to Athens. Since their revival, the Games have evolved into a global celebration, withstanding the test of time, though it is important to note that the competition was officially cancelled during the years of the major World Wars.`,
-            questions: [
-                {q: "The original Olympics were primarily a secular sporting event.", a: false, r: "False. They were religious festivals held to honor Zeus."},
-                {q: "In the very beginning, there was only one type of competition.", a: true, r: "True. The first recorded games only had the 'stade' footrace."},
-                {q: "The 'sacred truce' meant that all Greek wars were suspended permanently.", a: false, r: "False. Conflicts were only temporarily suspended for the games."},
-                {q: "Emperor Theodosius I stopped the games because he disliked sports.", a: false, r: "False. He abolished them claiming they were pagan rituals."},
-                {q: "The Olympics were not celebrated for more than fifteen centuries.", a: true, r: "True. They were dormant for over 1,500 years."},
-                {q: "Pierre de Coubertin’s main goal was exclusively to find the world's best athletes.", a: false, r: "False. He also aimed to promote global peace."},
-                {q: "The first modern Olympics in 1896 included participants from all genders.", a: false, r: "False. The text states they only featured male athletes."},
-                {q: "The marathon race is a modern addition not found in the ancient games.", a: true, r: "True. It was introduced in 1896."},
-                {q: "The city of Athens hosted both the first ancient and first modern games.", a: false, r: "False. Ancient games were in Olympia; modern in Athens."},
-                {q: "The modern Games have been held every four years without any official cancellations.", a: false, r: "False. They were cancelled during the World Wars."}
-            ]
-        },
-        "B2_Memory": [
-            {v: "Brush up on", m: "To improve or refresh knowledge"},
-            {v: "Carry out", m: "To perform or complete a task"},
-            {v: "Come down with", m: "To become sick with something"},
-            {v: "Pass out", m: "To lose consciousness"},
-            {v: "Look into", m: "To investigate or examine"},
-            {v: "Put off", m: "To postpone or delay"},
-            {v: "Rule out", m: "To eliminate a possibility"},
-            {v: "Set back", m: "To delay progress"},
-            {v: "Think over", m: "To consider carefully"},
-            {v: "Back up", m: "To support or confirm"}
-        ],
-        "B2_Matching": [
-            { a: "Vital", b: "signs" }, { a: "Blood", b: "pressure" }, { a: "Heart", b: "rate" },
-            { a: "Chest", b: "pain" }, { a: "Informed", b: "consent" }, { a: "Surgical", b: "procedure" },
-            { a: "Physical", b: "examination" }, { a: "Medical", b: "history" }, { a: "Adverse", b: "reaction" },
-            { a: "Immune", b: "system" }, { a: "General", b: "anesthesia" }, { a: "Family", b: "practitioner" },
-            { a: "Blood", b: "sample" }, { a: "Chronic", b: "condition" }, { a: "Shortness", b: "of breath" }
-        ],
-        "B2_Abstraction": {
-            article: "The global escalation of Metabolic Syndrome has positioned Type 2 Diabetes Mellitus (T2DM) as a critical health priority for modern healthcare systems. Current clinical guidelines emphasize that while pharmacological interventions, such as the administration of Metformin, remain the gold standard for initial glycemic control, long-term remission is rarely achieved through monotherapy alone due to the progressive nature of beta-cell decline. This longitudinal study evaluates the efficacy of the MET-LIFE Protocol, a rigorous 24-month randomized controlled trial involving a cohort of 1,200 participants across diverse clinical settings. The protocol is designed as a multimodal strategy that integrates high-intensity interval training (HIIT) to enhance mitochondrial biogenesis, a plant-based ketogenic diet aimed at reducing systemic inflammation, and standardized pharmacological support. Furthermore, the trial utilizes continuous glucose monitoring (CGM) as a primary tool to evaluate metabolic flexibility—the body's capacity to switch efficiently between carbohydrate and lipid oxidation. Preliminary data suggests that addressing the lifestyle-pharmacology intersection is paramount for sustained clinical success. During the follow-up phase, the experimental group showed a significant 1.8% decrease in HbA1c levels, contrasting with the control group’s stagnant metrics. It is worth noting that nearly half of these patients reached a state of partial remission, defined as maintaining sub-diabetic glycemic levels for at least six months without the need for active medication. These results were consistent across various age groups, provided that adherence to the HIIT and ketogenic components remained high. Ultimately, the researchers concluded that while Metformin provides a necessary foundation, lifestyle changes must be applied with maximum rigor and clinical supervision to successfully reverse long-standing metabolic impairment and restore beta-cell functionality.",
-            summary: "The MET-LIFE study was conducted to address T2DM, a condition for which single-drug treatment rarely (1) __________ long-term results. Unlike standard care, this protocol (2) __________ a specific exercise regimen known as (3) __________ with a nutritional plan. A central pillar of the trial was (4) __________, which refers to the organism's (5) __________ to alternate between different energy substrates. Regarding the outcomes, the experimental group (6) __________ a 1.8% decrease in HbA1c levels. It is (7) __________ noting that nearly half of these patients reached a state of (8) __________, meaning they no longer required drugs. The researchers (9) __________ that lifestyle changes must be applied with (10) __________ to successfully reverse metabolic impairment.",
-            answers: ["achieves", "integrated", "HIIT", "metabolic flexibility", "ability", "showed", "worth", "partial remission", "concluded", "rigor"]
-        },
-        "B2_WordBank": {
-            bank: ["was admitted", "had been experiencing", "reported", "hadn't had", "referred", "had occurred", "had subsided", "was noted", "being", "was scheduled"],
-            text: "The patient is a 54-year-old male who (1) __________ to the Emergency Department following a syncopal episode during moderate physical activity. According to his wife, who witnessed the event, the patient (2) __________ lightheadedness and palpitations for approximately twenty minutes before losing consciousness. Upon arrival, the patient (3) __________ that he (4) __________ any significant health issues prior to this month; however, he (5) __________ that a similar, albeit shorter, episode (6) __________ two weeks ago while gardening. He mentioned that the previous symptoms (7) __________ spontaneously without medical intervention. A mild systolic murmur (8) __________ during the initial physical examination. Although the patient denied (9) __________ in pain at the moment of admission, his heart rate remained elevated. Consequently, an urgent echocardiogram (10) __________ for the following morning to rule out structural heart disease.",
-            answers: ["was admitted", "had been experiencing", "reported", "hadn't had", "referred", "had occurred", "had subsided", "was noted", "being", "was scheduled"]
-        },
-        "B2_Crossword": {
-            gridSize: 17,
-            clues: [
-                { id: 1, d: "H", q: "DEVELOP (Noun)", a: "DEVELOPMENT" },
-                { id: 2, d: "V", q: "SURE (Adverb)", a: "SURELY" },
-                { id: 3, d: "H", q: "SUCCESS (Adjective)", a: "SUCCESSFUL" },
-                { id: 4, d: "V", q: "COMFORT (Adjective)", a: "COMFORTABLE" },
-                { id: 5, d: "H", q: "DANGER (Adjective)", a: "DANGEROUS" },
-                { id: 6, d: "V", q: "POSSIBLE (Noun)", a: "POSSIBILITY" },
-                { id: 7, d: "H", q: "CREATE (Noun)", a: "CREATION" },
-                { id: 8, d: "V", q: "DEPEND (Adjective)", a: "DEPENDENT" },
-                { id: 9, d: "H", q: "HEALTH (Adjective)", a: "HEALTHY" },
-                { id: 10, d: "V", q: "USUAL (Antonym Adjective)", a: "UNUSUAL" }
-            ],
-            grid: [
-                {r:1, c:1, v:"D", n:1}, {r:1, c:2, v:"E"}, {r:1, c:3, v:"V"}, {r:1, c:4, v:"E"}, {r:1, c:5, v:"L"}, {r:1, c:6, v:"O"}, {r:1, c:7, v:"P"}, {r:1, c:8, v:"M"}, {r:1, c:9, v:"E"}, {r:1, c:10, v:"N"}, {r:1, c:11, v:"T"},
-                {r:1, c:4, v:"E", n:2}, {r:2, c:4, v:"S"}, {r:3, c:4, v:"U"}, {r:4, c:4, v:"R"}, {r:5, c:4, v:"E"}, {r:6, c:4, v:"L"}, {r:7, c:4, v:"Y"},
-                {r:3, c:2, v:"S", n:3}, {r:3, c:3, v:"U"}, {r:3, c:4, v:"C"}, {r:3, c:5, v:"C"}, {r:3, c:6, v:"E"}, {r:3, c:7, v:"S"}, {r:3, c:8, v:"S"}, {r:3, c:9, v:"F"}, {r:3, c:10, v:"U"}, {r:3, c:11, v:"L"},
-                {r:3, c:5, v:"C", n:4}, {r:4, c:5, v:"O"}, {r:5, c:5, v:"M"}, {r:6, c:5, v:"F"}, {r:7, c:5, v:"O"}, {r:8, c:5, v:"R"}, {r:9, c:5, v:"T"}, {r:10, c:5, v:"A"}, {r:11, c:5, v:"B"}, {r:12, c:5, v:"L"}, {r:13, c:5, v:"E"},
-                {r:5, c:2, v:"D", n:5}, {r:5, c:3, v:"A"}, {r:5, c:4, v:"N"}, {r:5, c:5, v:"G"}, {r:5, c:6, v:"E"}, {r:5, c:7, v:"R"}, {r:5, c:8, v:"O"}, {r:5, c:9, v:"U"}, {r:5, c:10, v:"S"},
-                {r:5, c:7, v:"E", n:6}, {r:6, c:7, v:"X"}, {r:7, c:7, v:"P"}, {r:8, c:7, v:"E"}, {r:9, c:7, v:"R"}, {r:10, c:7, v:"I"}, {r:11, c:7, v:"E"}, {r:12, c:7, v:"N"}, {r:13, c:7, v:"C"}, {r:14, c:7, v:"E"},
-                {r:7, c:1, v:"C", n:7}, {r:7, c:2, v:"R"}, {r:7, c:3, v:"E"}, {r:7, c:4, v:"A"}, {r:7, c:5, v:"T"}, {r:7, c:6, v:"I"}, {r:7, c:7, v:"O"}, {r:7, c:8, v:"N"},
-                {r:7, c:3, v:"E", n:8}, {r:8, c:3, v:"F"}, {r:9, c:3, v:"F"}, {r:10, c:3, v:"E"}, {r:11, c:3, v:"C"}, {r:12, c:3, v:"T"}, {r:13, c:3, v:"I"}, {r:14, c:3, v:"V"}, {r:15, c:3, v:"E"},
-                {r:9, c:2, v:"H", n:9}, {r:9, c:3, v:"E"}, {r:9, c:4, v:"A"}, {r:9, c:5, v:"L"}, {r:9, c:6, v:"T"}, {r:9, c:7, v:"H"}, {r:9, c:8, v:"Y"},
-                {r:9, c:8, v:"Y", n:10}, {r:10, c:8, v:"E"}, {r:11, c:8, v:"S"}, {r:12, c:8, v:"T"}, {r:13, c:8, v:"E"}, {r:14, c:8, v:"R"}, {r:15, c:8, v:"D"}, {r:16, c:8, v:"A"}, {r:17, c:8, v:"Y"}
-            ]
-        }
-    };
+        grid: [
+            {r:1, c:1, v:"D", n:1}, {r:1, c:2, v:"E"}, {r:1, c:3, v:"V"}, {r:1, c:4, v:"E"}, {r:1, c:5, v:"L"}, {r:1, c:6, v:"O"}, {r:1, c:7, v:"P"}, {r:1, c:8, v:"M"}, {r:1, c:9, v:"E"}, {r:1, c:10, v:"N"}, {r:1, c:11, v:"T"},
+            {r:1, c:4, v:"E", n:2}, {r:2, c:4, v:"S"}, {r:3, c:4, v:"U"}, {r:4, c:4, v:"R"}, {r:5, c:4, v:"E"}, {r:6, c:4, v:"L"}, {r:7, c:4, v:"Y"},
+            {r:3, c:2, v:"S", n:3}, {r:3, c:3, v:"U"}, {r:3, c:4, v:"C"}, {r:3, c:5, v:"C"}, {r:3, c:6, v:"E"}, {r:3, c:7, v:"S"}, {r:3, c:8, v:"S"}, {r:3, c:9, v:"F"}, {r:3, c:10, v:"U"}, {r:3, c:11, v:"L"},
+            {r:3, c:5, v:"C", n:4}, {r:4, c:5, v:"O"}, {r:5, c:5, v:"M"}, {r:6, c:5, v:"F"}, {r:7, c:5, v:"O"}, {r:8, c:5, v:"R"}, {r:9, c:5, v:"T"}, {r:10, c:5, v:"A"}, {r:11, c:5, v:"B"}, {r:12, c:5, v:"L"}, {r:13, c:5, v:"E"},
+            {r:5, c:2, v:"D", n:5}, {r:5, c:3, v:"A"}, {r:5, c:4, v:"N"}, {r:5, c:5, v:"G"}, {r:5, c:6, v:"E"}, {r:5, c:7, v:"R"}, {r:5, c:8, v:"O"}, {r:5, c:9, v:"U"}, {r:5, c:10, v:"S"},
+            {r:5, c:7, v:"E", n:6}, {r:6, c:7, v:"X"}, {r:7, c:7, v:"P"}, {r:8, c:7, v:"E"}, {r:9, c:7, v:"R"}, {r:10, c:7, v:"I"}, {r:11, c:7, v:"E"}, {r:12, c:7, v:"N"}, {r:13, c:7, v:"C"}, {r:14, c:7, v:"E"},
+            {r:7, c:1, v:"C", n:7}, {r:7, c:2, v:"R"}, {r:7, c:3, v:"E"}, {r:7, c:4, v:"A"}, {r:7, c:5, v:"T"}, {r:7, c:6, v:"I"}, {r:7, c:7, v:"O"}, {r:7, c:8, v:"N"},
+            {r:7, c:3, v:"E", n:8}, {r:8, c:3, v:"F"}, {r:9, c:3, v:"F"}, {r:10, c:3, v:"E"}, {r:11, c:3, v:"C"}, {r:12, c:3, v:"T"}, {r:13, c:3, v:"I"}, {r:14, c:3, v:"V"}, {r:15, c:3, v:"E"},
+            {r:9, c:2, v:"H", n:9}, {r:9, c:3, v:"E"}, {r:9, c:4, v:"A"}, {r:9, c:5, v:"L"}, {r:9, c:6, v:"T"}, {r:9, c:7, v:"H"}, {r:9, c:8, v:"Y"},
+            {r:9, c:8, v:"Y", n:10}, {r:10, c:8, v:"E"}, {r:11, c:8, v:"S"}, {r:12, c:8, v:"T"}, {r:13, c:8, v:"E"}, {r:14, c:8, v:"R"}, {r:15, c:8, v:"D"}, {r:16, c:8, v:"A"}, {r:17, c:8, v:"Y"}
+        ]
+    },
+    "_tags_metadata": {
+        "B2_MC": ["GP", "MP"],
+        "B2_Writing": ["GP", "MP"],
+        "B2_Stones": ["GP", "MP"],
+        "B2_Reading": ["GP", "MP"],
+        "B2_Memory": ["GP", "MP"],
+        "B2_Matching": ["MP"],
+        "B2_Abstraction": ["MP"],
+        "B2_WordBank": ["MP"],
+        "B2_Crossword": ["GP", "MP"]
+    }
+};
 
-    database.B2_MC._tags = ["GP", "MP"];
-    database.B2_Writing._tags = ["GP", "MP"];
-    database.B2_Stones._tags = ["GP", "MP"];
-    database.B2_Reading._tags = ["GP", "MP"];
-    database.B2_Memory._tags = ["GP", "MP"];
-    database.B2_Matching._tags = ["MP"];
-    database.B2_Abstraction._tags = ["MP"];
-    database.B2_WordBank._tags = ["MP"];
-    database.B2_Crossword._tags = ["GP", "MP"];
 
     function showScreen(screenId) {
         document.querySelectorAll('.container').forEach(s => s.classList.add('hidden'));
