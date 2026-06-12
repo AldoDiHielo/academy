@@ -425,14 +425,87 @@ const database = {
         showQuizzes();
     }
 
+    function launchDiagnostic() {
+        currentPath = 'diagnostic';
+        currentQuestionIndex = 0;
+        score = 0;
+        diagnosticResults = { "A2": { total: 0, correct: 0 }, "B1": { total: 0, correct: 0 }, "B2": { total: 0, correct: 0 }, "B2/C1": { total: 0, correct: 0 }, "C1": { total: 0, correct: 0 } };
+        loadDiagnosticQuestion();
+        showScreen('screen-quiz');
+    }
+
+    function loadDiagnosticQuestion() {
+        const questions = database.diagnostic;
+        const q = questions[currentQuestionIndex];
+        document.getElementById('progress-fill').style.width = `${(currentQuestionIndex / questions.length) * 100}%`;
+        document.getElementById('q-text').innerText = q.text;
+        const optionsBox = document.getElementById('options-box');
+        optionsBox.innerHTML = "";
+        const fbox = document.getElementById('feedback-box');
+        fbox.classList.add('hidden');
+        fbox.className = 'option hidden';
+        document.getElementById('btn-continue').classList.add('hidden');
+        q.options.forEach((opt, idx) => {
+            const btn = document.createElement('div');
+            btn.className = 'option';
+            btn.innerText = opt;
+            btn.onclick = () => checkDiagnosticAnswer(idx, btn);
+            optionsBox.appendChild(btn);
+        });
+    }
+
+    function checkDiagnosticAnswer(selectedIdx, optionEl) {
+        const q = database.diagnostic[currentQuestionIndex];
+        const options = document.getElementById('options-box').children;
+        for (let opt of options) opt.removeAttribute('onclick');
+        let isCorrect = (selectedIdx === q.correct);
+        if (isCorrect) {
+            optionEl.classList.add('correct');
+            score++;
+            diagnosticResults[q.level].correct++;
+        } else {
+            optionEl.classList.add('wrong');
+            if (options[q.correct]) options[q.correct].classList.add('correct');
+        }
+        diagnosticResults[q.level].total++;
+        const fbox = document.getElementById('feedback-box');
+        fbox.className = isCorrect ? 'option correct' : 'option wrong';
+        fbox.innerHTML = `<strong>${isCorrect ? 'Correct' : 'Incorrect'}</strong><br>Level: ${q.level}`;
+        fbox.classList.remove('hidden');
+        document.getElementById('btn-continue').classList.remove('hidden');
+        document.getElementById('btn-continue').onclick = nextDiagnosticQuestion;
+    }
+
+    function nextDiagnosticQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < database.diagnostic.length) {
+            loadDiagnosticQuestion();
+        } else {
+            calculateAssessment();
+        }
+    }
+
+    function calculateAssessment() {
+        let report = "Assessment Report:<br>";
+        let finalLevel = "Beginner (A1)";
+        for (let lvl in diagnosticResults) {
+            let res = diagnosticResults[lvl];
+            if (res.total > 0) {
+                let pct = (res.correct / res.total) * 100;
+                report += `${lvl}: ${res.correct}/${res.total} (${pct.toFixed(0)}%)<br>`;
+                if (pct >= 70) finalLevel = lvl;
+            }
+        }
+        document.getElementById('final-score-display').innerHTML = `Final Level Detected: <strong>${finalLevel}</strong><br><br>${report}`;
+        showScreen('screen-results');
+    }
+
     function showQuizzes() {
         const container = document.getElementById('quiz-list-container');
         if (!container) return;
         container.innerHTML = "";
         document.getElementById('lvl-title').innerText = `${selectedLevelCode} Modules`;
-
         let activeCount = 0;
-
         Object.keys(database).forEach(key => {
             if (key.startsWith(selectedLevelCode)) {
                 const module = database[key];
@@ -446,7 +519,6 @@ const database = {
                 }
             }
         });
-
         const placeholdersNeeded = 20 - activeCount;
         for (let i = 1; i <= placeholdersNeeded; i++) {
             const emptyCard = document.createElement('div');
@@ -455,13 +527,10 @@ const database = {
             emptyCard.onclick = () => showScreen('screen-dev');
             container.appendChild(emptyCard);
         }
-
         showScreen('screen-levels');
     }
 
-    function goBackToList() {
-        showQuizzes();
-    }
+    function goBackToList() { showQuizzes(); }
 
     function launchModule(moduleKey) {
         currentPath = moduleKey;
@@ -471,24 +540,19 @@ const database = {
         if (moduleKey.includes('MC') || moduleKey.includes('Stones') || moduleKey.includes('Writing')) {
             loadQuestion();
             showScreen('screen-quiz');
-        }
-        else if (moduleKey.includes('Reading')) {
+        } else if (moduleKey.includes('Reading')) {
             loadReadingQuestion();
             showScreen('screen-reading');
-        }
-        else if (moduleKey.includes('Memory')) {
+        } else if (moduleKey.includes('Memory')) {
             initMemoryModule();
             showScreen('screen-memory');
-        }
-        else if (moduleKey.includes('Matching')) {
+        } else if (moduleKey.includes('Matching')) {
             initMatchingModule();
             showScreen('screen-matching');
-        }
-        else if (moduleKey.includes('Crossword')) {
+        } else if (moduleKey.includes('Crossword')) {
             renderCrossword();
             showScreen('screen-crossword');
-        }
-        else {
+        } else {
             initTextModule();
             showScreen('screen-text-module');
         }
@@ -501,13 +565,11 @@ const database = {
         document.getElementById('q-text').innerText = q.q;
         const optionsBox = document.getElementById('options-box');
         optionsBox.innerHTML = "";
-        
         const fbox = document.getElementById('feedback-box');
         fbox.classList.add('hidden');
         fbox.className = 'option hidden';
-        
         document.getElementById('btn-continue').classList.add('hidden');
-
+        document.getElementById('btn-continue').onclick = nextQuestion;
         q.o.forEach((opt, idx) => {
             const btn = document.createElement('div');
             btn.className = 'option';
@@ -520,14 +582,10 @@ const database = {
     function checkAnswer(selectedIdx, optionEl) {
         const q = database[currentPath][currentQuestionIndex];
         const options = document.getElementById('options-box').children;
-        for (let opt of options) {
-            opt.removeAttribute('onclick');
-        }
-        
+        for (let opt of options) opt.removeAttribute('onclick');
         let isCorrect = (selectedIdx === q.a);
         let selectedText = q.o[selectedIdx];
         let correctText = q.o[q.a];
-
         if (isCorrect) {
             optionEl.classList.add('correct');
             score++;
@@ -535,18 +593,15 @@ const database = {
             optionEl.classList.add('wrong');
             if (options[q.a]) options[q.a].classList.add('correct');
         }
-        
         const fbox = document.getElementById('feedback-box');
         fbox.className = isCorrect ? 'option correct' : 'option wrong';
         fbox.style.cursor = 'default';
-        
         fbox.innerHTML = `
             <span class="pedagogic-title">${isCorrect ? '✓ Correct Answer' : '✗ Incorrect Answer'}</span>
             <strong>Your choice:</strong> ${selectedText} <br>
             <strong>Correct structure:</strong> ${correctText}
             <span class="pedagogic-detail">${q.r}</span>
         `;
-        
         fbox.classList.remove('hidden');
         document.getElementById('btn-continue').classList.remove('hidden');
     }
@@ -564,22 +619,17 @@ const database = {
     function loadReadingQuestion() {
         const module = database[currentPath];
         const q = module.questions[currentQuestionIndex];
-        
         document.getElementById('reading-article').innerHTML = module.article;
         document.getElementById('reading-progress-fill').style.width = `${(currentQuestionIndex / module.questions.length) * 100}%`;
         document.getElementById('reading-q-text').innerText = `${currentQuestionIndex + 1}. ${q.q}`;
-        
         const optionsBox = document.getElementById('reading-options-box');
         optionsBox.innerHTML = "";
-        
         const fbox = document.getElementById('reading-feedback-box');
         fbox.classList.add('hidden');
         fbox.className = 'option hidden';
-        
         document.getElementById('reading-btn-continue').classList.add('hidden');
-
-        const optionsText = ["True", "False"];
-        optionsText.forEach(opt => {
+        document.getElementById('reading-btn-continue').onclick = nextReadingQuestion;
+        ["True", "False"].forEach(opt => {
             const btn = document.createElement('button');
             btn.className = 'pill-btn';
             btn.innerText = opt;
@@ -592,14 +642,8 @@ const database = {
         const module = database[currentPath];
         const q = module.questions[currentQuestionIndex];
         const options = document.getElementById('reading-options-box').children;
-        
-        for (let opt of options) {
-            opt.setAttribute('disabled', 'true');
-            opt.style.pointerEvents = 'none';
-        }
-        
+        for (let opt of options) { opt.setAttribute('disabled', 'true'); opt.style.pointerEvents = 'none'; }
         let isCorrect = (userChoice === q.a);
-
         if (isCorrect) {
             optionEl.classList.add('selected-true');
             score++;
@@ -611,17 +655,14 @@ const database = {
                 }
             }
         }
-        
         const fbox = document.getElementById('reading-feedback-box');
         fbox.className = isCorrect ? 'option correct' : 'option wrong';
-        
         fbox.innerHTML = `
             <span class="pedagogic-title">${isCorrect ? '✓ Correct Assessment' : '✗ Incorrect Assessment'}</span>
             <strong>Evaluated statement:</strong> "${q.q}"<br>
             <strong>Verdict:</strong> The Statement is ${q.a ? 'True' : 'False'}.
             <span class="pedagogic-detail">${q.r}</span>
         `;
-        
         fbox.classList.remove('hidden');
         document.getElementById('reading-btn-continue').classList.remove('hidden');
     }
@@ -645,10 +686,8 @@ const database = {
         rightCol.innerHTML = "";
         selectedWord = null;
         matchedPairs = [];
-
         const leftItems = data.map(item => item.a);
         const rightItems = data.map(item => item.b).sort(() => Math.random() - 0.5);
-
         leftItems.forEach(text => {
             const div = document.createElement('div');
             div.className = 'match-item';
@@ -677,29 +716,18 @@ const database = {
                 el.classList.add('selected');
                 return;
             }
-            const isMatch = database[currentPath].some(item =>
-                (item.a === selectedWord.text && item.b === el.innerText) ||
-                (item.b === selectedWord.text && item.a === el.innerText)
-            );
+            const isMatch = database[currentPath].some(item => (item.a === selectedWord.text && item.b === el.innerText) || (item.b === selectedWord.text && item.a === el.innerText));
             if (isMatch) {
                 el.classList.add('matched-pair');
                 selectedWord.el.classList.add('matched-pair');
                 matchedPairs.push(selectedWord.text, el.innerText);
                 if (matchedPairs.length === database[currentPath].length * 2) {
-                    setTimeout(() => {
-                        document.getElementById('final-score-display').innerText = `Module finished! Perfect Match!`;
-                        showScreen('screen-results');
-                    }, 1000);
+                    setTimeout(() => { document.getElementById('final-score-display').innerText = `Module finished! Perfect Match!`; showScreen('screen-results'); }, 1000);
                 }
             } else {
-                const item1 = selectedWord.el;
-                const item2 = el;
-                item1.classList.add('wrong-match');
-                item2.classList.add('wrong-match');
-                setTimeout(() => {
-                    item1.classList.remove('wrong-match');
-                    item2.classList.remove('wrong-match');
-                }, 500);
+                const item1 = selectedWord.el; const item2 = el;
+                item1.classList.add('wrong-match'); item2.classList.add('wrong-match');
+                setTimeout(() => { item1.classList.remove('wrong-match'); item2.classList.remove('wrong-match'); }, 500);
             }
             selectedWord.el.classList.remove('selected');
             selectedWord = null;
@@ -713,7 +741,6 @@ const database = {
         const totalPairs = database[currentPath].length;
         document.getElementById('memory-counter').innerText = "0";
         document.getElementById('memory-total').innerText = totalPairs;
-
         database[currentPath].forEach((pair, idx) => {
             cardsData.push({ text: pair.v, pairId: idx });
             cardsData.push({ text: pair.m, pairId: idx });
@@ -732,82 +759,43 @@ const database = {
     function flipCard(card) {
         if (lockBoard || card.classList.contains('flipped')) return;
         card.classList.add('flipped');
-        if (!firstCard) {
-            firstCard = card;
-            return;
-        }
-        secondCard = card;
-        lockBoard = true;
+        if (!firstCard) { firstCard = card; return; }
+        secondCard = card; lockBoard = true;
         const totalPairs = database[currentPath].length;
-
         if (firstCard.dataset.pairId === secondCard.dataset.pairId) {
             firstCard.querySelector('.card-back').style.backgroundColor = '#d4edda';
-            firstCard.querySelector('.card-back').style.borderColor = 'var(--success)';
             secondCard.querySelector('.card-back').style.backgroundColor = '#d4edda';
-            secondCard.querySelector('.card-back').style.borderColor = 'var(--success)';
-            
             score++;
             document.getElementById('memory-counter').innerText = score;
             resetBoard();
-            if (score === totalPairs) {
-                setTimeout(() => {
-                    document.getElementById('final-score-display').innerText = `Module finished! Score: ${score} / ${totalPairs}`;
-                    showScreen('screen-results');
-                }, 1000);
-            }
+            if (score === totalPairs) { setTimeout(() => { document.getElementById('final-score-display').innerText = `Module finished! Score: ${score} / ${totalPairs}`; showScreen('screen-results'); }, 1000); }
         } else {
-            setTimeout(() => {
-                firstCard.classList.remove('flipped');
-                secondCard.classList.remove('flipped');
-                resetBoard();
-            }, 1000);
+            setTimeout(() => { firstCard.classList.remove('flipped'); secondCard.classList.remove('flipped'); resetBoard(); }, 1000);
         }
     }
 
-    function resetBoard() {
-        firstCard = null;
-        secondCard = null;
-        lockBoard = false;
-    }
+    function resetBoard() { firstCard = null; secondCard = null; lockBoard = false; }
 
     function renderCrossword() {
         const data = database.B2_Crossword;
         const container = document.getElementById("b2-activity-wrapper");
         const cluesContainer = document.getElementById("crossword-clues");
-
-        let maxRow = 0;
-        let maxCol = 0;
-        data.grid.forEach(cell => {
-            if (cell.r > maxRow) maxRow = cell.r;
-            if (cell.c > maxCol) maxCol = cell.c;
-        });
-
+        let maxRow = 0; let maxCol = 0;
+        data.grid.forEach(cell => { if (cell.r > maxRow) maxRow = cell.r; if (cell.c > maxCol) maxCol = cell.c; });
         let gridHtml = `<div style="display:grid; grid-template-columns:repeat(${maxCol + 1}, 32px); gap:2px; justify-content:center; background:var(--primary); padding:15px; border-radius:10px; width:fit-content; margin:0 auto;">`;
-
         for (let r = 0; r <= maxRow; r++) {
             for (let c = 0; c <= maxCol; c++) {
                 const cell = data.grid.find(i => parseInt(i.r) === r && parseInt(i.c) === c);
                 if (cell) {
-                    gridHtml += `
-                        <div style="position:relative; width:32px; height:32px; background:white; border:1px solid #ddd; box-sizing:border-box;">
-                            ${cell.n ? `<span style="position:absolute; font-size:9px; top:1px; left:2px; font-weight:bold; color:var(--primary);">${cell.n}</span>` : ''}
-                            <input type="text" class="cw-cell" maxlength="1" data-r="${r}" data-c="${c}">
-                        </div>`;
-                } else {
-                    gridHtml += `<div style="width:32px; height:32px; background:var(--primary);"></div>`;
-                }
+                    gridHtml += `<div style="position:relative; width:32px; height:32px; background:white; border:1px solid #ddd; box-sizing:border-box;">${cell.n ? `<span style="position:absolute; font-size:9px; top:1px; left:2px; font-weight:bold; color:var(--primary);">${cell.n}</span>` : ''}<input type="text" class="cw-cell" maxlength="1" data-r="${r}" data-c="${c}"></div>`;
+                } else { gridHtml += `<div style="width:32px; height:32px; background:var(--primary);"></div>`; }
             }
         }
         container.innerHTML = gridHtml + `</div>`;
-
         let cluesHtml = `<div class="clues-box"><h4>Across</h4><ul>`;
-        data.clues.filter(c => c.d === "H").forEach(c => {
-            cluesHtml += `<li><strong>${c.id}.</strong> ${c.q}</li>`;
-        });
+        data.clues.filter(c => c.d === "H").forEach(c => { cluesHtml += `<li><strong>${c.id}.</strong> ${c.q}</li>`; });
         cluesHtml += `</ul></div><div class="clues-box"><h4>Down</h4><ul>`;
-        data.clues.filter(c => c.d === "V").forEach(c => {
-            cluesHtml += `<li><strong>${c.id}.</strong> ${c.q}</li>`;
-        });
+        data.clues.filter(c => c.d === "V").forEach(c => { cluesHtml += `<li><strong>${c.id}.</strong> ${c.q}</li>`; });
         cluesHtml += `</ul></div>`;
         cluesContainer.innerHTML = cluesHtml;
     }
@@ -815,70 +803,45 @@ const database = {
     function checkCrosswordAnswers() {
         let allCorrect = true;
         const inputs = document.querySelectorAll('.cw-cell');
-
         inputs.forEach(input => {
-            const row = parseInt(input.dataset.r);
-            const col = parseInt(input.dataset.c);
+            const row = parseInt(input.dataset.r); const col = parseInt(input.dataset.c);
             const cell = database.B2_Crossword.grid.find(i => parseInt(i.r) === row && parseInt(i.c) === col);
-
             if (cell) {
-                if (input.value.toUpperCase() === cell.v.toUpperCase()) {
-                    input.style.backgroundColor = "#d4edda";
-                    input.style.color = "var(--success)";
-                } else {
-                    input.style.backgroundColor = "#f8d7da";
-                    input.style.color = "var(--danger)";
-                    allCorrect = false;
-                }
+                if (input.value.toUpperCase() === cell.v.toUpperCase()) { input.style.backgroundColor = "#d4edda"; input.style.color = "var(--success)"; }
+                else { input.style.backgroundColor = "#f8d7da"; input.style.color = "var(--danger)"; allCorrect = false; }
             }
         });
-
-        if (allCorrect && inputs.length > 0) {
-            setTimeout(() => {
-                document.getElementById('final-score-display').innerText = "Crossword Completed Successfully!";
-                showScreen('screen-results');
-            }, 1000);
-        }
+        if (allCorrect && inputs.length > 0) { setTimeout(() => { document.getElementById('final-score-display').innerText = "Crossword Completed Successfully!"; showScreen('screen-results'); }, 1000); }
     }
 
     function initTextModule() {
         const articleBox = document.getElementById('text-module-article');
         const bankBox = document.getElementById('text-module-bank');
         const contentBox = document.getElementById('text-module-content');
-
-        articleBox.classList.add('hidden');
-        bankBox.classList.add('hidden');
+        articleBox.classList.add('hidden'); bankBox.classList.add('hidden');
         activeBankWord = null;
-
         const module = database[currentPath];
-
         if (currentPath === "B2_Abstraction") {
             document.getElementById('text-module-title').innerText = "B2 Abstraction Challenge";
             articleBox.innerHTML = `<strong>Reading Text:</strong><br>${module.article}`;
             articleBox.classList.remove('hidden');
-            
             let structuredSummary = module.summary;
             module.answers.forEach((_, idx) => {
                 const searchStr = `(${idx + 1}) __________`;
                 const replaceStr = `<input type="text" class="inline-blank text-mod-input" data-idx="${idx}" placeholder="blank ${idx + 1}">`;
                 structuredSummary = structuredSummary.replace(searchStr, replaceStr);
             });
-            
             contentBox.innerHTML = `<strong>Summary Exercise (Fill in the blanks inline):</strong><br><br>${structuredSummary}`;
-            
         } else if (currentPath === "B2_WordBank") {
             document.getElementById('text-module-title').innerText = "B2 Word Bank Exercise";
-            
             renderWordBankGroup();
             bankBox.classList.remove('hidden');
-            
             let structuredText = module.text;
             module.answers.forEach((_, idx) => {
                 const searchStr = `(${idx + 1}) __________`;
                 const replaceStr = `<span class="inline-blank word-bank-space" data-idx="${idx}" id="wb-space-${idx}" onclick="handleSpaceClick(${idx})">word ${idx + 1}</span>`;
                 structuredText = structuredText.replace(searchStr, replaceStr);
             });
-            
             contentBox.innerHTML = `<strong>Exercise Text (Click a word from bank, then click a blank space):</strong><br><br>${structuredText}`;
         }
     }
@@ -886,33 +849,24 @@ const database = {
     function renderWordBankGroup() {
         const bankBox = document.getElementById('text-module-bank');
         const module = database.B2_WordBank;
-        
         bankBox.innerHTML = module.bank.map((word, index) => {
             let isUsed = false;
             const spaces = document.querySelectorAll('.word-bank-space');
-            spaces.forEach(sp => {
-                if(sp.innerText === word) isUsed = true;
-            });
-            
+            spaces.forEach(sp => { if(sp.innerText === word) isUsed = true; });
             let activeClass = (activeBankWord && activeBankWord.word === word) ? ' active-select' : '';
             let usedClass = isUsed ? ' used' : '';
-            
             return `<button class="word-item${activeClass}${usedClass}" onclick="selectBankWord('${word}', ${index})">${word}</button>`;
         }).join('');
     }
 
     function selectBankWord(word, index) {
-        if (activeBankWord && activeBankWord.word === word) {
-            activeBankWord = null; 
-        } else {
-            activeBankWord = { word, index };
-        }
+        if (activeBankWord && activeBankWord.word === word) { activeBankWord = null; }
+        else { activeBankWord = { word, index }; }
         renderWordBankGroup();
     }
 
     function handleSpaceClick(spaceIdx) {
         const spaceElement = document.getElementById(`wb-space-${spaceIdx}`);
-        
         if (spaceElement.classList.contains('filled')) {
             spaceElement.innerText = `word ${spaceIdx + 1}`;
             spaceElement.classList.remove('filled');
@@ -922,13 +876,11 @@ const database = {
             renderWordBankGroup();
             return;
         }
-
         if (activeBankWord) {
             spaceElement.innerText = activeBankWord.word;
             spaceElement.classList.add('filled');
             spaceElement.style.borderColor = "var(--secondary)";
             spaceElement.style.backgroundColor = "#eef7fe";
-            
             activeBankWord = null;
             renderWordBankGroup();
         }
@@ -936,27 +888,15 @@ const database = {
 
     function verifyTextModule() {
         const module = database[currentPath];
-        let allCorrect = true;
-        let localScore = 0;
-
+        let allCorrect = true; let localScore = 0;
         if (currentPath === "B2_Abstraction") {
             const inputs = document.querySelectorAll('.text-mod-input');
             inputs.forEach(input => {
                 const idx = parseInt(input.dataset.idx);
                 const userAnswer = input.value.trim().toUpperCase().replace(/\s+/g, ' ');
                 const correctAnswer = module.answers[idx].toUpperCase().replace(/\s+/g, ' ');
-
-                if (userAnswer === correctAnswer) {
-                    input.style.borderColor = "var(--success)";
-                    input.style.backgroundColor = "#d4edda";
-                    input.style.color = "#155724";
-                    localScore++;
-                } else {
-                    input.style.borderColor = "var(--danger)";
-                    input.style.backgroundColor = "#f8d7da";
-                    input.style.color = "#721c24";
-                    allCorrect = false;
-                }
+                if (userAnswer === correctAnswer) { input.style.borderColor = "var(--success)"; input.style.backgroundColor = "#d4edda"; localScore++; }
+                else { input.style.borderColor = "var(--danger)"; input.style.backgroundColor = "#f8d7da"; allCorrect = false; }
             });
         } else if (currentPath === "B2_WordBank") {
             const spaces = document.querySelectorAll('.word-bank-space');
@@ -964,29 +904,14 @@ const database = {
                 const idx = parseInt(space.dataset.idx);
                 const userVal = space.classList.contains('filled') ? space.innerText.trim().toUpperCase() : "";
                 const correctVal = module.answers[idx].toUpperCase();
-
-                if (userVal === correctVal) {
-                    space.style.borderColor = "var(--success)";
-                    space.style.backgroundColor = "#d4edda";
-                    space.style.color = "#155724";
-                    localScore++;
-                } else {
-                    space.style.borderColor = "var(--danger)";
-                    space.style.backgroundColor = "#f8d7da";
-                    space.style.color = "#721c24";
-                    allCorrect = false;
-                }
+                if (userVal === correctVal) { space.style.borderColor = "var(--success)"; space.style.backgroundColor = "#d4edda"; localScore++; }
+                else { space.style.borderColor = "var(--danger)"; space.style.backgroundColor = "#f8d7da"; allCorrect = false; }
             });
         }
-
         score = localScore;
         document.getElementById('final-score-display').innerText = `Module finished! Score: ${score} / ${module.answers.length}`;
-
-        if (allCorrect) {
-            setTimeout(() => { showScreen('screen-results'); }, 1000);
-        } else {
-            alert(`Exercise validated. Score: ${score}/${module.answers.length}. Check highlighted positions.`);
-        }
+        if (allCorrect) { setTimeout(() => { showScreen('screen-results'); }, 1000); }
+        else { alert(`Exercise validated. Score: ${score}/${module.answers.length}. Check highlighted positions.`); }
     }
 </script>
 </body>
