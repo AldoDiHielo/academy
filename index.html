@@ -500,35 +500,44 @@ const database = {
         showScreen('screen-results');
     }
 
-    function showQuizzes() {
-        const container = document.getElementById('quiz-list-container');
-        if (!container) return;
-        container.innerHTML = "";
-        document.getElementById('lvl-title').innerText = `${selectedLevelCode} Modules`;
-        let activeCount = 0;
-        Object.keys(database).forEach(key => {
-            if (key.startsWith(selectedLevelCode)) {
-                const module = database[key];
-                if (module._tags && module._tags.includes(selectedPath)) {
-                    activeCount++;
-                    const card = document.createElement('div');
-                    card.className = 'level-card';
-                    card.innerHTML = `<h3>${key.replace(`${selectedLevelCode}_`, " ").replace("_", " ")}</h3>`;
-                    card.onclick = () => launchModule(key);
-                    container.appendChild(card);
-                }
+function showQuizzes() {
+    const container = document.getElementById('quiz-list-container');
+    if (!container) return;
+    container.innerHTML = "";
+    document.getElementById('lvl-title').innerText = `${selectedLevelCode} Modules`;
+    let activeCount = 0;
+
+    Object.keys(database).forEach(key => {
+        if (key.startsWith(selectedLevelCode)) {
+            const tags = database._tags_metadata[key] || [];
+            if (tags.includes(selectedPath)) {
+                activeCount++;
+                const card = document.createElement('div');
+                card.className = 'level-card';
+                card.innerHTML = `<h3>${key.replace(`${selectedLevelCode}_`, " ").replace("_", " ")}</h3>`;
+                card.onclick = () => launchModule(key);
+                container.appendChild(card);
             }
-        });
-        const placeholdersNeeded = 20 - activeCount;
-        for (let i = 1; i <= placeholdersNeeded; i++) {
-            const emptyCard = document.createElement('div');
-            emptyCard.className = 'level-card upcoming';
-            emptyCard.innerHTML = `<h3>Module ${activeCount + i}</h3><p style="font-size:11px; margin:5px 0 0 0; color:var(--accent);">Upcoming</p>`;
-            emptyCard.onclick = () => showScreen('screen-dev');
-            container.appendChild(emptyCard);
         }
-        showScreen('screen-levels');
+    });
+
+    const placeholdersNeeded = 20 - activeCount;
+    for (let i = 1; i <= placeholdersNeeded; i++) {
+        const emptyCard = document.createElement('div');
+        emptyCard.className = 'level-card upcoming';
+        emptyCard.innerHTML = `<h3>Module ${activeCount + i}</h3><p style="font-size:11px; margin:5px 0 0 0; color:var(--accent);">Upcoming</p>`;
+        emptyCard.onclick = () => showScreen('screen-dev');
+        container.appendChild(emptyCard);
     }
+    showScreen('screen-levels');
+}
+
+function restartDiagnosticFlow() {
+    selectedPath = "";
+    selectedLevelCode = "";
+    currentPath = "";
+    showScreen('screen-branch');
+}
 
     function goBackToList() { showQuizzes(); }
 
