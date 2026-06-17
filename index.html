@@ -174,25 +174,164 @@
     let currentPath = "";
     let currentQuestionIndex = 0;
     let score = 0;
-    let matchedPairs = [];
-    let selectedWord = null;
-    let firstCard = null;
-    let secondCard = null;
-    let lockBoard = false;
-    let activeBankWord = null; 
+    let diagnosticResults = {};
+    let activeBankWord = null;
+    let firstCard = null, secondCard = null, lockBoard = false;
+    let selectedWord = null, matchedPairs = [];
 
-    function launchDiagnostic() {
-        if (typeof database === 'undefined' || !database.diagnostic) {
-            showScreen('screen-dev'); 
-        } else {
-            console.log("Iniciando examen diagnóstico...");
+    function showScreen(screenId) {
+        document.querySelectorAll('.container').forEach(s => s.classList.add('hidden'));
+        const target = document.getElementById(screenId);
+        if (target) target.classList.remove('hidden');
+    }
+
+    function login() {
+        if (document.getElementById('student-name').value.trim()) {
+            showScreen('screen-branch');
         }
     }
 
-    function showScreen(screenId) {
-        document.querySelectorAll('.container').forEach(el => el.classList.add('hidden'));
-        document.getElementById(screenId).classList.remove('hidden');
+    function setPath(path) {
+        selectedPath = path === 'General' ? 'GP' : 'MP';
+        showScreen('screen-levels-selector');
     }
+
+    function selectLevel(level) {
+        selectedLevelCode = level;
+        showQuizzes();
+    }
+
+function showQuizzes() {
+    const container = document.getElementById('quiz-list-container');
+    if (!container) return;
+    container.innerHTML = "";
+    document.getElementById('lvl-title').innerText = `${selectedLevelCode} Modules`;
+    let activeCount = 0;
+
+    Object.keys(database).forEach(key => {
+        if (key.startsWith(selectedLevelCode)) {
+            const tags = database._tags_metadata[key] || [];
+            
+            if (tags.includes(selectedPath)) {
+                activeCount++;
+                const card = document.createElement('div');
+                card.className = 'level-card';
+                card.innerHTML = `<h3>${key.replace(`${selectedLevelCode}_`, "").replace("_", " ")}</h3>`;
+                card.onclick = () => launchModule(key);
+                container.appendChild(card);
+            }
+        }
+    });
+
+    const placeholdersNeeded = 20 - activeCount;
+    for (let i = 1; i <= placeholdersNeeded; i++) {
+        const emptyCard = document.createElement('div');
+        emptyCard.className = 'level-card upcoming';
+        emptyCard.innerHTML = `<h3>Module ${activeCount + i}</h3><p style="font-size:11px; margin:5px 0 0 0; color:var(--accent);">Upcoming</p>`;
+        emptyCard.onclick = () => showScreen('screen-dev');
+        container.appendChild(emptyCard);
+    }
+    showScreen('screen-levels');
+}
+    function launchModule(moduleKey) {
+        currentPath = moduleKey;
+        currentQuestionIndex = 0;
+        score = 0;
+        activeBankWord = null;
+        if (moduleKey.includes('MC') || moduleKey.includes('Stones') || moduleKey.includes('Writing')) {
+            loadQuestion();
+            showScreen('screen-quiz');
+        } else if (moduleKey.includes('Reading')) {
+            loadReadingQuestion();
+            showScreen('screen-reading');
+        } else if (moduleKey.includes('Memory')) {
+            initMemoryModule();
+            showScreen('screen-memory');
+        } else if (moduleKey.includes('Matching')) {
+            initMatchingModule();
+            showScreen('screen-matching');
+        } else if (moduleKey.includes('Crossword')) {
+            renderCrossword();
+            showScreen('screen-crossword');
+        } else {
+            initTextModule();
+            showScreen('screen-text-module');
+        }
+    }
+
+    function loadQuestion() {
+        const questions = database[currentPath];
+        const q = questions[currentQuestionIndex];
+        document.getElementById('progress-fill').style.width = `${(currentQuestionIndex / questions.length) * 100}%`;
+        document.getElementById('q-text').innerText = q.q;
+        const optionsBox = document.getElementById('options-box');
+        optionsBox.innerHTML = "";
+        const fbox = document.getElementById('feedback-box');
+        fbox.classList.add('hidden');
+        fbox.className = 'option hidden';
+        document.getElementById('btn-continue').classList.add('hidden');
+        document.getElementById('btn-continue').onclick = nextQuestion;
+        q.o.forEach((opt, idx) => {
+            const btn = document.createElement('div');
+            btn.className = 'option';
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(idx, btn);
+            optionsBox.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selectedIdx, optionEl) {
+        const q = database[currentPath][currentQuestionIndex];
+        const options = document.getElementById('options-box').children;
+        for (let opt of options) opt.removeAttribute('onclick');
+        let isCorrect = (selectedIdx === q.a);
+        let selectedText = q.o[selectedIdx];
+        let correctText = q.o[q.a];
+        if (isCorrect) {
+            optionEl.classList.add('correct');
+            score++;
+        } else {
+            optionEl.classList.add('wrong');
+            if (options[q.a]) options[q.a].classList.add('correct');
+        }
+        const fbox = document.getElementById('feedback-box');
+        fbox.className = isCorrect ? 'option correct' : 'option wrong';
+        fbox.innerHTML = `<span class="pedagogic-title">${isCorrect ? '✓ Correct Answer' : '✗ Incorrect Answer'}</span><br><strong>Your choice:</strong> ${selectedText} <br><strong>Correct structure:</strong> ${correctText}<span class="pedagogic-detail">${q.r}</span>`;
+        fbox.classList.remove('hidden');
+        document.getElementById('btn-continue').classList.remove('hidden');
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < database[currentPath].length) {
+            loadQuestion();
+        } else {
+            document.getElementById('final-score-display').innerText = `Module finished! Score: ${score} / ${database[currentPath].length}`;
+            showScreen('screen-results');
+        }
+    }
+
+    function loadReadingQuestion() {
+        const module = database[currentPath];
+        const q = module.questions[currentQuestionIndex];
+        document.getElementById('reading-article').innerHTML = module.article;
+        document.getElementById('reading-progress-fill').style.width = `${(currentQuestionIndex / module.questions.length) * 100}%`;
+        document.getElementById('reading-q-text').innerText = `${currentQuestionIndex + 1}. ${q.q}`;
+        const optionsBox = document.getElementById('reading-options-box');
+        optionsBox.innerHTML = "";
+        const fbox = document.getElementById('reading-feedback-box');
+        fbox.classList.add('hidden');
+        document.getElementById('reading-btn-continue').classList.add('hidden');
+        document.getElementById('reading-btn-continue').onclick = nextReadingQuestion;
+        ["True", "False"].forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'pill-btn';
+            btn.innerText = opt;
+            btn.onclick = () => checkReadingAnswer(opt === "True", btn);
+            optionsBox.appendChild(btn);
+        });
+    }
+</script>
 
 const database = {
     "diagnostic": [
@@ -319,7 +458,7 @@ const database = {
         {q: "Believe in", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Believe in ghosts'."}
     ],
     "B2_Reading": {
-        article: `The genesis of the Olympic Games dates back to 776 BC in ancient Olympia, Greece. Originally, the festival was held to honor Zeus, the king of the gods. While modern spectators are used to a vast array of sports, the first recorded Olympics featured only one event: a short footrace called the stade. For centuries, the games were a cornerstone of Greek culture, fostering a period of "sacred truce" where conflicts between city-states were temporarily suspended to allow athletes to travel safely. However, as the Roman Empire’s influence grew, the games began to lose their religious significance. In 393 AD, Emperor Theodosius I, who had recently converted to Christianity, abolished the festival, claiming it was a pagan ritual. <br><br>The Olympics remained dormant for over 1,500 years until a French educator named Baron Pierre de Coubertin proposed their revival. Coubertin believed that international competition could promote global peace and physical education. His vision culminated in the first modern Olympic Games, which took place in Athens in 1896. Although the event featured only male athletes from 14 nations, it was considered a massive success. It is a common misconception that the marathon was part of the ancient games; in reality, it was introduced in 1896 to commemorate a legendary run from the city of Marathon to Athens. Since their revival, the Games have evolved into a global celebration, withstanding the test of time, though it is important to note that the competition was officially cancelled during the years of the major World Wars.`,
+        article: "The genesis of the Olympic Games dates back to 776 BC in ancient Olympia, Greece. Originally, the festival was held to honor Zeus, the king of the gods. While modern spectators are used to a vast array of sports, the first recorded Olympics featured only one event: a short footrace called the stade. For centuries, the games were a cornerstone of Greek culture, fostering a period of \"sacred truce\" where conflicts between city-states were temporarily suspended to allow athletes to travel safely. However, as the Roman Empire’s influence grew, the games began to lose their religious significance. In 393 AD, Emperor Theodosius I, who had recently converted to Christianity, abolished the festival, claiming it was a pagan ritual. <br><br>The Olympics remained dormant for over 1,500 years until a French educator named Baron Pierre de Coubertin proposed their revival. Coubertin believed that international competition could promote global peace and physical education. His vision culminated in the first modern Olympic Games, which took place in Athens in 1896. Although the event featured only male athletes from 14 nations, it was considered a massive success. It is a common misconception that the marathon was part of the ancient games; in reality, it was introduced in 1896 to commemorate a legendary run from the city of Marathon to Athens. Since their revival, the Games have evolved into a global celebration, withstanding the test of time, though it is important to note that the competition was officially cancelled during the years of the major World Wars.",
         questions: [
             {q: "The original Olympics were primarily a secular sporting event.", a: false, r: "False. They were religious festivals held to honor Zeus."},
             {q: "In the very beginning, there was only one type of competition.", a: true, r: "True. The first recorded games only had the 'stade' footrace."},
@@ -401,7 +540,6 @@ const database = {
         "B2_Crossword": ["GP", "MP"]
     }
 };
-
 
     function showScreen(screenId) {
         document.querySelectorAll('.container').forEach(s => s.classList.add('hidden'));
