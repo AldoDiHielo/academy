@@ -169,169 +169,16 @@
     </div>
 
 <script>
-    let selectedPath = "";
-    let selectedLevelCode = "";
-    let currentPath = "";
-    let currentQuestionIndex = 0;
-    let score = 0;
-    let diagnosticResults = {};
-    let activeBankWord = null;
-    let firstCard = null, secondCard = null, lockBoard = false;
-    let selectedWord = null, matchedPairs = [];
-
-    function showScreen(screenId) {
-        document.querySelectorAll('.container').forEach(s => s.classList.add('hidden'));
-        const target = document.getElementById(screenId);
-        if (target) target.classList.remove('hidden');
-    }
-
-    function login() {
-        if (document.getElementById('student-name').value.trim()) {
-            showScreen('screen-branch');
-        }
-    }
-
-    function setPath(path) {
-        selectedPath = path === 'General' ? 'GP' : 'MP';
-        showScreen('screen-levels-selector');
-    }
-
-    function selectLevel(level) {
-        selectedLevelCode = level;
-        showQuizzes();
-    }
-
-function showQuizzes() {
-    const container = document.getElementById('quiz-list-container');
-    if (!container) return;
-    container.innerHTML = "";
-    document.getElementById('lvl-title').innerText = `${selectedLevelCode} Modules`;
-    let activeCount = 0;
-
-    Object.keys(database).forEach(key => {
-        if (key.startsWith(selectedLevelCode)) {
-            const tags = database._tags_metadata[key] || [];
-            
-            if (tags.includes(selectedPath)) {
-                activeCount++;
-                const card = document.createElement('div');
-                card.className = 'level-card';
-                card.innerHTML = `<h3>${key.replace(`${selectedLevelCode}_`, "").replace("_", " ")}</h3>`;
-                card.onclick = () => launchModule(key);
-                container.appendChild(card);
-            }
-        }
-    });
-
-    const placeholdersNeeded = 20 - activeCount;
-    for (let i = 1; i <= placeholdersNeeded; i++) {
-        const emptyCard = document.createElement('div');
-        emptyCard.className = 'level-card upcoming';
-        emptyCard.innerHTML = `<h3>Module ${activeCount + i}</h3><p style="font-size:11px; margin:5px 0 0 0; color:var(--accent);">Upcoming</p>`;
-        emptyCard.onclick = () => showScreen('screen-dev');
-        container.appendChild(emptyCard);
-    }
-    showScreen('screen-levels');
-}
-    function launchModule(moduleKey) {
-        currentPath = moduleKey;
-        currentQuestionIndex = 0;
-        score = 0;
-        activeBankWord = null;
-        if (moduleKey.includes('MC') || moduleKey.includes('Stones') || moduleKey.includes('Writing')) {
-            loadQuestion();
-            showScreen('screen-quiz');
-        } else if (moduleKey.includes('Reading')) {
-            loadReadingQuestion();
-            showScreen('screen-reading');
-        } else if (moduleKey.includes('Memory')) {
-            initMemoryModule();
-            showScreen('screen-memory');
-        } else if (moduleKey.includes('Matching')) {
-            initMatchingModule();
-            showScreen('screen-matching');
-        } else if (moduleKey.includes('Crossword')) {
-            renderCrossword();
-            showScreen('screen-crossword');
-        } else {
-            initTextModule();
-            showScreen('screen-text-module');
-        }
-    }
-
-    function loadQuestion() {
-        const questions = database[currentPath];
-        const q = questions[currentQuestionIndex];
-        document.getElementById('progress-fill').style.width = `${(currentQuestionIndex / questions.length) * 100}%`;
-        document.getElementById('q-text').innerText = q.q;
-        const optionsBox = document.getElementById('options-box');
-        optionsBox.innerHTML = "";
-        const fbox = document.getElementById('feedback-box');
-        fbox.classList.add('hidden');
-        fbox.className = 'option hidden';
-        document.getElementById('btn-continue').classList.add('hidden');
-        document.getElementById('btn-continue').onclick = nextQuestion;
-        q.o.forEach((opt, idx) => {
-            const btn = document.createElement('div');
-            btn.className = 'option';
-            btn.innerText = opt;
-            btn.onclick = () => checkAnswer(idx, btn);
-            optionsBox.appendChild(btn);
-        });
-    }
-
-    function checkAnswer(selectedIdx, optionEl) {
-        const q = database[currentPath][currentQuestionIndex];
-        const options = document.getElementById('options-box').children;
-        for (let opt of options) opt.removeAttribute('onclick');
-        let isCorrect = (selectedIdx === q.a);
-        let selectedText = q.o[selectedIdx];
-        let correctText = q.o[q.a];
-        if (isCorrect) {
-            optionEl.classList.add('correct');
-            score++;
-        } else {
-            optionEl.classList.add('wrong');
-            if (options[q.a]) options[q.a].classList.add('correct');
-        }
-        const fbox = document.getElementById('feedback-box');
-        fbox.className = isCorrect ? 'option correct' : 'option wrong';
-        fbox.innerHTML = `<span class="pedagogic-title">${isCorrect ? '✓ Correct Answer' : '✗ Incorrect Answer'}</span><br><strong>Your choice:</strong> ${selectedText} <br><strong>Correct structure:</strong> ${correctText}<span class="pedagogic-detail">${q.r}</span>`;
-        fbox.classList.remove('hidden');
-        document.getElementById('btn-continue').classList.remove('hidden');
-    }
-
-    function nextQuestion() {
-        currentQuestionIndex++;
-        if (currentQuestionIndex < database[currentPath].length) {
-            loadQuestion();
-        } else {
-            document.getElementById('final-score-display').innerText = `Module finished! Score: ${score} / ${database[currentPath].length}`;
-            showScreen('screen-results');
-        }
-    }
-
-    function loadReadingQuestion() {
-        const module = database[currentPath];
-        const q = module.questions[currentQuestionIndex];
-        document.getElementById('reading-article').innerHTML = module.article;
-        document.getElementById('reading-progress-fill').style.width = `${(currentQuestionIndex / module.questions.length) * 100}%`;
-        document.getElementById('reading-q-text').innerText = `${currentQuestionIndex + 1}. ${q.q}`;
-        const optionsBox = document.getElementById('reading-options-box');
-        optionsBox.innerHTML = "";
-        const fbox = document.getElementById('reading-feedback-box');
-        fbox.classList.add('hidden');
-        document.getElementById('reading-btn-continue').classList.add('hidden');
-        document.getElementById('reading-btn-continue').onclick = nextReadingQuestion;
-        ["True", "False"].forEach(opt => {
-            const btn = document.createElement('button');
-            btn.className = 'pill-btn';
-            btn.innerText = opt;
-            btn.onclick = () => checkReadingAnswer(opt === "True", btn);
-            optionsBox.appendChild(btn);
-        });
-    }
-</script>
+document.addEventListener('DOMContentLoaded', () => {
+    window.selectedPath = "";
+    window.selectedLevelCode = "";
+    window.currentPath = "";
+    window.currentQuestionIndex = 0;
+    window.score = 0;
+    window.diagnosticResults = {};
+    window.activeBankWord = null;
+    window.firstCard = null, window.secondCard = null, window.lockBoard = false;
+    window.selectedWord = null, window.matchedPairs = [];
 
 const database = {
     "diagnostic": [
@@ -541,29 +388,29 @@ const database = {
     }
 };
 
-    function showScreen(screenId) {
+window.showScreen = function(screenId) {
         document.querySelectorAll('.container').forEach(s => s.classList.add('hidden'));
         const target = document.getElementById(screenId);
         if (target) target.classList.remove('hidden');
     }
 
-    function login() {
+window.login = function() {
         if (document.getElementById('student-name').value.trim()) {
             showScreen('screen-branch');
         }
     }
 
-    function setPath(path) {
+window.setPath = function(path) {
         selectedPath = path === 'General' ? 'GP' : 'MP';
         showScreen('screen-levels-selector');
     }
 
-    function selectLevel(level) {
+window.selectLevel = function(level) {
         selectedLevelCode = level;
         showQuizzes();
     }
 
-    function launchDiagnostic() {
+window.launchDiagnostic = function() {
         currentPath = 'diagnostic';
         currentQuestionIndex = 0;
         score = 0;
@@ -572,7 +419,7 @@ const database = {
         showScreen('screen-quiz');
     }
 
-    function loadDiagnosticQuestion() {
+window.loadDiagnosticQuestion = function() {
         const questions = database.diagnostic;
         const q = questions[currentQuestionIndex];
         document.getElementById('progress-fill').style.width = `${(currentQuestionIndex / questions.length) * 100}%`;
@@ -592,7 +439,7 @@ const database = {
         });
     }
 
-    function checkDiagnosticAnswer(selectedIdx, optionEl) {
+window.checkDiagnosticAnswer = function(selectedIdx, optionEl) {
         const q = database.diagnostic[currentQuestionIndex];
         const options = document.getElementById('options-box').children;
         for (let opt of options) opt.removeAttribute('onclick');
@@ -614,7 +461,7 @@ const database = {
         document.getElementById('btn-continue').onclick = nextDiagnosticQuestion;
     }
 
-    function nextDiagnosticQuestion() {
+window.nextDiagnosticQuestion = function() {
         currentQuestionIndex++;
         if (currentQuestionIndex < database.diagnostic.length) {
             loadDiagnosticQuestion();
@@ -623,7 +470,7 @@ const database = {
         }
     }
 
-    function calculateAssessment() {
+window.calculateAssessment = function () {
         let report = "Assessment Report:<br>";
         let finalLevel = "Beginner (A1)";
         for (let lvl in diagnosticResults) {
@@ -638,7 +485,7 @@ const database = {
         showScreen('screen-results');
     }
 
-function showQuizzes() {
+window.showQuizzes = function() {
     const container = document.getElementById('quiz-list-container');
     if (!container) return;
     container.innerHTML = "";
@@ -670,16 +517,16 @@ function showQuizzes() {
     showScreen('screen-levels');
 }
 
-function restartDiagnosticFlow() {
+window.restartDiagnosticFlow = function() {
     selectedPath = "";
     selectedLevelCode = "";
     currentPath = "";
     showScreen('screen-branch');
 }
 
-    function goBackToList() { showQuizzes(); }
+window.goBackToList = function() { showQuizzes(); }
 
-    function launchModule(moduleKey) {
+window.launchModule = function(moduleKey) {
         currentPath = moduleKey;
         currentQuestionIndex = 0;
         score = 0;
@@ -705,7 +552,7 @@ function restartDiagnosticFlow() {
         }
     }
 
-    function loadQuestion() {
+window.loadQuestion = function() {
         const questions = database[currentPath];
         const q = questions[currentQuestionIndex];
         document.getElementById('progress-fill').style.width = `${(currentQuestionIndex / questions.length) * 100}%`;
@@ -726,7 +573,7 @@ function restartDiagnosticFlow() {
         });
     }
 
-    function checkAnswer(selectedIdx, optionEl) {
+window.checkAnswer = function(selectedIdx, optionEl) {
         const q = database[currentPath][currentQuestionIndex];
         const options = document.getElementById('options-box').children;
         for (let opt of options) opt.removeAttribute('onclick');
@@ -753,7 +600,7 @@ function restartDiagnosticFlow() {
         document.getElementById('btn-continue').classList.remove('hidden');
     }
 
-    function nextQuestion() {
+window.nextQuestion = function() {
         currentQuestionIndex++;
         if (currentQuestionIndex < database[currentPath].length) {
             loadQuestion();
@@ -763,7 +610,7 @@ function restartDiagnosticFlow() {
         }
     }
 
-    function loadReadingQuestion() {
+window.loadReadingQuestion = function() {
         const module = database[currentPath];
         const q = module.questions[currentQuestionIndex];
         document.getElementById('reading-article').innerHTML = module.article;
@@ -785,7 +632,7 @@ function restartDiagnosticFlow() {
         });
     }
 
-    function checkReadingAnswer(userChoice, optionEl) {
+window.checkReadingAnswer = function(userChoice, optionEl) {
         const module = database[currentPath];
         const q = module.questions[currentQuestionIndex];
         const options = document.getElementById('reading-options-box').children;
@@ -814,7 +661,7 @@ function restartDiagnosticFlow() {
         document.getElementById('reading-btn-continue').classList.remove('hidden');
     }
 
-    function nextReadingQuestion() {
+window.nextReadingQuestion = function() {
         currentQuestionIndex++;
         const module = database[currentPath];
         if (currentQuestionIndex < module.questions.length) {
@@ -825,7 +672,7 @@ function restartDiagnosticFlow() {
         }
     }
 
-    function initMatchingModule() {
+window.initMatchingModule = function() {
         const data = database[currentPath];
         const leftCol = document.getElementById('col-left');
         const rightCol = document.getElementById('col-right');
@@ -851,7 +698,7 @@ function restartDiagnosticFlow() {
         });
     }
 
-    function selectMatchWord(el, side) {
+window.selectMatchWord = function(el, side) {
         if (el.classList.contains('matched-pair')) return;
         if (!selectedWord) {
             selectedWord = { el, side, text: el.innerText };
@@ -881,7 +728,7 @@ function restartDiagnosticFlow() {
         }
     }
 
-    function initMemoryModule() {
+window.initMemoryModule = function() {
         const board = document.getElementById('memory-board');
         board.innerHTML = "";
         let cardsData = [];
@@ -903,7 +750,7 @@ function restartDiagnosticFlow() {
         });
     }
 
-    function flipCard(card) {
+window.flipCard = function(card) {
         if (lockBoard || card.classList.contains('flipped')) return;
         card.classList.add('flipped');
         if (!firstCard) { firstCard = card; return; }
@@ -921,9 +768,9 @@ function restartDiagnosticFlow() {
         }
     }
 
-    function resetBoard() { firstCard = null; secondCard = null; lockBoard = false; }
+window.resetBoard = function() { firstCard = null; secondCard = null; lockBoard = false; }
 
-    function renderCrossword() {
+window.renderCrossword = function() {
         const data = database.B2_Crossword;
         const container = document.getElementById("b2-activity-wrapper");
         const cluesContainer = document.getElementById("crossword-clues");
@@ -947,7 +794,7 @@ function restartDiagnosticFlow() {
         cluesContainer.innerHTML = cluesHtml;
     }
 
-    function checkCrosswordAnswers() {
+window.checkCrosswordAnswers = function() {
         let allCorrect = true;
         const inputs = document.querySelectorAll('.cw-cell');
         inputs.forEach(input => {
@@ -961,7 +808,7 @@ function restartDiagnosticFlow() {
         if (allCorrect && inputs.length > 0) { setTimeout(() => { document.getElementById('final-score-display').innerText = "Crossword Completed Successfully!"; showScreen('screen-results'); }, 1000); }
     }
 
-    function initTextModule() {
+window.initTextModule = function() {
         const articleBox = document.getElementById('text-module-article');
         const bankBox = document.getElementById('text-module-bank');
         const contentBox = document.getElementById('text-module-content');
@@ -993,7 +840,7 @@ function restartDiagnosticFlow() {
         }
     }
 
-    function renderWordBankGroup() {
+window.renderWordBankGroup = function() {
         const bankBox = document.getElementById('text-module-bank');
         const module = database.B2_WordBank;
         bankBox.innerHTML = module.bank.map((word, index) => {
@@ -1006,13 +853,13 @@ function restartDiagnosticFlow() {
         }).join('');
     }
 
-    function selectBankWord(word, index) {
+window.selectBankWord = function(word, index) {
         if (activeBankWord && activeBankWord.word === word) { activeBankWord = null; }
         else { activeBankWord = { word, index }; }
         renderWordBankGroup();
     }
 
-    function handleSpaceClick(spaceIdx) {
+window.handleSpaceClick = function(spaceIdx) {
         const spaceElement = document.getElementById(`wb-space-${spaceIdx}`);
         if (spaceElement.classList.contains('filled')) {
             spaceElement.innerText = `word ${spaceIdx + 1}`;
@@ -1033,7 +880,7 @@ function restartDiagnosticFlow() {
         }
     }
 
-    function verifyTextModule() {
+window.verifyTextModule = function() {
         const module = database[currentPath];
         let allCorrect = true; let localScore = 0;
         if (currentPath === "B2_Abstraction") {
@@ -1060,6 +907,7 @@ function restartDiagnosticFlow() {
         if (allCorrect) { setTimeout(() => { showScreen('screen-results'); }, 1000); }
         else { alert(`Exercise validated. Score: ${score}/${module.answers.length}. Check highlighted positions.`); }
     }
+});
 </script>
 </body>
 </html>
