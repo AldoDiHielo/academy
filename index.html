@@ -76,7 +76,7 @@
     <div id="screen-login" class="container">
         <h2>Student Access</h2>
         <input type="text" id="student-name" placeholder="Name">
-        <button class="main-btn" onclick="login()">Enter</button>
+        <button id="btn-login" class="main-btn">Enter</button>
     </div>
     <div id="screen-branch" class="container hidden">
         <h2>Choose Path</h2>
@@ -939,7 +939,12 @@
     };
 
     document.addEventListener('DOMContentLoaded', () => {
-        console.log("Sistema cargado y listo.");
+        const loginBtn = document.getElementById('btn-login');
+        if (loginBtn) {
+            loginBtn.addEventListener('click', () => {
+                window.login();
+            });
+        }
     });
 </script>
 </body>
