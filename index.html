@@ -73,13 +73,11 @@
 </head>
 <body>
     <header><h1>DiHielo English Academy</h1></header>
-
     <div id="screen-login" class="container">
         <h2>Student Access</h2>
         <input type="text" id="student-name" placeholder="Name">
         <button class="main-btn" onclick="login()">Enter</button>
     </div>
-
     <div id="screen-branch" class="container hidden">
         <h2>Choose Path</h2>
         <div class="grid">
@@ -88,7 +86,6 @@
             <div class="level-card" style="border-color: var(--accent);" onclick="launchDiagnostic()"><h3>Examen Diagnóstico</h3></div>
         </div>
     </div>
-
     <div id="screen-levels-selector" class="container hidden">
         <h2>Select Proficiency Level</h2>
         <div class="grid">
@@ -103,13 +100,11 @@
         </div>
         <button class="main-btn" style="margin-top:20px; background:#7f8c8d" onclick="showScreen('screen-branch')">Back</button>
     </div>
-
     <div id="screen-levels" class="container hidden">
         <h2 id="lvl-title">Modules</h2>
         <div id="quiz-list-container" class="grid"></div>
         <button class="main-btn" style="background:#7f8c8d; margin-top: 20px;" onclick="showScreen('screen-levels-selector')">Back</button>
     </div>
-
     <div id="screen-quiz" class="container hidden">
         <div class="progress-container"><div id="progress-fill"></div></div>
         <p id="q-text" style="font-size: 1.15rem; font-weight: 500; text-align: left; margin-bottom: 1.5rem;"></p>
@@ -118,7 +113,6 @@
         <button class="main-btn hidden" id="btn-continue" onclick="nextQuestion()">Continue</button>
         <button class="main-btn" style="background:#7f8c8d" onclick="goBackFromResults()">Exit</button>
     </div>
-
     <div id="screen-reading" class="container hidden">
         <h3 id="reading-title">Reading Comprehension</h3>
         <div id="reading-article" class="article-box"></div>
@@ -129,20 +123,17 @@
         <button class="main-btn hidden" id="reading-btn-continue" onclick="nextReadingQuestion()">Continue</button>
         <button class="main-btn" style="background:#7f8c8d" onclick="goBackFromResults()">Exit</button>
     </div>
-
     <div id="screen-memory" class="container hidden">
         <h3>Memory Match</h3>
         <p>Pairs Matched: <span id="memory-counter">0</span> / <span id="memory-total">0</span></p>
         <div id="memory-board" class="memory-grid"></div>
         <button class="main-btn" style="background:#7f8c8d; margin-top:20px;" onclick="goBackFromResults()">Exit</button>
     </div>
-
     <div id="screen-matching" class="container hidden">
         <h3>Collocations</h3>
         <div class="matching-container"><div id="col-left" class="match-col"></div><div id="col-right" class="match-col"></div></div>
         <button class="main-btn" style="background:#7f8c8d; margin-top:20px;" onclick="goBackFromResults()">Exit</button>
     </div>
-
     <div id="screen-crossword" class="container hidden">
         <h3>Crossword Challenge</h3>
         <div id="b2-activity-wrapper" style="margin-bottom: 20px;"></div>
@@ -150,7 +141,6 @@
         <button class="main-btn" onclick="checkCrosswordAnswers()">Verify Crossword</button>
         <button class="main-btn" style="background:#7f8c8d;" onclick="goBackFromResults()">Exit</button>
     </div>
-
     <div id="screen-text-module" class="container hidden">
         <h3 id="text-module-title">Activity</h3>
         <div id="text-module-article" class="article-box hidden"></div>
@@ -159,20 +149,17 @@
         <button class="main-btn" onclick="verifyTextModule()" style="margin-top: 20px;">Verify Answers</button>
         <button class="main-btn" style="background:#7f8c8d; margin-top: 20px;" onclick="goBackFromResults()">Exit</button>
     </div>
-
     <div id="screen-dev" class="container hidden">
         <h2 style="color: var(--accent);">Project being developed</h2>
         <p style="font-size: 1.2rem; color: var(--primary); margin-bottom: 2rem;">This module is under construction. Coming soon!</p>
         <button class="main-btn" style="background:#7f8c8d" onclick="goBackFromResults()">Back to Modules</button>
     </div>
-
-   <div id="screen-results" class="container hidden">
-    <h2 id="final-score-display"></h2>
-    <button class="main-btn" onclick="goBackFromResults()">Back</button>
-</div>
+    <div id="screen-results" class="container hidden">
+        <h2 id="final-score-display"></h2>
+        <button class="main-btn" onclick="goBackFromResults()">Back</button>
+    </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
     window.selectedPath = "";
     window.selectedLevelCode = "";
     window.currentPath = "";
@@ -180,780 +167,779 @@ document.addEventListener('DOMContentLoaded', () => {
     window.score = 0;
     window.diagnosticResults = {};
     window.activeBankWord = null;
-    window.firstCard = null, window.secondCard = null, window.lockBoard = false;
-    window.selectedWord = null, window.matchedPairs = [];
+    window.firstCard = null; 
+    window.secondCard = null; 
+    window.lockBoard = false;
+    window.selectedWord = null; 
+    window.matchedPairs = [];
 
-const database = {
-    "diagnostic": [
-        { id: 1, level: "A2", text: "She ______ to the office every morning by bus.", options: ["go", "goes", "going"], correct: 1 },
-        { id: 2, level: "A2", text: "They ______ watch the game last night because they were busy.", options: ["don't", "didn't", "haven't"], correct: 1 },
-        { id: 3, level: "A2", text: "Look at those clouds! It ______ to rain.", options: ["is going", "goes", "will"], correct: 0 },
-        { id: 4, level: "A2", text: "I have lived here ______ five years.", options: ["since", "for", "ago"], correct: 1 },
-        { id: 5, level: "A2", text: "He is ______ than his brother.", options: ["tall", "taller", "most tall"], correct: 1 },
-        { id: 6, level: "A2", text: "______ you like to come for dinner?", options: ["Do", "Are", "Would"], correct: 2 },
-        { id: 7, level: "A2", text: "I ______ my homework when the phone rang.", options: ["did", "was doing", "have done"], correct: 1 },
-        { id: 8, level: "A2", text: "This is the ______ book I have ever read.", options: ["good", "better", "best"], correct: 2 },
-        { id: 9, level: "A2", text: "She ______ her teeth twice a day.", options: ["brush", "brushes", "is brushing"], correct: 1 },
-        { id: 10, level: "A2", text: "Can you ______ me a favor, please?", options: ["do", "make", "give"], correct: 0 },
-        { id: 11, level: "B1", text: "If I ______ you, I would take that job.", options: ["am", "was", "were"], correct: 2 },
-        { id: 12, level: "B1", text: "I ______ this movie already.", options: ["saw", "have seen", "see"], correct: 1 },
-        { id: 13, level: "B1", text: "She ______ allowed to stay out late.", options: ["isn't", "doesn't", "hasn't"], correct: 0 },
-        { id: 14, level: "B1", text: "This house ______ in 1990.", options: ["was built", "built", "is built"], correct: 0 },
-        { id: 15, level: "B1", text: "I am interested ______ learning new languages.", options: ["at", "on", "in"], correct: 2 },
-        { id: 16, level: "B1", text: "How ______ sugar do you put in your coffee?", options: ["many", "much", "few"], correct: 1 },
-        { id: 17, level: "B1", text: "I'm really tired. I ______ all day.", options: ["work", "worked", "have been working"], correct: 2 },
-        { id: 18, level: "B1", text: "She suggests ______ to the park.", options: ["go", "to go", "going"], correct: 2 },
-        { id: 19, level: "B1", text: "We ______ each other since we were kids.", options: ["know", "have known", "knew"], correct: 1 },
-        { id: 20, level: "B1", text: "Would you mind ______ the window?", options: ["close", "closing", "to close"], correct: 1 },
-        { id: 21, level: "B2", text: "By this time next year, I ______ my degree.", options: ["will finish", "will have finished", "finish"], correct: 1 },
-        { id: 22, level: "B2", text: "Hard ______ she tried, she couldn't open the door.", options: ["as", "though", "even"], correct: 0 },
-        { id: 23, level: "B2", text: "I'd rather ______ at home tonight.", options: ["stay", "to stay", "staying"], correct: 0 },
-        { id: 24, level: "B2", text: "He ______ have been there; I saw him in another city.", options: ["shouldn't", "mustn't", "can't"], correct: 2 },
-        { id: 25, level: "B2", text: "______ the weather was bad, we enjoyed the trip.", options: ["Despite", "Although", "However"], correct: 1 },
-        { id: 26, level: "B2", text: "If he ______ earlier, he wouldn't have missed the flight.", options: ["arrived", "had arrived", "would arrive"], correct: 1 },
-        { id: 27, level: "B2", text: "She admitted ______ the money.", options: ["to steal", "stealing", "steal"], correct: 1 },
-        { id: 28, level: "B2", text: "Never ______ such a beautiful place.", options: ["I have seen", "have I seen", "I saw"], correct: 1 },
-        { id: 29, level: "B2", text: "He is used to ______ early.", options: ["wake up", "waking up", "woke up"], correct: 1 },
-        { id: 30, level: "B2", text: "The film, ______ I saw yesterday, was amazing.", options: ["that", "which", "who"], correct: 1 },
-        { id: 31, level: "B2/C1", text: "Scarcely ______ the house when it started to pour.", options: ["had I left", "I had left", "did I leave"], correct: 0 },
-        { id: 32, level: "B2/C1", text: "I wish I ______ more time to study.", options: ["have", "had", "would have"], correct: 1 },
-        { id: 33, level: "B2/C1", text: "She is ______ to be one of the best in her field.", options: ["said", "told", "spoken"], correct: 0 },
-        { id: 34, level: "B2/C1", text: "It's high time you ______ a decision.", options: ["make", "made", "will make"], correct: 1 },
-        { id: 35, level: "B2/C1", text: "Were ______ to help, we would finish on time.", options: ["you", "he", "we"], correct: 0 },
-        { id: 36, level: "B2/C1", text: "He ______ be working; his car is in the parking lot.", options: ["must", "can", "should"], correct: 0 },
-        { id: 37, level: "B2/C1", text: "Not only ______ he come late, but he also forgot his notes.", options: ["did", "has", "does"], correct: 0 },
-        { id: 38, level: "B2/C1", text: "I'd prefer you ______ that loud music.", options: ["to stop", "stop", "stopped"], correct: 2 },
-        { id: 39, level: "B2/C1", text: "They ______ to have been working there for years.", options: ["seem", "appear", "are"], correct: 0 },
-        { id: 40, level: "B2/C1", text: "The report is to ______ by tomorrow.", options: ["submit", "be submitted", "submitted"], correct: 1 },
-        { id: 41, level: "C1", text: "Little ______ about the surprise party.", options: ["did she know", "she knew", "she did know"], correct: 0 },
-        { id: 42, level: "C1", text: "Had I ______ that, I would have acted differently.", options: ["know", "known", "knew"], correct: 1 },
-        { id: 43, level: "C1", text: "Supposing you ______ the lottery, what would you do?", options: ["win", "won", "have won"], correct: 1 },
-        { id: 44, level: "C1", text: "It is essential that he ______ on time.", options: ["arrives", "arrive", "arrived"], correct: 1 },
-        { id: 45, level: "C1", text: "______ your help, we would have failed.", options: ["But for", "Because of", "Despite"], correct: 0 },
-        { id: 46, level: "C1", text: "She ______ as if she knows everything.", options: ["acts", "acted", "is acting"], correct: 0 },
-        { id: 47, level: "C1", text: "Under no circumstances ______ allowed to leave.", options: ["you are", "are you", "were you"], correct: 1 },
-        { id: 48, level: "C1", text: "I'd just as soon ______ it now.", options: ["do", "to do", "doing"], correct: 0 },
-        { id: 49, level: "C1", text: "The project is ______ completion.", options: ["on the verge of", "in the verge of", "at the verge of"], correct: 0 },
-        { id: 50, level: "C1", text: "______ it or not, I'm actually enjoying this.", options: ["Believe", "Believing", "To believe"], correct: 0 }
-    ],
-    "B2_MC": [
-        {q: "By the time the surgeon arrived, the nurses __________ the patient.", o: ["had already prepared", "have already prepared", "already prepared"], a: 0, r: "Past Perfect is for an action completed before another past action."},
-        {q: "If I __________ more attention, I would be able to answer this now.", o: ["paid", "had paid", "would have paid"], a: 1, r: "Mixed conditional: Past condition, present result."},
-        {q: "I need to __________ on the latest research.", o: ["brush up", "look for", "take in"], a: 0, r: "'Brush up on' means to refresh knowledge."},
-        {q: "The operating room __________ at the moment.", o: ["is repairing", "is being repaired", "has been repaired"], a: 1, r: "Present Continuous Passive is for ongoing actions."},
-        {q: "The specialist is very experienced __________ dealing with complex cases.", o: ["at", "with", "in"], a: 2, r: "'Experienced' collocates with 'in'."},
-        {q: "I suggest that he __________ a break.", o: ["take", "takes", "to take"], a: 0, r: "Subjunctive mood after 'suggest' uses base form."},
-        {q: "__________ the weather was terrible, the supplies arrived.", o: ["Despite", "Despite the fact that", "In spite of"], a: 1, r: "Followed by a full clause."},
-        {q: "We need to see __________ with our colleagues.", o: ["eye to eye", "face to face", "hand to hand"], a: 0, r: "Agree completely."},
-        {q: "I'm not used to __________ such long shifts.", o: ["work", "working", "be working"], a: 1, r: "'Be used to' + gerund."},
-        {q: "John told me he __________ call me the following day.", o: ["will", "would", "calls"], a: 1, r: "Reported speech backshifts 'will' to 'would'."},
-        {q: "I wish I __________ so much money last year.", o: ["didn't spend", "hadn't spent", "wouldn't spend"], a: 1, r: "Past regret uses Past Perfect."},
-        {q: "The manager __________ to give everyone a bonus.", o: ["suggested", "promised", "admitted"], a: 1, r: "'Promise' + to-infinitive."},
-        {q: "If the ambulance __________ earlier, they could have saved him.", o: ["arrived", "had arrived", "would arrive"], a: 1, r: "Third conditional (If + Past Perfect)."},
-        {q: "I found the medical conference very __________.", o: ["enlightening", "enlightened", "enlighten"], a: 0, r: "Adjective describing the event."},
-        {q: "The doctor needs to __________ a decision immediately.", o: ["do", "make", "get"], a: 1, r: "Collocation: 'make a decision'."},
-        {q: "Hardly __________ the door when the phone rang.", o: ["I had opened", "had I opened", "did I open"], a: 1, r: "Inversion: auxiliary before subject."},
-        {q: "The doctor __________ to have discovered a new variant.", o: ["claims", "suggests", "denies"], a: 0, r: "'Claim' for asserting facts."},
-        {q: "If we __________ the equipment yesterday, we could start today.", o: ["received", "had received", "would receive"], a: 1, r: "Mixed conditional."},
-        {q: "You __________ better see a specialist about that cough.", o: ["would", "should", "had"], a: 2, r: "'Had better' for strong advice."},
-        {q: "The patient is believed __________ from a rare condition.", o: ["to suffer", "to be suffering", "suffering"], a: 1, r: "Passive reporting structure."},
-        {q: "No sooner __________ the hospital than my pager went off.", o: ["I had left", "had I left", "did I leave"], a: 1, r: "Inversion with 'No sooner'."},
-        {q: "I'm not accustomed __________ such high levels of stress.", o: ["to handle", "to handling", "handling"], a: 1, r: "'Accustomed to' + gerund."},
-        {q: "She's very __________ on specializing in cardiology.", o: ["keen", "fond", "interested"], a: 0, r: "'Keen on'."},
-        {q: "The surgery was put __________ until the patient stabilized.", o: ["off", "out", "away"], a: 0, r: "'Put off' = postpone."},
-        {q: "I wish I __________ more during the lecture.", o: ["focused", "had focused", "would focus"], a: 1, r: "Past regret."},
-        {q: "By the end of the year, she __________ her residency.", o: ["will finish", "will have finished", "finishes"], a: 1, r: "Future Perfect."},
-        {q: "The laboratory, __________ was renovated, is top-notch.", o: ["which", "that", "whose"], a: 0, r: "Non-defining relative clause."},
-        {q: "I'd rather you __________ smoke in the waiting area.", o: ["don't", "didn't", "not"], a: 1, r: "'Would rather' + subject + Past Simple."},
-        {q: "The medicine needs __________ with food.", o: ["to take", "to be taken", "taking"], a: 1, r: "Passive infinitive."},
-        {q: "Seldom __________ such a dedicated medical team.", o: ["have I seen", "I have seen", "did I saw"], a: 0, r: "Inversion after 'Seldom'."}
-    ],
-     "B2_Writing": [
-    {q: "By next summer, I __________ (finish) my master's degree.", o: ["will finish", "will have finished", "have finished"], a: 1, r: "Future Perfect."},
-    {q: "I'd rather you __________ (not / smoke) in the house.", o: ["don't smoke", "didn't smoke", "not smoke"], a: 1, r: "Would rather + subject + Past Simple."},
-    {q: "Seldom __________ (we / see) such a beautiful sunset.", o: ["we have seen", "have we seen", "did we saw"], a: 1, r: "Inversion after 'Seldom'."},
-    {q: "If I had known you were coming, I __________ (bake) a cake.", o: ["would bake", "would have baked", "had baked"], a: 1, r: "Third Conditional."},
-    {q: "I'm looking forward to __________ (meet) your family.", o: ["meet", "meeting", "to meet"], a: 1, r: "'To' as a preposition + gerund."},
-    {q: "The boss suggested __________ (postpone) the meeting.", o: ["to postpone", "postponing", "postponed"], a: 1, r: "'Suggest' + gerund."},
-    {q: "He is believed __________ (be) very rich.", o: ["to be", "being", "is"], a: 0, r: "Passive reporting structure."},
-    {q: "I wish I __________ (not / eat) so much chocolate yesterday.", o: ["didn't eat", "hadn't eaten", "wouldn't eat"], a: 1, r: "Regret about the past."},
-    {q: "It's high time you __________ (start) looking for a job.", o: ["start", "started", "to start"], a: 1, r: "It's high time + Past Simple."},
-    {q: "Hardly __________ (the plane / land) when it started to rain.", o: ["did the plane land", "the plane had landed", "had the plane landed"], a: 2, r: "Inversion with 'Hardly'."},
-    {q: "I was used to __________ (drive) on the left.", o: ["drive", "driving", "drove"], a: 1, r: "'Be used to' + gerund."},
-    {q: "No sooner __________ (I / arrive) home than it rained.", o: ["I had arrived", "did I arrive", "had I arrived"], a: 2, r: "Inversion with 'No sooner'."},
-    {q: "You __________ (had) better call her now.", o: ["would", "should", "had"], a: 2, r: "'Had better' structure."},
-    {q: "The house __________ (clean) by the time we got back.", o: ["was cleaned", "had been cleaned", "has been cleaned"], a: 1, r: "Past Perfect Passive."},
-    {q: "Suppose you __________ (win) the lottery, what would you do?", o: ["win", "won", "would win"], a: 1, r: "Second conditional (imaginary)."},
-    {q: "I don't mind __________ (wait) for you.", o: ["wait", "waiting", "to wait"], a: 1, r: "'Mind' + gerund."},
-    {q: "The information __________ (be) very helpful.", o: ["is", "are", "were"], a: 0, r: "'Information' is always singular."},
-    {q: "We've run __________ (of) coffee.", o: ["out", "off", "out of"], a: 2, r: "Phrasal verb: to have none left."},
-    {q: "If only I __________ (can / speak) French!", o: ["could speak", "can speak", "spoke"], a: 0, r: "Wish about ability."},
-    {q: "The thief admitted __________ (steal) the jewelry.", o: ["to steal", "stealing", "stole"], a: 1, r: "'Admit' + gerund."},
-    {q: "You shouldn't have __________ (tell) him.", o: ["told", "tell", "telling"], a: 0, r: "Should have + past participle."},
-    {q: "I'm not accustomed to __________ (be / treat) like this.", o: ["being treated", "be treated", "treat"], a: 0, r: "Passive gerund."},
-    {q: "The project, __________ (which / no pronoun) was led by Sarah, was a success.", o: ["that", "which", "where"], a: 1, r: "Non-defining relative clause."},
-    {q: "He tried to avoid __________ (answer) my question.", o: ["to answer", "answering", "answer"], a: 1, r: "'Avoid' + gerund."},
-    {q: "Unless you __________ (study) harder, you'll fail.", o: ["will study", "study", "studied"], a: 1, r: "Unless + present simple."},
-    {q: "I forgot __________ (lock) the door.", o: ["locking", "to lock", "lock"], a: 1, r: "Forget + to-infinitive (didn't do it)."},
-    {q: "The news __________ (be) shocking.", o: ["is", "was", "were"], a: 1, r: "'News' is singular."},
-    {q: "By the time we arrive, the movie __________ (start).", o: ["will start", "will have started", "started"], a: 1, r: "Future Perfect."},
-    {q: "It was a mistake __________ (not / take) the map.", o: ["not to take", "not taking", "didn't take"], a: 0, r: "Negative infinitive."},
-    {q: "I'd rather __________ (stay) home tonight.", o: ["stay", "to stay", "staying"], a: 0, r: "'Would rather' + bare infinitive."}
-],
-    "B2_Stones": [
-        {q: "Look after", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Look the baby after'."},
-        {q: "Turn off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Turn the light off'."},
-        {q: "Run into", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Run my friend into'."},
-        {q: "Pick up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Pick it up'."},
-        {q: "Get over", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Get the breakup over'."},
-        {q: "Bring up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Bring it up'."},
-        {q: "Come across", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Come an old friend across'."},
-        {q: "Call off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Call it off'."},
-        {q: "Deal with", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Deal the issue with'."},
-        {q: "Fill out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Fill it out'."},
-        {q: "Take off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Take your shoes off'."},
-        {q: "Put away", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Put your clothes away'."},
-        {q: "Hand in", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Hand your essay in'."},
-        {q: "Give up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Give it up'."},
-        {q: "Throw away", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Throw those old papers away'."},
-        {q: "Look up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Look the word up'."},
-        {q: "Put on", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Put your coat on'."},
-        {q: "Back up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Back your files up'."},
-        {q: "Cut off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Cut the power off'."},
-        {q: "Cheer up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Cheer her up'."},
-        {q: "Figure out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Figure it out'."},
-        {q: "Leave out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Leave details out'."},
-        {q: "Point out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Point the mistake out'."},
-        {q: "Look into", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Look into the matter'."},
-        {q: "Wait on", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Wait on someone'."},
-        {q: "Depend on", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Depend on them'."},
-        {q: "Stand by", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Stand by me'."},
-        {q: "Care for", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Care for pets'."},
-        {q: "Break into", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Break into a house'."},
-        {q: "Believe in", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Believe in ghosts'."}
-    ],
-    "B2_Reading": {
-        article: "The genesis of the Olympic Games dates back to 776 BC in ancient Olympia, Greece. Originally, the festival was held to honor Zeus, the king of the gods. While modern spectators are used to a vast array of sports, the first recorded Olympics featured only one event: a short footrace called the stade. For centuries, the games were a cornerstone of Greek culture, fostering a period of \"sacred truce\" where conflicts between city-states were temporarily suspended to allow athletes to travel safely. However, as the Roman Empire’s influence grew, the games began to lose their religious significance. In 393 AD, Emperor Theodosius I, who had recently converted to Christianity, abolished the festival, claiming it was a pagan ritual. <br><br>The Olympics remained dormant for over 1,500 years until a French educator named Baron Pierre de Coubertin proposed their revival. Coubertin believed that international competition could promote global peace and physical education. His vision culminated in the first modern Olympic Games, which took place in Athens in 1896. Although the event featured only male athletes from 14 nations, it was considered a massive success. It is a common misconception that the marathon was part of the ancient games; in reality, it was introduced in 1896 to commemorate a legendary run from the city of Marathon to Athens. Since their revival, the Games have evolved into a global celebration, withstanding the test of time, though it is important to note that the competition was officially cancelled during the years of the major World Wars.",
-        questions: [
-            {q: "The original Olympics were primarily a secular sporting event.", a: false, r: "False. They were religious festivals held to honor Zeus."},
-            {q: "In the very beginning, there was only one type of competition.", a: true, r: "True. The first recorded games only had the 'stade' footrace."},
-            {q: "The 'sacred truce' meant that all Greek wars were suspended permanently.", a: false, r: "False. Conflicts were only temporarily suspended for the games."},
-            {q: "Emperor Theodosius I stopped the games because he disliked sports.", a: false, r: "False. He abolished them claiming they were pagan rituals."},
-            {q: "The Olympics were not celebrated for more than fifteen centuries.", a: true, r: "True. They were dormant for over 1,500 years."},
-            {q: "Pierre de Coubertin’s main goal was exclusively to find the world's best athletes.", a: false, r: "False. He also aimed to promote global peace."},
-            {q: "The first modern Olympics in 1896 included participants from all genders.", a: false, r: "False. The text states they only featured male athletes."},
-            {q: "The marathon race is a modern addition not found in the ancient games.", a: true, r: "True. It was introduced in 1896."},
-            {q: "The city of Athens hosted both the first ancient and first modern games.", a: false, r: "False. Ancient games were in Olympia; modern in Athens."},
-            {q: "The modern Games have been held every four years without any official cancellations.", a: false, r: "False. They were cancelled during the World Wars."}
-        ]
-    },
-    "B2_Memory": [
-        {v: "Brush up on", m: "To improve or refresh knowledge"},
-        {v: "Carry out", m: "To perform or complete a task"},
-        {v: "Come down with", m: "To become sick with something"},
-        {v: "Pass out", m: "To lose consciousness"},
-        {v: "Look into", m: "To investigate or examine"},
-        {v: "Put off", m: "To postpone or delay"},
-        {v: "Rule out", m: "To eliminate a possibility"},
-        {v: "Set back", m: "To delay progress"},
-        {v: "Think over", m: "To consider carefully"},
-        {v: "Back up", m: "To support or confirm"}
-    ],
-    "B2_Matching": [
-        { a: "Vital", b: "signs" }, { a: "Blood", b: "pressure" }, { a: "Heart", b: "rate" },
-        { a: "Chest", b: "pain" }, { a: "Informed", b: "consent" }, { a: "Surgical", b: "procedure" },
-        { a: "Physical", b: "examination" }, { a: "Medical", b: "history" }, { a: "Adverse", b: "reaction" },
-        { a: "Immune", b: "system" }, { a: "General", b: "anesthesia" }, { a: "Family", b: "practitioner" },
-        { a: "Blood", b: "sample" }, { a: "Chronic", b: "condition" }, { a: "Shortness", b: "of breath" }
-    ],
-    "B2_Abstraction": {
-        article: "The global escalation of Metabolic Syndrome has positioned Type 2 Diabetes Mellitus (T2DM) as a critical health priority for modern healthcare systems. Current clinical guidelines emphasize that while pharmacological interventions, such as the administration of Metformin, remain the gold standard for initial glycemic control, long-term remission is rarely achieved through monotherapy alone due to the progressive nature of beta-cell decline. This longitudinal study evaluates the efficacy of the MET-LIFE Protocol, a rigorous 24-month randomized controlled trial involving a cohort of 1,200 participants across diverse clinical settings. The protocol is designed as a multimodal strategy that integrates high-intensity interval training (HIIT) to enhance mitochondrial biogenesis, a plant-based ketogenic diet aimed at reducing systemic inflammation, and standardized pharmacological support. Furthermore, the trial utilizes continuous glucose monitoring (CGM) as a primary tool to evaluate metabolic flexibility—the body's capacity to switch efficiently between carbohydrate and lipid oxidation. Preliminary data suggests that addressing the lifestyle-pharmacology intersection is paramount for sustained clinical success. During the follow-up phase, the experimental group showed a significant 1.8% decrease in HbA1c levels, contrasting with the control group’s stagnant metrics. It is worth noting that nearly half of these patients reached a state of partial remission, defined as maintaining sub-diabetic glycemic levels for at least six months without the need for active medication. These results were consistent across various age groups, provided that adherence to the HIIT and ketogenic components remained high. Ultimately, the researchers concluded that while Metformin provides a necessary foundation, lifestyle changes must be applied with maximum rigor and clinical supervision to successfully reverse long-standing metabolic impairment and restore beta-cell functionality.",
-        summary: "The MET-LIFE study was conducted to address T2DM, a condition for which single-drug treatment rarely (1) __________ long-term results. Unlike standard care, this protocol (2) __________ a specific exercise regimen known as (3) __________ with a nutritional plan. A central pillar of the trial was (4) __________, which refers to the organism's (5) __________ to alternate between different energy substrates. Regarding the outcomes, the experimental group (6) __________ a 1.8% decrease in HbA1c levels. It is (7) __________ noting that nearly half of these patients reached a state of (8) __________, meaning they no longer required drugs. The researchers (9) __________ that lifestyle changes must be applied with (10) __________ to successfully reverse metabolic impairment.",
-        answers: ["achieves", "integrated", "HIIT", "metabolic flexibility", "ability", "showed", "worth", "partial remission", "concluded", "rigor"]
-    },
-    "B2_WordBank": {
-        bank: ["was admitted", "had been experiencing", "reported", "hadn't had", "referred", "had occurred", "had subsided", "was noted", "being", "was scheduled"],
-        text: "The patient is a 54-year-old male who (1) __________ to the Emergency Department following a syncopal episode during moderate physical activity. According to his wife, who witnessed the event, the patient (2) __________ lightheadedness and palpitations for approximately twenty minutes before losing consciousness. Upon arrival, the patient (3) __________ that he (4) __________ any significant health issues prior to this month; however, he (5) __________ that a similar, albeit shorter, episode (6) __________ two weeks ago while gardening. He mentioned that the previous symptoms (7) __________ spontaneously without medical intervention. A mild systolic murmur (8) __________ during the initial physical examination. Although the patient denied (9) __________ in pain at the moment of admission, his heart rate remained elevated. Consequently, an urgent echocardiogram (10) __________ for the following morning to rule out structural heart disease.",
-        answers: ["was admitted", "had been experiencing", "reported", "hadn't had", "referred", "had occurred", "had subsided", "was noted", "being", "was scheduled"]
-    },
-"B2_Crossword": {
-    "grid": [
-        [null, null, null, null, null, null, null, null, null, null, null, null, null, "C", null],
-        [null, null, null, null, null, null, null, null, null, null, null, null, null, "O", null],
-        [null, null, null, null, null, null, null, null, null, null, null, null, null, "M", null],
-        [null, null, null, null, null, null, null, null, null, null, null, null, null, "F", null],
-        [null, null, null, null, "C", "R", "E", "A", "T", "I", "O", "N", null, "O", null],
-        [null, null, null, null, null, null, null, null, null, null, null, null, null, "R", null],
-        [null, null, null, null, "P", "O", "S", "S", "I", "B", "I", "L", "I", "T", "Y"],
-        [null, null, null, null, null, null, null, null, null, null, null, null, null, "A", null],
-        [null, "D", "A", "N", "G", "E", "R", "O", "U", "S", null, null, null, "B", null],
-        [null, "E", null, null, null, null, null, null, null, null, null, null, null, "L", null],
-        [null, "P", null, null, null, null, null, null, null, null, "D", "E", "V", "E", "L", "O", "P", "M", "E", "N", "T"],
-        ["H", "E", "A", "L", "T", "H", "Y", null, null, null, null, null, null, "E", null],
-        [null, "N", null, null, null, null, null, null, null, null, null, null, null, null, null],
-        [null, "D", null, null, null, null, null, null, null, null, null, null, null, null, null],
-        [null, "E", null, null, "S", "U", "C", "C", "E", "S", "S", "F", "U", "L", null],
-        ["U", "N", "U", "S", "U", "A", "L", null, null, null, null, null, null, null, null],
-        [null, "T", null, null, null, null, null, null, null, null, null, null, null, null, null]
-    ],
-    "clues": {
-        "across": [
-            { "id": 3, "clue": "Requiring someone or something for financial or other support" },
-            { "id": 5, "clue": "Achieving the results wanted or hoped for" },
-            { "id": 6, "clue": "In a confident and certain manner" },
-            { "id": 9, "clue": "Providing physical ease and relaxation" }
+    const database = {
+        "diagnostic": [
+            { id: 1, level: "A2", text: "She ______ to the office every morning by bus.", options: ["go", "goes", "going"], correct: 1 },
+            { id: 2, level: "A2", text: "They ______ watch the game last night because they were busy.", options: ["don't", "didn't", "haven't"], correct: 1 },
+            { id: 3, level: "A2", text: "Look at those clouds! It ______ to rain.", options: ["is going", "goes", "will"], correct: 0 },
+            { id: 4, level: "A2", text: "I have lived here ______ five years.", options: ["since", "for", "ago"], correct: 1 },
+            { id: 5, level: "A2", text: "He is ______ than his brother.", options: ["tall", "taller", "most tall"], correct: 1 },
+            { id: 6, level: "A2", text: "______ you like to come for dinner?", options: ["Do", "Are", "Would"], correct: 2 },
+            { id: 7, level: "A2", text: "I ______ my homework when the phone rang.", options: ["did", "was doing", "have done"], correct: 1 },
+            { id: 8, level: "A2", text: "This is the ______ book I have ever read.", options: ["good", "better", "best"], correct: 2 },
+            { id: 9, level: "A2", text: "She ______ her teeth twice a day.", options: ["brush", "brushes", "is brushing"], correct: 1 },
+            { id: 10, level: "A2", text: "Can you ______ me a favor, please?", options: ["do", "make", "give"], correct: 0 },
+            { id: 11, level: "B1", text: "If I ______ you, I would take that job.", options: ["am", "was", "were"], correct: 2 },
+            { id: 12, level: "B1", text: "I ______ this movie already.", options: ["saw", "have seen", "see"], correct: 1 },
+            { id: 13, level: "B1", text: "She ______ allowed to stay out late.", options: ["isn't", "doesn't", "hasn't"], correct: 0 },
+            { id: 14, level: "B1", text: "This house ______ in 1990.", options: ["was built", "built", "is built"], correct: 0 },
+            { id: 15, level: "B1", text: "I am interested ______ learning new languages.", options: ["at", "on", "in"], correct: 2 },
+            { id: 16, level: "B1", text: "How ______ sugar do you put in your coffee?", options: ["many", "much", "few"], correct: 1 },
+            { id: 17, level: "B1", text: "I'm really tired. I ______ all day.", options: ["work", "worked", "have been working"], correct: 2 },
+            { id: 18, level: "B1", text: "She suggests ______ to the park.", options: ["go", "to go", "going"], correct: 2 },
+            { id: 19, level: "B1", text: "We ______ each other since we were kids.", options: ["know", "have known", "knew"], correct: 1 },
+            { id: 20, level: "B1", text: "Would you mind ______ the window?", options: ["close", "closing", "to close"], correct: 1 },
+            { id: 21, level: "B2", text: "By this time next year, I ______ my degree.", options: ["will finish", "will have finished", "finish"], correct: 1 },
+            { id: 22, level: "B2", text: "Hard ______ she tried, she couldn't open the door.", options: ["as", "though", "even"], correct: 0 },
+            { id: 23, level: "B2", text: "I'd rather ______ at home tonight.", options: ["stay", "to stay", "staying"], correct: 0 },
+            { id: 24, level: "B2", text: "He ______ have been there; I saw him in another city.", options: ["shouldn't", "mustn't", "can't"], correct: 2 },
+            { id: 25, level: "B2", text: "______ the weather was bad, we enjoyed the trip.", options: ["Despite", "Although", "However"], correct: 1 },
+            { id: 26, level: "B2", text: "If he ______ earlier, he wouldn't have missed the flight.", options: ["arrived", "had arrived", "would arrive"], correct: 1 },
+            { id: 27, level: "B2", text: "She admitted ______ the money.", options: ["to steal", "stealing", "steal"], correct: 1 },
+            { id: 28, level: "B2", text: "Never ______ such a beautiful place.", options: ["I have seen", "have I seen", "I saw"], correct: 1 },
+            { id: 29, level: "B2", text: "He is used to ______ early.", options: ["wake up", "waking up", "woke up"], correct: 1 },
+            { id: 30, level: "B2", text: "The film, ______ I saw yesterday, was amazing.", options: ["that", "which", "who"], correct: 1 },
+            { id: 31, level: "B2/C1", text: "Scarcely ______ the house when it started to pour.", options: ["had I left", "I had left", "did I leave"], correct: 0 },
+            { id: 32, level: "B2/C1", text: "I wish I ______ more time to study.", options: ["have", "had", "would have"], correct: 1 },
+            { id: 33, level: "B2/C1", text: "She is ______ to be one of the best in her field.", options: ["said", "told", "spoken"], correct: 0 },
+            { id: 34, level: "B2/C1", text: "It's high time you ______ a decision.", options: ["make", "made", "will make"], correct: 1 },
+            { id: 35, level: "B2/C1", text: "Were ______ to help, we would finish on time.", options: ["you", "he", "we"], correct: 0 },
+            { id: 36, level: "B2/C1", text: "He ______ be working; his car is in the parking lot.", options: ["must", "can", "should"], correct: 0 },
+            { id: 37, level: "B2/C1", text: "Not only ______ he come late, but he also forgot his notes.", options: ["did", "has", "does"], correct: 0 },
+            { id: 38, level: "B2/C1", text: "I'd prefer you ______ that loud music.", options: ["to stop", "stop", "stopped"], correct: 2 },
+            { id: 39, level: "B2/C1", text: "They ______ to have been working there for years.", options: ["seem", "appear", "are"], correct: 0 },
+            { id: 40, level: "B2/C1", text: "The report is to ______ by tomorrow.", options: ["submit", "be submitted", "submitted"], correct: 1 },
+            { id: 41, level: "C1", text: "Little ______ about the surprise party.", options: ["did she know", "she knew", "she did know"], correct: 0 },
+            { id: 42, level: "C1", text: "Had I ______ that, I would have acted differently.", options: ["know", "known", "knew"], correct: 1 },
+            { id: 43, level: "C1", text: "Supposing you ______ the lottery, what would you do?", options: ["win", "won", "have won"], correct: 1 },
+            { id: 44, level: "C1", text: "It is essential that he ______ on time.", options: ["arrives", "arrive", "arrived"], correct: 1 },
+            { id: 45, level: "C1", text: "______ your help, we would have failed.", options: ["But for", "Because of", "Despite"], correct: 0 },
+            { id: 46, level: "C1", text: "She ______ as if she knows everything.", options: ["acts", "acted", "is acting"], correct: 0 },
+            { id: 47, level: "C1", text: "Under no circumstances ______ allowed to leave.", options: ["you are", "are you", "were you"], correct: 1 },
+            { id: 48, level: "C1", text: "I'd just as soon ______ it now.", options: ["do", "to do", "doing"], correct: 0 },
+            { id: 49, level: "C1", text: "The project is ______ completion.", options: ["on the verge of", "in the verge of", "at the verge of"], correct: 0 },
+            { id: 50, level: "C1", text: "______ it or not, I'm actually enjoying this.", options: ["Believe", "Believing", "To believe"], correct: 0 }
         ],
-        "down": [
-            { "id": 1, "clue": "In good health or free from illness" },
-            { "id": 2, "clue": "Not habitually or commonly occurring" },
-            { "id": 3, "clue": "Able or likely to cause harm or injury" },
-            { "id": 4, "clue": "A thing that may happen or be the case" },
-            { "id": 7, "clue": "The action or process of bringing something into existence" },
-            { "id": 8, "clue": "The process of developing or being developed" }
-        ]
-    },
-    "_tags_metadata": {
-        "B2_MC": ["GP", "MP"],
-        "B2_Writing": ["GP", "MP"],
-        "B2_Stones": ["GP", "MP"],
-        "B2_Reading": ["GP", "MP"],
-        "B2_Memory": ["GP", "MP"],
-        "B2_Matching": ["MP"],
-        "B2_Abstraction": ["MP"],
-        "B2_WordBank": ["MP"],
-        "B2_Crossword": ["GP", "MP"]
-    }
-};
-
-window.showScreen = function(screenId) {
-    document.querySelectorAll('.container').forEach(s => s.classList.add('hidden'));
-    const target = document.getElementById(screenId);
-    if (target) target.classList.remove('hidden');
-}
-
-window.login = function() {
-    if (document.getElementById('student-name').value.trim()) {
-        showScreen('screen-branch');
-    }
-}
-
-window.setPath = function(path) {
-    selectedPath = path === 'General' ? 'GP' : 'MP';
-    showScreen('screen-levels-selector');
-}
-
-window.selectLevel = function(level) {
-    selectedLevelCode = level;
-    showQuizzes();
-}
-
-window.launchDiagnostic = function() {
-    currentPath = 'diagnostic';
-    currentQuestionIndex = 0;
-    score = 0;
-    diagnosticResults = { "A2": { total: 0, correct: 0 }, "B1": { total: 0, correct: 0 }, "B2": { total: 0, correct: 0 }, "B2/C1": { total: 0, correct: 0 }, "C1": { total: 0, correct: 0 } };
-    loadDiagnosticQuestion();
-    showScreen('screen-quiz');
-}
-
-window.loadDiagnosticQuestion = function() {
-    const questions = database.diagnostic;
-    const q = questions[currentQuestionIndex];
-    document.getElementById('progress-fill').style.width = `${(currentQuestionIndex / questions.length) * 100}%`;
-    document.getElementById('q-text').innerText = q.text;
-    const optionsBox = document.getElementById('options-box');
-    optionsBox.innerHTML = "";
-    const fbox = document.getElementById('feedback-box');
-    fbox.classList.add('hidden');
-    fbox.className = 'option hidden';
-    document.getElementById('btn-continue').classList.add('hidden');
-    q.options.forEach((opt, idx) => {
-        const btn = document.createElement('div');
-        btn.className = 'option';
-        btn.innerText = opt;
-        btn.onclick = () => checkDiagnosticAnswer(idx, btn);
-        optionsBox.appendChild(btn);
-    });
-}
-
-window.checkDiagnosticAnswer = function(selectedIdx, optionEl) {
-    const q = database.diagnostic[currentQuestionIndex];
-    const options = document.getElementById('options-box').children;
-    for (let opt of options) opt.removeAttribute('onclick');
-    let isCorrect = (selectedIdx === q.correct);
-    if (isCorrect) {
-        optionEl.classList.add('correct');
-        score++;
-        diagnosticResults[q.level].correct++;
-    } else {
-        optionEl.classList.add('wrong');
-        if (options[q.correct]) options[q.correct].classList.add('correct');
-    }
-    diagnosticResults[q.level].total++;
-    const fbox = document.getElementById('feedback-box');
-    fbox.className = isCorrect ? 'option correct' : 'option wrong';
-    fbox.innerHTML = `<strong>${isCorrect ? 'Correct' : 'Incorrect'}</strong><br>Level: ${q.level}`;
-    fbox.classList.remove('hidden');
-    document.getElementById('btn-continue').classList.remove('hidden');
-    document.getElementById('btn-continue').onclick = nextDiagnosticQuestion;
-}
-
-window.nextDiagnosticQuestion = function() {
-    currentQuestionIndex++;
-    if (currentQuestionIndex < database.diagnostic.length) {
-        loadDiagnosticQuestion();
-    } else {
-        calculateAssessment();
-    }
-}
-
-window.calculateAssessment = function () {
-    let report = "Assessment Report:<br>";
-    let finalLevel = "Beginner (A1)";
-    for (let lvl in diagnosticResults) {
-        let res = diagnosticResults[lvl];
-        if (res.total > 0) {
-            let pct = (res.correct / res.total) * 100;
-            report += `${lvl}: ${res.correct}/${res.total} (${pct.toFixed(0)}%)<br>`;
-            if (pct >= 70) finalLevel = lvl;
-        }
-    }
-    document.getElementById('final-score-display').innerHTML = `Final Level Detected: <strong>${finalLevel}</strong><br><br>${report}`;
-    showScreen('screen-results');
-}
-
-window.showQuizzes = function() {
-    const container = document.getElementById('quiz-list-container');
-    if (!container) return;
-    container.innerHTML = "";
-    document.getElementById('lvl-title').innerText = `${selectedLevelCode} Modules`;
-    let activeCount = 0;
-    Object.keys(database).forEach(key => {
-        if (key.startsWith(selectedLevelCode)) {
-            const tags = database._tags_metadata[key] || [];
-            if (tags.includes(selectedPath)) {
-                activeCount++;
-                const card = document.createElement('div');
-                card.className = 'level-card';
-                card.innerHTML = `<h3>${key.replace(`${selectedLevelCode}_`, " ").replace("_", " ")}</h3>`;
-                card.onclick = () => launchModule(key);
-                container.appendChild(card);
+        "B2_MC": [
+            {q: "By the time the surgeon arrived, the nurses __________ the patient.", o: ["had already prepared", "have already prepared", "already prepared"], a: 0, r: "Past Perfect is for an action completed before another past action."},
+            {q: "If I __________ more attention, I would be able to answer this now.", o: ["paid", "had paid", "would have paid"], a: 1, r: "Mixed conditional: Past condition, present result."},
+            {q: "I need to __________ on the latest research.", o: ["brush up", "look for", "take in"], a: 0, r: "'Brush up on' means to refresh knowledge."},
+            {q: "The operating room __________ at the moment.", o: ["is repairing", "is being repaired", "has been repaired"], a: 1, r: "Present Continuous Passive is for ongoing actions."},
+            {q: "The specialist is very experienced __________ dealing with complex cases.", o: ["at", "with", "in"], a: 2, r: "'Experienced' collocates with 'in'."},
+            {q: "I suggest that he __________ a break.", o: ["take", "takes", "to take"], a: 0, r: "Subjunctive mood after 'suggest' uses base form."},
+            {q: "__________ the weather was terrible, the supplies arrived.", o: ["Despite", "Despite the fact that", "In spite of"], a: 1, r: "Followed by a full clause."},
+            {q: "We need to see __________ with our colleagues.", o: ["eye to eye", "face to face", "hand to hand"], a: 0, r: "Agree completely."},
+            {q: "I'm not used to __________ such long shifts.", o: ["work", "working", "be working"], a: 1, r: "'Be used to' + gerund."},
+            {q: "John told me he __________ call me the following day.", o: ["will", "would", "calls"], a: 1, r: "Reported speech backshifts 'will' to 'would'."},
+            {q: "I wish I __________ so much money last year.", o: ["didn't spend", "hadn't spent", "wouldn't spend"], a: 1, r: "Past regret uses Past Perfect."},
+            {q: "The manager __________ to give everyone a bonus.", o: ["suggested", "promised", "admitted"], a: 1, r: "'Promise' + to-infinitive."},
+            {q: "If the ambulance __________ earlier, they could have saved him.", o: ["arrived", "had arrived", "would arrive"], a: 1, r: "Third conditional (If + Past Perfect)."},
+            {q: "I found the medical conference very __________.", o: ["enlightening", "enlightened", "enlighten"], a: 0, r: "Adjective describing the event."},
+            {q: "The doctor needs to __________ a decision immediately.", o: ["do", "make", "get"], a: 1, r: "Collocation: 'make a decision'."},
+            {q: "Hardly __________ the door when the phone rang.", o: ["I had opened", "had I opened", "did I open"], a: 1, r: "Inversion: auxiliary before subject."},
+            {q: "The doctor __________ to have discovered a new variant.", o: ["claims", "suggests", "denies"], a: 0, r: "'Claim' for asserting facts."},
+            {q: "If we __________ the equipment yesterday, we could start today.", o: ["received", "had received", "would receive"], a: 1, r: "Mixed conditional."},
+            {q: "You __________ better see a specialist about that cough.", o: ["would", "should", "had"], a: 2, r: "'Had better' for strong advice."},
+            {q: "The patient is believed __________ from a rare condition.", o: ["to suffer", "to be suffering", "suffering"], a: 1, r: "Passive reporting structure."},
+            {q: "No sooner __________ the hospital than my pager went off.", o: ["I had left", "had I left", "did I leave"], a: 1, r: "Inversion with 'No sooner'."},
+            {q: "I'm not accustomed __________ such high levels of stress.", o: ["to handle", "to handling", "handling"], a: 1, r: "'Accustomed to' + gerund."},
+            {q: "She's very __________ on specializing in cardiology.", o: ["keen", "fond", "interested"], a: 0, r: "'Keen on'."},
+            {q: "The surgery was put __________ until the patient stabilized.", o: ["off", "out", "away"], a: 0, r: "'Put off' = postpone."},
+            {q: "I wish I __________ more during the lecture.", o: ["focused", "had focused", "would focus"], a: 1, r: "Past regret."},
+            {q: "By the end of the year, she __________ her residency.", o: ["will finish", "will have finished", "finishes"], a: 1, r: "Future Perfect."},
+            {q: "The laboratory, __________ was renovated, is top-notch.", o: ["which", "that", "whose"], a: 0, r: "Non-defining relative clause."},
+            {q: "I'd rather you __________ smoke in the waiting area.", o: ["don't", "didn't", "not"], a: 1, r: "'Would rather' + subject + Past Simple."},
+            {q: "The medicine needs __________ with food.", o: ["to take", "to be taken", "taking"], a: 1, r: "Passive infinitive."},
+            {q: "Seldom __________ such a dedicated medical team.", o: ["have I seen", "I have seen", "did I saw"], a: 0, r: "Inversion after 'Seldom'."}
+        ],
+        "B2_Writing": [
+            {q: "By next summer, I __________ (finish) my master's degree.", o: ["will finish", "will have finished", "have finished"], a: 1, r: "Future Perfect."},
+            {q: "I'd rather you __________ (not / smoke) in the house.", o: ["don't smoke", "didn't smoke", "not smoke"], a: 1, r: "Would rather + subject + Past Simple."},
+            {q: "Seldom __________ (we / see) such a beautiful sunset.", o: ["we have seen", "have we seen", "did we saw"], a: 1, r: "Inversion after 'Seldom'."},
+            {q: "If I had known you were coming, I __________ (bake) a cake.", o: ["would bake", "would have baked", "had baked"], a: 1, r: "Third Conditional."},
+            {q: "I'm looking forward to __________ (meet) your family.", o: ["meet", "meeting", "to meet"], a: 1, r: "'To' as a preposition + gerund."},
+            {q: "The boss suggested __________ (postpone) the meeting.", o: ["to postpone", "postponing", "postponed"], a: 1, r: "'Suggest' + gerund."},
+            {q: "He is believed __________ (be) very rich.", o: ["to be", "being", "is"], a: 0, r: "Passive reporting structure."},
+            {q: "I wish I __________ (not / eat) so much chocolate yesterday.", o: ["didn't eat", "hadn't eaten", "wouldn't eat"], a: 1, r: "Regret about the past."},
+            {q: "It's high time you __________ (start) looking for a job.", o: ["start", "started", "to start"], a: 1, r: "It's high time + Past Simple."},
+            {q: "Hardly __________ (the plane / land) when it started to rain.", o: ["did the plane land", "the plane had landed", "had the plane landed"], a: 2, r: "Inversion with 'Hardly'."},
+            {q: "I was used to __________ (drive) on the left.", o: ["drive", "driving", "drove"], a: 1, r: "'Be used to' + gerund."},
+            {q: "No sooner __________ (I / arrive) home than it rained.", o: ["I had arrived", "did I arrive", "had I arrived"], a: 2, r: "Inversion with 'No sooner'."},
+            {q: "You __________ (had) better call her now.", o: ["would", "should", "had"], a: 2, r: "'Had better' structure."},
+            {q: "The house __________ (clean) by the time we got back.", o: ["was cleaned", "had been cleaned", "has been cleaned"], a: 1, r: "Past Perfect Passive."},
+            {q: "Suppose you __________ (win) the lottery, what would you do?", o: ["win", "won", "would win"], a: 1, r: "Second conditional (imaginary)."},
+            {q: "I don't mind __________ (wait) for you.", o: ["wait", "waiting", "to wait"], a: 1, r: "'Mind' + gerund."},
+            {q: "The information __________ (be) very helpful.", o: ["is", "are", "were"], a: 0, r: "'Information' is always singular."},
+            {q: "We've run __________ (of) coffee.", o: ["out", "off", "out of"], a: 2, r: "Phrasal verb: to have none left."},
+            {q: "If only I __________ (can / speak) French!", o: ["could speak", "can speak", "spoke"], a: 0, r: "Wish about ability."},
+            {q: "The thief admitted __________ (steal) the jewelry.", o: ["to steal", "stealing", "stole"], a: 1, r: "'Admit' + gerund."},
+            {q: "You shouldn't have __________ (tell) him.", o: ["told", "tell", "telling"], a: 0, r: "Should have + past participle."},
+            {q: "I'm not accustomed to __________ (be / treat) like this.", o: ["being treated", "be treated", "treat"], a: 0, r: "Passive gerund."},
+            {q: "The project, __________ (which / no pronoun) was led by Sarah, was a success.", o: ["that", "which", "where"], a: 1, r: "Non-defining relative clause."},
+            {q: "He tried to avoid __________ (answer) my question.", o: ["to answer", "answering", "answer"], a: 1, r: "'Avoid' + gerund."},
+            {q: "Unless you __________ (study) harder, you'll fail.", o: ["will study", "study", "studied"], a: 1, r: "Unless + present simple."},
+            {q: "I forgot __________ (lock) the door.", o: ["locking", "to lock", "lock"], a: 1, r: "Forget + to-infinitive (didn't do it)."},
+            {q: "The news __________ (be) shocking.", o: ["is", "was", "were"], a: 1, r: "'News' is singular."},
+            {q: "By the time we arrive, the movie __________ (start).", o: ["will start", "will have started", "started"], a: 1, r: "Future Perfect."},
+            {q: "It was a mistake __________ (not / take) the map.", o: ["not to take", "not taking", "didn't take"], a: 0, r: "Negative infinitive."},
+            {q: "I'd rather __________ (stay) home tonight.", o: ["stay", "to stay", "staying"], a: 0, r: "'Would rather' + bare infinitive."}
+        ],
+        "B2_Stones": [
+            {q: "Look after", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Look the baby after'."},
+            {q: "Turn off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Turn the light off'."},
+            {q: "Run into", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Run my friend into'."},
+            {q: "Pick up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Pick it up'."},
+            {q: "Get over", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Get the breakup over'."},
+            {q: "Bring up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Bring it up'."},
+            {q: "Come across", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: You cannot say 'Come an old friend across'."},
+            {q: "Call off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Call it off'."},
+            {q: "Deal with", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Deal the issue with'."},
+            {q: "Fill out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Fill it out'."},
+            {q: "Take off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Take your shoes off'."},
+            {q: "Put away", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Put your clothes away'."},
+            {q: "Hand in", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Hand your essay in'."},
+            {q: "Give up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Give it up'."},
+            {q: "Throw away", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Throw those old papers away'."},
+            {q: "Look up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Look the word up'."},
+            {q: "Put on", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Put your coat on'."},
+            {q: "Back up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Back your files up'."},
+            {q: "Cut off", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Cut the power off'."},
+            {q: "Cheer up", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Cheer her up'."},
+            {q: "Figure out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Figure it out'."},
+            {q: "Leave out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Leave details out'."},
+            {q: "Point out", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 1, r: "Eggshell: You can say 'Point the mistake out'."},
+            {q: "Look into", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Look into the matter'."},
+            {q: "Wait on", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Wait on someone'."},
+            {q: "Depend on", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Depend on them'."},
+            {q: "Stand by", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Stand by me'."},
+            {q: "Care for", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Care for pets'."},
+            {q: "Break into", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Break into a house'."},
+            {q: "Believe in", o: ["Stone (Inseparable)", "Eggshell (Separable)"], a: 0, r: "Stone: Always 'Believe in ghosts'."}
+        ],
+        "B2_Reading": {
+            article: "The genesis of the Olympic Games dates back to 776 BC in ancient Olympia, Greece. Originally, the festival was held to honor Zeus, the king of the gods. While modern spectators are used to a vast array of sports, the first recorded Olympics featured only one event: a short footrace called the stade. For centuries, the games were a cornerstone of Greek culture, fostering a period of \"sacred truce\" where conflicts between city-states were temporarily suspended to allow athletes to travel safely. However, as the Roman Empire’s influence grew, the games began to lose their religious significance. In 393 AD, Emperor Theodosius I, who had recently converted to Christianity, abolished the festival, claiming it was a pagan ritual. <br><br>The Olympics remained dormant for over 1,500 years until a French educator named Baron Pierre de Coubertin proposed their revival. Coubertin believed that international competition could promote global peace and physical education. His vision culminated in the first modern Olympic Games, which took place in Athens in 1896. Although the event featured only male athletes from 14 nations, it was considered a massive success. It is a common misconception that the marathon was part of the ancient games; in reality, it was introduced in 1896 to commemorate a legendary run from the city of Marathon to Athens. Since their revival, the Games have evolved into a global celebration, withstanding the test of time, though it is important to note that the competition was officially cancelled during the years of the major World Wars.",
+            questions: [
+                {q: "The original Olympics were primarily a secular sporting event.", a: false, r: "False. They were religious festivals held to honor Zeus."},
+                {q: "In the very beginning, there was only one type of competition.", a: true, r: "True. The first recorded games only had the 'stade' footrace."},
+                {q: "The 'sacred truce' meant that all Greek wars were suspended permanently.", a: false, r: "False. Conflicts were only temporarily suspended for the games."},
+                {q: "Emperor Theodosius I stopped the games because he disliked sports.", a: false, r: "False. He abolished them claiming they were pagan rituals."},
+                {q: "The Olympics were not celebrated for more than fifteen centuries.", a: true, r: "True. They were dormant for over 1,500 years."},
+                {q: "Pierre de Coubertin’s main goal was exclusively to find the world's best athletes.", a: false, r: "False. He also aimed to promote global peace."},
+                {q: "The first modern Olympics in 1896 included participants from all genders.", a: false, r: "False. The text states they only featured male athletes."},
+                {q: "The marathon race is a modern addition not found in the ancient games.", a: true, r: "True. It was introduced in 1896."},
+                {q: "The city of Athens hosted both the first ancient and first modern games.", a: false, r: "False. Ancient games were in Olympia; modern in Athens."},
+                {q: "The modern Games have been held every four years without any official cancellations.", a: false, r: "False. They were cancelled during the World Wars."}
+            ]
+        },
+        "B2_Memory": [
+            {v: "Brush up on", m: "To improve or refresh knowledge"},
+            {v: "Carry out", m: "To perform or complete a task"},
+            {v: "Come down with", m: "To become sick with something"},
+            {v: "Pass out", m: "To lose consciousness"},
+            {v: "Look into", m: "To investigate or examine"},
+            {v: "Put off", m: "To postpone or delay"},
+            {v: "Rule out", m: "To eliminate a possibility"},
+            {v: "Set back", m: "To delay progress"},
+            {v: "Think over", m: "To consider carefully"},
+            {v: "Back up", m: "To support or confirm"}
+        ],
+        "B2_Matching": [
+            { a: "Vital", b: "signs" }, { a: "Blood", b: "pressure" }, { a: "Heart", b: "rate" },
+            { a: "Chest", b: "pain" }, { a: "Informed", b: "consent" }, { a: "Surgical", b: "procedure" },
+            { a: "Physical", b: "examination" }, { a: "Medical", b: "history" }, { a: "Adverse", b: "reaction" },
+            { a: "Immune", b: "system" }, { a: "General", b: "anesthesia" }, { a: "Family", b: "practitioner" },
+            { a: "Blood", b: "sample" }, { a: "Chronic", b: "condition" }, { a: "Shortness", b: "of breath" }
+        ],
+        "B2_Abstraction": {
+            article: "The global escalation of Metabolic Syndrome has positioned Type 2 Diabetes Mellitus (T2DM) as a critical health priority for modern healthcare systems. Current clinical guidelines emphasize that while pharmacological interventions, such as the administration of Metformin, remain the gold standard for initial glycemic control, long-term remission is rarely achieved through monotherapy alone due to the progressive nature of beta-cell decline. This longitudinal study evaluates the efficacy of the MET-LIFE Protocol, a rigorous 24-month randomized controlled trial involving a cohort of 1,200 participants across diverse clinical settings. The protocol is designed as a multimodal strategy that integrates high-intensity interval training (HIIT) to enhance mitochondrial biogenesis, a plant-based ketogenic diet aimed at reducing systemic inflammation, and standardized pharmacological support. Furthermore, the trial utilizes continuous glucose monitoring (CGM) as a primary tool to evaluate metabolic flexibility—the body's capacity to switch efficiently between carbohydrate and lipid oxidation. Preliminary data suggests that addressing the lifestyle-pharmacology intersection is paramount for sustained clinical success. During the follow-up phase, the experimental group showed a significant 1.8% decrease in HbA1c levels, contrasting with the control group’s stagnant metrics. It is worth noting that nearly half of these patients reached a state of partial remission, defined as maintaining sub-diabetic glycemic levels for at least six months without the need for active medication. These results were consistent across various age groups, provided that adherence to the HIIT and ketogenic components remained high. Ultimately, the researchers concluded that while Metformin provides a necessary foundation, lifestyle changes must be applied with maximum rigor and clinical supervision to successfully reverse long-standing metabolic impairment and restore beta-cell functionality.",
+            summary: "The MET-LIFE study was conducted to address T2DM, a condition for which single-drug treatment rarely (1) __________ long-term results. Unlike standard care, this protocol (2) __________ a specific exercise regimen known as (3) __________ with a nutritional plan. A central pillar of the trial was (4) __________, which refers to the organism's (5) __________ to alternate between different energy substrates. Regarding the outcomes, the experimental group (6) __________ a 1.8% decrease in HbA1c levels. It is (7) __________ noting that nearly half of these patients reached a state of (8) __________, meaning they no longer required drugs. The researchers (9) __________ that lifestyle changes must be applied with (10) __________ to successfully reverse metabolic impairment.",
+            answers: ["achieves", "integrated", "HIIT", "metabolic flexibility", "ability", "showed", "worth", "partial remission", "concluded", "rigor"]
+        },
+        "B2_WordBank": {
+            bank: ["was admitted", "had been experiencing", "reported", "hadn't had", "referred", "had occurred", "had subsided", "was noted", "being", "was scheduled"],
+            text: "The patient is a 54-year-old male who (1) __________ to the Emergency Department following a syncopal episode during moderate physical activity. According to his wife, who witnessed the event, the patient (2) __________ lightheadedness and palpitations for approximately twenty minutes before losing consciousness. Upon arrival, the patient (3) __________ that he (4) __________ any significant health issues prior to this month; however, he (5) __________ that a similar, albeit shorter, episode (6) __________ two weeks ago while gardening. He mentioned that the previous symptoms (7) __________ spontaneously without medical intervention. A mild systolic murmur (8) __________ during the initial physical examination. Although the patient denied (9) __________ in pain at the moment of admission, his heart rate remained elevated. Consequently, an urgent echocardiogram (10) __________ for the following morning to rule out structural heart disease.",
+            answers: ["was admitted", "had been experiencing", "reported", "hadn't had", "referred", "had occurred", "had subsided", "was noted", "being", "was scheduled"]
+        },
+        "B2_Crossword": {
+            "grid": [
+                [null, null, null, null, null, null, null, null, null, null, null, null, null, "C", null],
+                [null, null, null, null, null, null, null, null, null, null, null, null, null, "O", null],
+                [null, null, null, null, null, null, null, null, null, null, null, null, null, "M", null],
+                [null, null, null, null, null, null, null, null, null, null, null, null, null, "F", null],
+                [null, null, null, null, "C", "R", "E", "A", "T", "I", "O", "N", null, "O", null],
+                [null, null, null, null, null, null, null, null, null, null, null, null, null, "R", null],
+                [null, null, null, null, "P", "O", "S", "S", "I", "B", "I", "L", "I", "T", "Y"],
+                [null, null, null, null, null, null, null, null, null, null, null, null, null, "A", null],
+                [null, "D", "A", "N", "G", "E", "R", "O", "U", "S", null, null, null, "B", null],
+                [null, "E", null, null, null, null, null, null, null, null, null, null, null, "L", null],
+                [null, "P", null, null, null, null, null, null, null, null, "D", "E", "V", "E", "L", "O", "P", "M", "E", "N", "T"],
+                ["H", "E", "A", "L", "T", "H", "Y", null, null, null, null, null, null, "E", null],
+                [null, "N", null, null, null, null, null, null, null, null, null, null, null, null, null],
+                [null, "D", null, null, null, null, null, null, null, null, null, null, null, null, null],
+                [null, "E", null, null, "S", "U", "C", "C", "E", "S", "S", "F", "U", "L", null],
+                ["U", "N", "U", "S", "U", "A", "L", null, null, null, null, null, null, null, null],
+                [null, "T", null, null, null, null, null, null, null, null, null, null, null, null, null]
+            ],
+            "clues": {
+                "across": [
+                    { "id": 3, "clue": "Requiring someone or something for financial or other support" },
+                    { "id": 5, "clue": "Achieving the results wanted or hoped for" },
+                    { "id": 6, "clue": "In a confident and certain manner" },
+                    { "id": 9, "clue": "Providing physical ease and relaxation" }
+                ],
+                "down": [
+                    { "id": 1, "clue": "In good health or free from illness" },
+                    { "id": 2, "clue": "Not habitually or commonly occurring" },
+                    { "id": 3, "clue": "Able or likely to cause harm or injury" },
+                    { "id": 4, "clue": "A thing that may happen or be the case" },
+                    { "id": 7, "clue": "The action or process of bringing something into existence" },
+                    { "id": 8, "clue": "The process of developing or being developed" }
+                ]
+            },
+            "_tags_metadata": {
+                "B2_MC": ["GP", "MP"],
+                "B2_Writing": ["GP", "MP"],
+                "B2_Stones": ["GP", "MP"],
+                "B2_Reading": ["GP", "MP"],
+                "B2_Memory": ["GP", "MP"],
+                "B2_Matching": ["MP"],
+                "B2_Abstraction": ["MP"],
+                "B2_WordBank": ["MP"],
+                "B2_Crossword": ["GP", "MP"]
             }
+        };
+
+    window.showScreen = function(screenId) {
+        document.querySelectorAll('.container').forEach(s => s.classList.add('hidden'));
+        const target = document.getElementById(screenId);
+        if (target) target.classList.remove('hidden');
+    };
+
+    window.login = function() {
+        if (document.getElementById('student-name').value.trim()) {
+            showScreen('screen-branch');
         }
-    });
-    const placeholdersNeeded = 20 - activeCount;
-    for (let i = 1; i <= placeholdersNeeded; i++) {
-        const emptyCard = document.createElement('div');
-        emptyCard.className = 'level-card upcoming';
-        emptyCard.innerHTML = `<h3>Module ${activeCount + i}</h3><p style="font-size:11px; margin:5px 0 0 0; color:var(--accent);">Upcoming</p>`;
-        emptyCard.onclick = () => showScreen('screen-dev');
-        container.appendChild(emptyCard);
-    }
-    showScreen('screen-levels');
-}
+    };
 
-window.restartDiagnosticFlow = function() {
-    selectedPath = "";
-    selectedLevelCode = "";
-    currentPath = "";
-    score = 0;
-    showScreen('screen-branch');
-}
+    window.setPath = function(path) {
+        selectedPath = path === 'General' ? 'GP' : 'MP';
+        showScreen('screen-levels-selector');
+    };
 
-window.goBackFromResults = function() {
-    if (currentPath === 'diagnostic') {
-        restartDiagnosticFlow();
-    } else {
+    window.selectLevel = function(level) {
+        selectedLevelCode = level;
         showQuizzes();
-    }
-}
+    };
 
-window.launchModule = function(moduleKey) {
-    currentPath = moduleKey;
-    currentQuestionIndex = 0;
-    score = 0;
-    activeBankWord = null;
-    if (moduleKey.includes('MC') || moduleKey.includes('Stones') || moduleKey.includes('Writing')) {
-        loadQuestion();
+    window.launchDiagnostic = function() {
+        currentPath = 'diagnostic';
+        currentQuestionIndex = 0;
+        score = 0;
+        diagnosticResults = { "A2": { total: 0, correct: 0 }, "B1": { total: 0, correct: 0 }, "B2": { total: 0, correct: 0 }, "B2/C1": { total: 0, correct: 0 }, "C1": { total: 0, correct: 0 } };
+        loadDiagnosticQuestion();
         showScreen('screen-quiz');
-    } else if (moduleKey.includes('Reading')) {
-        loadReadingQuestion();
-        showScreen('screen-reading');
-    } else if (moduleKey.includes('Memory')) {
-        initMemoryModule();
-        showScreen('screen-memory');
-    } else if (moduleKey.includes('Matching')) {
-        initMatchingModule();
-        showScreen('screen-matching');
-    } else if (moduleKey.includes('Crossword')) {
-        renderCrossword();
-        showScreen('screen-crossword');
-    } else {
-        initTextModule();
-        showScreen('screen-text-module');
-    }
-}
+    };
 
-window.loadQuestion = function() {
-    const questions = database[currentPath];
-    const q = questions[currentQuestionIndex];
-    document.getElementById('progress-fill').style.width = `${(currentQuestionIndex / questions.length) * 100}%`;
-    document.getElementById('q-text').innerText = q.q;
-    const optionsBox = document.getElementById('options-box');
-    optionsBox.innerHTML = "";
-    const fbox = document.getElementById('feedback-box');
-    fbox.classList.add('hidden');
-    fbox.className = 'option hidden';
-    document.getElementById('btn-continue').classList.add('hidden');
-    document.getElementById('btn-continue').onclick = nextQuestion;
-    q.o.forEach((opt, idx) => {
-        const btn = document.createElement('div');
-        btn.className = 'option';
-        btn.innerText = opt;
-        btn.onclick = () => checkAnswer(idx, btn);
-        optionsBox.appendChild(btn);
-    });
-}
+    window.loadDiagnosticQuestion = function() {
+        const questions = database.diagnostic;
+        const q = questions[currentQuestionIndex];
+        document.getElementById('progress-fill').style.width = `${(currentQuestionIndex / questions.length) * 100}%`;
+        document.getElementById('q-text').innerText = q.text;
+        const optionsBox = document.getElementById('options-box');
+        optionsBox.innerHTML = "";
+        const fbox = document.getElementById('feedback-box');
+        fbox.classList.add('hidden');
+        fbox.className = 'option hidden';
+        document.getElementById('btn-continue').classList.add('hidden');
+        q.options.forEach((opt, idx) => {
+            const btn = document.createElement('div');
+            btn.className = 'option';
+            btn.innerText = opt;
+            btn.onclick = () => checkDiagnosticAnswer(idx, btn);
+            optionsBox.appendChild(btn);
+        });
+    };
 
-window.checkAnswer = function(selectedIdx, optionEl) {
-    const q = database[currentPath][currentQuestionIndex];
-    const options = document.getElementById('options-box').children;
-    for (let opt of options) opt.removeAttribute('onclick');
-    let isCorrect = (selectedIdx === q.a);
-    let selectedText = q.o[selectedIdx];
-    let correctText = q.o[q.a];
-    if (isCorrect) {
-        optionEl.classList.add('correct');
-        score++;
-    } else {
-        optionEl.classList.add('wrong');
-        if (options[q.a]) options[q.a].classList.add('correct');
-    }
-    const fbox = document.getElementById('feedback-box');
-    fbox.className = isCorrect ? 'option correct' : 'option wrong';
-    fbox.style.cursor = 'default';
-    fbox.innerHTML = `<span class="pedagogic-title">${isCorrect ? '✓ Correct Answer' : '✗ Incorrect Answer'}</span><strong>Your choice:</strong> ${selectedText} <br><strong>Correct structure:</strong> ${correctText}<span class="pedagogic-detail">${q.r}</span>`;
-    fbox.classList.remove('hidden');
-    document.getElementById('btn-continue').classList.remove('hidden');
-}
+    window.checkDiagnosticAnswer = function(selectedIdx, optionEl) {
+        const q = database.diagnostic[currentQuestionIndex];
+        const options = document.getElementById('options-box').children;
+        for (let opt of options) opt.removeAttribute('onclick');
+        let isCorrect = (selectedIdx === q.correct);
+        if (isCorrect) {
+            optionEl.classList.add('correct');
+            score++;
+            diagnosticResults[q.level].correct++;
+        } else {
+            optionEl.classList.add('wrong');
+            if (options[q.correct]) options[q.correct].classList.add('correct');
+        }
+        diagnosticResults[q.level].total++;
+        const fbox = document.getElementById('feedback-box');
+        fbox.className = isCorrect ? 'option correct' : 'option wrong';
+        fbox.innerHTML = `<strong>${isCorrect ? 'Correct' : 'Incorrect'}</strong><br>Level: ${q.level}`;
+        fbox.classList.remove('hidden');
+        document.getElementById('btn-continue').classList.remove('hidden');
+        document.getElementById('btn-continue').onclick = nextDiagnosticQuestion;
+    };
 
-window.nextQuestion = function() {
-    currentQuestionIndex++;
-    if (currentQuestionIndex < database[currentPath].length) {
-        loadQuestion();
-    } else {
-        document.getElementById('final-score-display').innerText = `Module finished! Score: ${score} / ${database[currentPath].length}`;
-        showScreen('screen-results');
-    }
-}
+    window.nextDiagnosticQuestion = function() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < database.diagnostic.length) {
+            loadDiagnosticQuestion();
+        } else {
+            calculateAssessment();
+        }
+    };
 
-window.loadReadingQuestion = function() {
-    const module = database[currentPath];
-    const q = module.questions[currentQuestionIndex];
-    document.getElementById('reading-article').innerHTML = module.article;
-    document.getElementById('reading-progress-fill').style.width = `${(currentQuestionIndex / module.questions.length) * 100}%`;
-    document.getElementById('reading-q-text').innerText = `${currentQuestionIndex + 1}. ${q.q}`;
-    const optionsBox = document.getElementById('reading-options-box');
-    optionsBox.innerHTML = "";
-    const fbox = document.getElementById('reading-feedback-box');
-    fbox.classList.add('hidden');
-    fbox.className = 'option hidden';
-    document.getElementById('reading-btn-continue').classList.add('hidden');
-    document.getElementById('reading-btn-continue').onclick = nextReadingQuestion;
-    ["True", "False"].forEach(opt => {
-        const btn = document.createElement('button');
-        btn.className = 'pill-btn';
-        btn.innerText = opt;
-        btn.onclick = () => checkReadingAnswer(opt === "True", btn);
-        optionsBox.appendChild(btn);
-    });
-}
-
-window.checkReadingAnswer = function(userChoice, optionEl) {
-    const module = database[currentPath];
-    const q = module.questions[currentQuestionIndex];
-    const options = document.getElementById('reading-options-box').children;
-    for (let opt of options) { opt.setAttribute('disabled', 'true'); opt.style.pointerEvents = 'none'; }
-    let isCorrect = (userChoice === q.a);
-    if (isCorrect) {
-        optionEl.classList.add('selected-true');
-        score++;
-    } else {
-        optionEl.classList.add('selected-false');
-        for (let opt of options) {
-            if ((opt.innerText === "True" && q.a === true) || (opt.innerText === "False" && q.a === false)) {
-                opt.classList.add('correct-pill');
+    window.calculateAssessment = function () {
+        let report = "Assessment Report:<br>";
+        let finalLevel = "Beginner (A1)";
+        for (let lvl in diagnosticResults) {
+            let res = diagnosticResults[lvl];
+            if (res.total > 0) {
+                let pct = (res.correct / res.total) * 100;
+                report += `${lvl}: ${res.correct}/${res.total} (${pct.toFixed(0)}%)<br>`;
+                if (pct >= 70) finalLevel = lvl;
             }
         }
-    }
-    const fbox = document.getElementById('reading-feedback-box');
-    fbox.className = isCorrect ? 'option correct' : 'option wrong';
-    fbox.innerHTML = `<span class="pedagogic-title">${isCorrect ? '✓ Correct Assessment' : '✗ Incorrect Assessment'}</span><strong>Evaluated statement:</strong> "${q.q}"<br><strong>Verdict:</strong> The Statement is ${q.a ? 'True' : 'False'}.<span class="pedagogic-detail">${q.r}</span>`;
-    fbox.classList.remove('hidden');
-    document.getElementById('reading-btn-continue').classList.remove('hidden');
-}
-
-window.nextReadingQuestion = function() {
-    currentQuestionIndex++;
-    const module = database[currentPath];
-    if (currentQuestionIndex < module.questions.length) {
-        loadReadingQuestion();
-    } else {
-        document.getElementById('final-score-display').innerText = `Module finished! Score: ${score} / ${module.questions.length}`;
+        document.getElementById('final-score-display').innerHTML = `Final Level Detected: <strong>${finalLevel}</strong><br><br>${report}`;
         showScreen('screen-results');
-    }
-}
+    };
 
-window.initMatchingModule = function() {
-    const data = database[currentPath];
-    const leftCol = document.getElementById('col-left');
-    const rightCol = document.getElementById('col-right');
-    leftCol.innerHTML = "";
-    rightCol.innerHTML = "";
-    selectedWord = null;
-    matchedPairs = [];
-    const leftItems = data.map(item => item.a);
-    const rightItems = data.map(item => item.b).sort(() => Math.random() - 0.5);
-    leftItems.forEach(text => {
-        const div = document.createElement('div');
-        div.className = 'match-item';
-        div.innerText = text;
-        div.onclick = () => selectMatchWord(div, 'left');
-        leftCol.appendChild(div);
-    });
-    rightItems.forEach(text => {
-        const div = document.createElement('div');
-        div.className = 'match-item';
-        div.innerText = text;
-        div.onclick = () => selectMatchWord(div, 'right');
-        rightCol.appendChild(div);
-    });
-}
+    window.showQuizzes = function() {
+        const container = document.getElementById('quiz-list-container');
+        if (!container) return;
+        container.innerHTML = "";
+        document.getElementById('lvl-title').innerText = `${selectedLevelCode} Modules`;
+        let activeCount = 0;
+        Object.keys(database).forEach(key => {
+            if (key.startsWith(selectedLevelCode)) {
+                const tags = database._tags_metadata[key] || [];
+                if (tags.includes(selectedPath)) {
+                    activeCount++;
+                    const card = document.createElement('div');
+                    card.className = 'level-card';
+                    card.innerHTML = `<h3>${key.replace(`${selectedLevelCode}_`, " ").replace("_", " ")}</h3>`;
+                    card.onclick = () => launchModule(key);
+                    container.appendChild(card);
+                }
+            }
+        });
+        const placeholdersNeeded = 20 - activeCount;
+        for (let i = 1; i <= placeholdersNeeded; i++) {
+            const emptyCard = document.createElement('div');
+            emptyCard.className = 'level-card upcoming';
+            emptyCard.innerHTML = `<h3>Module ${activeCount + i}</h3><p style="font-size:11px; margin:5px 0 0 0; color:var(--accent);">Upcoming</p>`;
+            emptyCard.onclick = () => showScreen('screen-dev');
+            container.appendChild(emptyCard);
+        }
+        showScreen('screen-levels');
+    };
 
-window.selectMatchWord = function(el, side) {
-    if (el.classList.contains('matched-pair')) return;
-    if (!selectedWord) {
-        selectedWord = { el, side, text: el.innerText };
-        el.classList.add('selected');
-    } else {
-        if (selectedWord.side === side) {
-            selectedWord.el.classList.remove('selected');
+    window.restartDiagnosticFlow = function() {
+        selectedPath = "";
+        selectedLevelCode = "";
+        currentPath = "";
+        score = 0;
+        showScreen('screen-branch');
+    };
+
+    window.goBackFromResults = function() {
+        if (currentPath === 'diagnostic') {
+            restartDiagnosticFlow();
+        } else {
+            showQuizzes();
+        }
+    };
+
+    window.launchModule = function(moduleKey) {
+        currentPath = moduleKey;
+        currentQuestionIndex = 0;
+        score = 0;
+        activeBankWord = null;
+        if (moduleKey.includes('MC') || moduleKey.includes('Stones') || moduleKey.includes('Writing')) {
+            loadQuestion();
+            showScreen('screen-quiz');
+        } else if (moduleKey.includes('Reading')) {
+            loadReadingQuestion();
+            showScreen('screen-reading');
+        } else if (moduleKey.includes('Memory')) {
+            initMemoryModule();
+            showScreen('screen-memory');
+        } else if (moduleKey.includes('Matching')) {
+            initMatchingModule();
+            showScreen('screen-matching');
+        } else if (moduleKey.includes('Crossword')) {
+            renderCrossword();
+            showScreen('screen-crossword');
+        } else {
+            initTextModule();
+            showScreen('screen-text-module');
+        }
+    };
+
+    window.loadQuestion = function() {
+        const questions = database[currentPath];
+        const q = questions[currentQuestionIndex];
+        document.getElementById('progress-fill').style.width = `${(currentQuestionIndex / questions.length) * 100}%`;
+        document.getElementById('q-text').innerText = q.q;
+        const optionsBox = document.getElementById('options-box');
+        optionsBox.innerHTML = "";
+        const fbox = document.getElementById('feedback-box');
+        fbox.classList.add('hidden');
+        fbox.className = 'option hidden';
+        document.getElementById('btn-continue').classList.add('hidden');
+        document.getElementById('btn-continue').onclick = nextQuestion;
+        q.o.forEach((opt, idx) => {
+            const btn = document.createElement('div');
+            btn.className = 'option';
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(idx, btn);
+            optionsBox.appendChild(btn);
+        });
+    };
+
+    window.checkAnswer = function(selectedIdx, optionEl) {
+        const q = database[currentPath][currentQuestionIndex];
+        const options = document.getElementById('options-box').children;
+        for (let opt of options) opt.removeAttribute('onclick');
+        let isCorrect = (selectedIdx === q.a);
+        let selectedText = q.o[selectedIdx];
+        let correctText = q.o[q.a];
+        if (isCorrect) {
+            optionEl.classList.add('correct');
+            score++;
+        } else {
+            optionEl.classList.add('wrong');
+            if (options[q.a]) options[q.a].classList.add('correct');
+        }
+        const fbox = document.getElementById('feedback-box');
+        fbox.className = isCorrect ? 'option correct' : 'option wrong';
+        fbox.style.cursor = 'default';
+        fbox.innerHTML = `<span class="pedagogic-title">${isCorrect ? '✓ Correct Answer' : '✗ Incorrect Answer'}</span><strong>Your choice:</strong> ${selectedText} <br><strong>Correct structure:</strong> ${correctText}<span class="pedagogic-detail">${q.r}</span>`;
+        fbox.classList.remove('hidden');
+        document.getElementById('btn-continue').classList.remove('hidden');
+    };
+
+    window.nextQuestion = function() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < database[currentPath].length) {
+            loadQuestion();
+        } else {
+            document.getElementById('final-score-display').innerText = `Module finished! Score: ${score} / ${database[currentPath].length}`;
+            showScreen('screen-results');
+        }
+    };
+
+    window.loadReadingQuestion = function() {
+        const module = database[currentPath];
+        const q = module.questions[currentQuestionIndex];
+        document.getElementById('reading-article').innerHTML = module.article;
+        document.getElementById('reading-progress-fill').style.width = `${(currentQuestionIndex / module.questions.length) * 100}%`;
+        document.getElementById('reading-q-text').innerText = `${currentQuestionIndex + 1}. ${q.q}`;
+        const optionsBox = document.getElementById('reading-options-box');
+        optionsBox.innerHTML = "";
+        const fbox = document.getElementById('reading-feedback-box');
+        fbox.classList.add('hidden');
+        fbox.className = 'option hidden';
+        document.getElementById('reading-btn-continue').classList.add('hidden');
+        document.getElementById('reading-btn-continue').onclick = nextReadingQuestion;
+        ["True", "False"].forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'pill-btn';
+            btn.innerText = opt;
+            btn.onclick = () => checkReadingAnswer(opt === "True", btn);
+            optionsBox.appendChild(btn);
+        });
+    };
+
+    window.checkReadingAnswer = function(userChoice, optionEl) {
+        const module = database[currentPath];
+        const q = module.questions[currentQuestionIndex];
+        const options = document.getElementById('reading-options-box').children;
+        for (let opt of options) { opt.setAttribute('disabled', 'true'); opt.style.pointerEvents = 'none'; }
+        let isCorrect = (userChoice === q.a);
+        if (isCorrect) {
+            optionEl.classList.add('selected-true');
+            score++;
+        } else {
+            optionEl.classList.add('selected-false');
+            for (let opt of options) {
+                if ((opt.innerText === "True" && q.a === true) || (opt.innerText === "False" && q.a === false)) {
+                    opt.classList.add('correct-pill');
+                }
+            }
+        }
+        const fbox = document.getElementById('reading-feedback-box');
+        fbox.className = isCorrect ? 'option correct' : 'option wrong';
+        fbox.innerHTML = `<span class="pedagogic-title">${isCorrect ? '✓ Correct Assessment' : '✗ Incorrect Assessment'}</span><strong>Evaluated statement:</strong> "${q.q}"<br><strong>Verdict:</strong> The Statement is ${q.a ? 'True' : 'False'}.<span class="pedagogic-detail">${q.r}</span>`;
+        fbox.classList.remove('hidden');
+        document.getElementById('reading-btn-continue').classList.remove('hidden');
+    };
+
+    window.nextReadingQuestion = function() {
+        currentQuestionIndex++;
+        const module = database[currentPath];
+        if (currentQuestionIndex < module.questions.length) {
+            loadReadingQuestion();
+        } else {
+            document.getElementById('final-score-display').innerText = `Module finished! Score: ${score} / ${module.questions.length}`;
+            showScreen('screen-results');
+        }
+    };
+
+    window.initMatchingModule = function() {
+        const data = database[currentPath];
+        const leftCol = document.getElementById('col-left');
+        const rightCol = document.getElementById('col-right');
+        leftCol.innerHTML = "";
+        rightCol.innerHTML = "";
+        selectedWord = null;
+        matchedPairs = [];
+        const leftItems = data.map(item => item.a);
+        const rightItems = data.map(item => item.b).sort(() => Math.random() - 0.5);
+        leftItems.forEach(text => {
+            const div = document.createElement('div');
+            div.className = 'match-item';
+            div.innerText = text;
+            div.onclick = () => selectMatchWord(div, 'left');
+            leftCol.appendChild(div);
+        });
+        rightItems.forEach(text => {
+            const div = document.createElement('div');
+            div.className = 'match-item';
+            div.innerText = text;
+            div.onclick = () => selectMatchWord(div, 'right');
+            rightCol.appendChild(div);
+        });
+    };
+
+    window.selectMatchWord = function(el, side) {
+        if (el.classList.contains('matched-pair')) return;
+        if (!selectedWord) {
             selectedWord = { el, side, text: el.innerText };
             el.classList.add('selected');
+        } else {
+            if (selectedWord.side === side) {
+                selectedWord.el.classList.remove('selected');
+                selectedWord = { el, side, text: el.innerText };
+                el.classList.add('selected');
+                return;
+            }
+            const isMatch = database[currentPath].some(item => (item.a === selectedWord.text && item.b === el.innerText) || (item.b === selectedWord.text && item.a === el.innerText));
+            if (isMatch) {
+                el.classList.add('matched-pair');
+                selectedWord.el.classList.add('matched-pair');
+                matchedPairs.push(selectedWord.text, el.innerText);
+                if (matchedPairs.length === database[currentPath].length * 2) {
+                    setTimeout(() => { document.getElementById('final-score-display').innerText = `Module finished! Perfect Match!`; showScreen('screen-results'); }, 1000);
+                }
+            } else {
+                const item1 = selectedWord.el; const item2 = el;
+                item1.classList.add('wrong-match'); item2.classList.add('wrong-match');
+                setTimeout(() => { item1.classList.remove('wrong-match'); item2.classList.remove('wrong-match'); }, 500);
+            }
+            selectedWord.el.classList.remove('selected');
+            selectedWord = null;
+        }
+    };
+
+    window.initMemoryModule = function() {
+        const board = document.getElementById('memory-board');
+        board.innerHTML = "";
+        let cardsData = [];
+        const totalPairs = database[currentPath].length;
+        document.getElementById('memory-counter').innerText = "0";
+        document.getElementById('memory-total').innerText = totalPairs;
+        database[currentPath].forEach((pair, idx) => {
+            cardsData.push({ text: pair.v, pairId: idx });
+            cardsData.push({ text: pair.m, pairId: idx });
+        });
+        cardsData.sort(() => Math.random() - 0.5);
+        cardsData.forEach(card => {
+            const cardEl = document.createElement('div');
+            cardEl.className = 'memory-card';
+            cardEl.dataset.pairId = card.pairId;
+            cardEl.innerHTML = `<div class="card-face card-front">?</div><div class="card-face card-back">${card.text}</div>`;
+            cardEl.onclick = () => flipCard(cardEl);
+            board.appendChild(cardEl);
+        });
+    };
+
+    window.flipCard = function(card) {
+        if (lockBoard || card.classList.contains('flipped')) return;
+        card.classList.add('flipped');
+        if (!firstCard) { firstCard = card; return; }
+        secondCard = card; lockBoard = true;
+        const totalPairs = database[currentPath].length;
+        if (firstCard.dataset.pairId === secondCard.dataset.pairId) {
+            firstCard.querySelector('.card-back').style.backgroundColor = '#d4edda';
+            secondCard.querySelector('.card-back').style.backgroundColor = '#d4edda';
+            score++;
+            document.getElementById('memory-counter').innerText = score;
+            resetBoard();
+            if (score === totalPairs) { setTimeout(() => { document.getElementById('final-score-display').innerText = `Module finished! Score: ${score} / ${totalPairs}`; showScreen('screen-results'); }, 1000); }
+        } else {
+            setTimeout(() => { firstCard.classList.remove('flipped'); secondCard.classList.remove('flipped'); resetBoard(); }, 1000);
+        }
+    };
+
+    window.resetBoard = function() { firstCard = null; secondCard = null; lockBoard = false; };
+
+    window.renderCrossword = function() {
+        const data = database.B2_Crossword;
+        const container = document.getElementById("b2-activity-wrapper");
+        const cluesContainer = document.getElementById("crossword-clues");
+        let gridHtml = `<div style="display:grid; grid-template-columns:repeat(${data.grid[0].length}, 32px); gap:1px; justify-content:center; background:#bdc3c7; padding:15px; border-radius:10px; width:fit-content; margin:0 auto;">`;
+        data.grid.forEach((row, r) => {
+            row.forEach((cellValue, c) => {
+                if (cellValue !== null) {
+                    gridHtml += `<div style="width:32px; height:32px; background:white; display:flex; align-items:center; justify-content:center;"><input type="text" class="cw-cell" maxlength="1" data-r="${r}" data-c="${c}"></div>`;
+                } else {
+                    gridHtml += `<div style="width:32px; height:32px; background:#2c3e50;"></div>`;
+                }
+            });
+        });
+        container.innerHTML = gridHtml + `</div>`;
+        let cluesHtml = `<div class="clues-box"><h4>Across</h4><ul>`;
+        data.clues.across.forEach(c => { cluesHtml += `<li><strong>${c.id}.</strong> ${c.clue}</li>`; });
+        cluesHtml += `</ul></div><div class="clues-box"><h4>Down</h4><ul>`;
+        data.clues.down.forEach(c => { cluesHtml += `<li><strong>${c.id}.</strong> ${c.clue}</li>`; });
+        cluesContainer.innerHTML = cluesHtml + `</ul></div>`;
+    };
+
+    window.checkCrosswordAnswers = function() {
+        let allCorrect = true;
+        const inputs = document.querySelectorAll('.cw-cell');
+        inputs.forEach(input => {
+            const r = parseInt(input.dataset.r);
+            const c = parseInt(input.dataset.c);
+            const correctLetter = database.B2_Crossword.grid[r][c];
+            if (input.value.toUpperCase() === correctLetter.toUpperCase()) {
+                input.style.backgroundColor = "#d4edda";
+                input.style.color = "var(--success)";
+            } else {
+                input.style.backgroundColor = "#f8d7da";
+                input.style.color = "var(--danger)";
+                allCorrect = false;
+            }
+        });
+        if (allCorrect) {
+            setTimeout(() => {
+                document.getElementById('final-score-display').innerText = "Crossword Completed Successfully!";
+                showScreen('screen-results');
+            }, 1000);
+        }
+    };
+
+    window.initTextModule = function() {
+        const articleBox = document.getElementById('text-module-article');
+        const bankBox = document.getElementById('text-module-bank');
+        const contentBox = document.getElementById('text-module-content');
+        articleBox.classList.add('hidden'); bankBox.classList.add('hidden');
+        activeBankWord = null;
+        const module = database[currentPath];
+        if (currentPath === "B2_Abstraction") {
+            document.getElementById('text-module-title').innerText = "B2 Abstraction Challenge";
+            articleBox.innerHTML = `<strong>Reading Text:</strong><br>${module.article}`;
+            articleBox.classList.remove('hidden');
+            let structuredSummary = module.summary;
+            module.answers.forEach((_, idx) => {
+                const searchStr = `(${idx + 1}) __________`;
+                const replaceStr = `<input type="text" class="inline-blank text-mod-input" data-idx="${idx}" placeholder="blank ${idx + 1}">`;
+                structuredSummary = structuredSummary.replace(searchStr, replaceStr);
+            });
+            contentBox.innerHTML = `<strong>Summary Exercise (Fill in the blanks inline):</strong><br><br>${structuredSummary}`;
+        } else if (currentPath === "B2_WordBank") {
+            document.getElementById('text-module-title').innerText = "B2 Word Bank Exercise";
+            renderWordBankGroup();
+            bankBox.classList.remove('hidden');
+            let structuredText = module.text;
+            module.answers.forEach((_, idx) => {
+                const searchStr = `(${idx + 1}) __________`;
+                const replaceStr = `<span class="inline-blank word-bank-space" data-idx="${idx}" id="wb-space-${idx}" onclick="handleSpaceClick(${idx})">word ${idx + 1}</span>`;
+                structuredText = structuredText.replace(searchStr, replaceStr);
+            });
+            contentBox.innerHTML = `<strong>Exercise Text (Click a word from bank, then click a blank space):</strong><br><br>${structuredText}`;
+        }
+    };
+
+    window.renderWordBankGroup = function() {
+        const bankBox = document.getElementById('text-module-bank');
+        const module = database.B2_WordBank;
+        bankBox.innerHTML = module.bank.map((word, index) => {
+            let isUsed = false;
+            const spaces = document.querySelectorAll('.word-bank-space');
+            spaces.forEach(sp => { if(sp.innerText === word) isUsed = true; });
+            let activeClass = (activeBankWord && activeBankWord.word === word) ? ' active-select' : '';
+            let usedClass = isUsed ? ' used' : '';
+            return `<button class="word-item${activeClass}${usedClass}" onclick="selectBankWord('${word}', ${index})">${word}</button>`;
+        }).join('');
+    };
+
+    window.selectBankWord = function(word, index) {
+        if (activeBankWord && activeBankWord.word === word) { activeBankWord = null; }
+        else { activeBankWord = { word, index }; }
+        renderWordBankGroup();
+    };
+
+    window.handleSpaceClick = function(spaceIdx) {
+        const spaceElement = document.getElementById(`wb-space-${spaceIdx}`);
+        if (spaceElement.classList.contains('filled')) {
+            spaceElement.innerText = `word ${spaceIdx + 1}`;
+            spaceElement.classList.remove('filled');
+            spaceElement.style.borderColor = "#ccc";
+            spaceElement.style.backgroundColor = "#fffcf0";
+            activeBankWord = null;
+            renderWordBankGroup();
             return;
         }
-        const isMatch = database[currentPath].some(item => (item.a === selectedWord.text && item.b === el.innerText) || (item.b === selectedWord.text && item.a === el.innerText));
-        if (isMatch) {
-            el.classList.add('matched-pair');
-            selectedWord.el.classList.add('matched-pair');
-            matchedPairs.push(selectedWord.text, el.innerText);
-            if (matchedPairs.length === database[currentPath].length * 2) {
-                setTimeout(() => { document.getElementById('final-score-display').innerText = `Module finished! Perfect Match!`; showScreen('screen-results'); }, 1000);
-            }
-        } else {
-            const item1 = selectedWord.el; const item2 = el;
-            item1.classList.add('wrong-match'); item2.classList.add('wrong-match');
-            setTimeout(() => { item1.classList.remove('wrong-match'); item2.classList.remove('wrong-match'); }, 500);
+        if (activeBankWord) {
+            spaceElement.innerText = activeBankWord.word;
+            spaceElement.classList.add('filled');
+            spaceElement.style.borderColor = "var(--secondary)";
+            spaceElement.style.backgroundColor = "#eef7fe";
+            activeBankWord = null;
+            renderWordBankGroup();
         }
-        selectedWord.el.classList.remove('selected');
-        selectedWord = null;
-    }
-}
+    };
 
-window.initMemoryModule = function() {
-    const board = document.getElementById('memory-board');
-    board.innerHTML = "";
-    let cardsData = [];
-    const totalPairs = database[currentPath].length;
-    document.getElementById('memory-counter').innerText = "0";
-    document.getElementById('memory-total').innerText = totalPairs;
-    database[currentPath].forEach((pair, idx) => {
-        cardsData.push({ text: pair.v, pairId: idx });
-        cardsData.push({ text: pair.m, pairId: idx });
-    });
-    cardsData.sort(() => Math.random() - 0.5);
-    cardsData.forEach(card => {
-        const cardEl = document.createElement('div');
-        cardEl.className = 'memory-card';
-        cardEl.dataset.pairId = card.pairId;
-        cardEl.innerHTML = `<div class="card-face card-front">?</div><div class="card-face card-back">${card.text}</div>`;
-        cardEl.onclick = () => flipCard(cardEl);
-        board.appendChild(cardEl);
-    });
-}
-
-window.flipCard = function(card) {
-    if (lockBoard || card.classList.contains('flipped')) return;
-    card.classList.add('flipped');
-    if (!firstCard) { firstCard = card; return; }
-    secondCard = card; lockBoard = true;
-    const totalPairs = database[currentPath].length;
-    if (firstCard.dataset.pairId === secondCard.dataset.pairId) {
-        firstCard.querySelector('.card-back').style.backgroundColor = '#d4edda';
-        secondCard.querySelector('.card-back').style.backgroundColor = '#d4edda';
-        score++;
-        document.getElementById('memory-counter').innerText = score;
-        resetBoard();
-        if (score === totalPairs) { setTimeout(() => { document.getElementById('final-score-display').innerText = `Module finished! Score: ${score} / ${totalPairs}`; showScreen('screen-results'); }, 1000); }
-    } else {
-        setTimeout(() => { firstCard.classList.remove('flipped'); secondCard.classList.remove('flipped'); resetBoard(); }, 1000);
-    }
-}
-
-window.resetBoard = function() { firstCard = null; secondCard = null; lockBoard = false; }
-
-window.renderCrossword = function() {
-    const data = database.B2_Crossword;
-    const container = document.getElementById("b2-activity-wrapper");
-    const cluesContainer = document.getElementById("crossword-clues");
-    
-    let gridHtml = `<div style="display:grid; grid-template-columns:repeat(${data.grid[0].length}, 32px); gap:1px; justify-content:center; background:#bdc3c7; padding:15px; border-radius:10px; width:fit-content; margin:0 auto;">`;
-    
-    data.grid.forEach((row, r) => {
-        row.forEach((cellValue, c) => {
-            if (cellValue !== null) {
-                gridHtml += `<div style="width:32px; height:32px; background:white; display:flex; align-items:center; justify-content:center;">
-                    <input type="text" class="cw-cell" maxlength="1" data-r="${r}" data-c="${c}">
-                </div>`;
-            } else {
-                gridHtml += `<div style="width:32px; height:32px; background:#2c3e50;"></div>`;
-            }
-        });
-    });
-    container.innerHTML = gridHtml + `</div>`;
-
-    let cluesHtml = `<div class="clues-box"><h4>Across</h4><ul>`;
-    data.clues.across.forEach(c => { cluesHtml += `<li><strong>${c.id}.</strong> ${c.clue}</li>`; });
-    cluesHtml += `</ul></div><div class="clues-box"><h4>Down</h4><ul>`;
-    data.clues.down.forEach(c => { cluesHtml += `<li><strong>${c.id}.</strong> ${c.clue}</li>`; });
-    cluesContainer.innerHTML = cluesHtml + `</ul></div>`;
-}
-
-window.checkCrosswordAnswers = function() {
-    let allCorrect = true;
-    const inputs = document.querySelectorAll('.cw-cell');
-    inputs.forEach(input => {
-        const r = parseInt(input.dataset.r);
-        const c = parseInt(input.dataset.c);
-        const correctLetter = database.B2_Crossword.grid[r][c];
-        
-        if (input.value.toUpperCase() === correctLetter.toUpperCase()) {
-            input.style.backgroundColor = "#d4edda";
-            input.style.color = "var(--success)";
-        } else {
-            input.style.backgroundColor = "#f8d7da";
-            input.style.color = "var(--danger)";
-            allCorrect = false;
+    window.verifyTextModule = function() {
+        const module = database[currentPath];
+        let allCorrect = true; let localScore = 0;
+        if (currentPath === "B2_Abstraction") {
+            const inputs = document.querySelectorAll('.text-mod-input');
+            inputs.forEach(input => {
+                const idx = parseInt(input.dataset.idx);
+                const userAnswer = input.value.trim().toUpperCase().replace(/\s+/g, ' ');
+                const correctAnswer = module.answers[idx].toUpperCase().replace(/\s+/g, ' ');
+                if (userAnswer === correctAnswer) { input.style.borderColor = "var(--success)"; input.style.backgroundColor = "#d4edda"; localScore++; }
+                else { input.style.borderColor = "var(--danger)"; input.style.backgroundColor = "#f8d7da"; allCorrect = false; }
+            });
+        } else if (currentPath === "B2_WordBank") {
+            const spaces = document.querySelectorAll('.word-bank-space');
+            spaces.forEach(space => {
+                const idx = parseInt(space.dataset.idx);
+                const userVal = space.classList.contains('filled') ? space.innerText.trim().toUpperCase() : "";
+                const correctVal = module.answers[idx].toUpperCase();
+                if (userVal === correctVal) { space.style.borderColor = "var(--success)"; space.style.backgroundColor = "#d4edda"; localScore++; }
+                else { space.style.borderColor = "var(--danger)"; space.style.backgroundColor = "#f8d7da"; allCorrect = false; }
+            });
         }
-    });
-    
-    if (allCorrect) {
-        setTimeout(() => {
-            document.getElementById('final-score-display').innerText = "Crossword Completed Successfully!";
-            showScreen('screen-results');
-        }, 1000);
-    }
-}
+        score = localScore;
+        document.getElementById('final-score-display').innerText = `Module finished! Score: ${score} / ${module.answers.length}`;
+        if (allCorrect) { setTimeout(() => { showScreen('screen-results'); }, 1000); }
+        else { alert(`Exercise validated. Score: ${score}/${module.answers.length}. Check highlighted positions.`); }
+    };
 
-window.initTextModule = function() {
-    const articleBox = document.getElementById('text-module-article');
-    const bankBox = document.getElementById('text-module-bank');
-    const contentBox = document.getElementById('text-module-content');
-    articleBox.classList.add('hidden'); bankBox.classList.add('hidden');
-    activeBankWord = null;
-    const module = database[currentPath];
-    if (currentPath === "B2_Abstraction") {
-        document.getElementById('text-module-title').innerText = "B2 Abstraction Challenge";
-        articleBox.innerHTML = `<strong>Reading Text:</strong><br>${module.article}`;
-        articleBox.classList.remove('hidden');
-        let structuredSummary = module.summary;
-        module.answers.forEach((_, idx) => {
-            const searchStr = `(${idx + 1}) __________`;
-            const replaceStr = `<input type="text" class="inline-blank text-mod-input" data-idx="${idx}" placeholder="blank ${idx + 1}">`;
-            structuredSummary = structuredSummary.replace(searchStr, replaceStr);
-        });
-        contentBox.innerHTML = `<strong>Summary Exercise (Fill in the blanks inline):</strong><br><br>${structuredSummary}`;
-    } else if (currentPath === "B2_WordBank") {
-        document.getElementById('text-module-title').innerText = "B2 Word Bank Exercise";
-        renderWordBankGroup();
-        bankBox.classList.remove('hidden');
-        let structuredText = module.text;
-        module.answers.forEach((_, idx) => {
-            const searchStr = `(${idx + 1}) __________`;
-            const replaceStr = `<span class="inline-blank word-bank-space" data-idx="${idx}" id="wb-space-${idx}" onclick="handleSpaceClick(${idx})">word ${idx + 1}</span>`;
-            structuredText = structuredText.replace(searchStr, replaceStr);
-        });
-        contentBox.innerHTML = `<strong>Exercise Text (Click a word from bank, then click a blank space):</strong><br><br>${structuredText}`;
-    }
-}
-
-window.renderWordBankGroup = function() {
-    const bankBox = document.getElementById('text-module-bank');
-    const module = database.B2_WordBank;
-    bankBox.innerHTML = module.bank.map((word, index) => {
-        let isUsed = false;
-        const spaces = document.querySelectorAll('.word-bank-space');
-        spaces.forEach(sp => { if(sp.innerText === word) isUsed = true; });
-        let activeClass = (activeBankWord && activeBankWord.word === word) ? ' active-select' : '';
-        let usedClass = isUsed ? ' used' : '';
-        return `<button class="word-item${activeClass}${usedClass}" onclick="selectBankWord('${word}', ${index})">${word}</button>`;
-    }).join('');
-}
-
-window.selectBankWord = function(word, index) {
-    if (activeBankWord && activeBankWord.word === word) { activeBankWord = null; }
-    else { activeBankWord = { word, index }; }
-    renderWordBankGroup();
-}
-
-window.handleSpaceClick = function(spaceIdx) {
-    const spaceElement = document.getElementById(`wb-space-${spaceIdx}`);
-    if (spaceElement.classList.contains('filled')) {
-        spaceElement.innerText = `word ${spaceIdx + 1}`;
-        spaceElement.classList.remove('filled');
-        spaceElement.style.borderColor = "#ccc";
-        spaceElement.style.backgroundColor = "#fffcf0";
-        activeBankWord = null;
-        renderWordBankGroup();
-        return;
-    }
-    if (activeBankWord) {
-        spaceElement.innerText = activeBankWord.word;
-        spaceElement.classList.add('filled');
-        spaceElement.style.borderColor = "var(--secondary)";
-        spaceElement.style.backgroundColor = "#eef7fe";
-        activeBankWord = null;
-        renderWordBankGroup();
-    }
-}
-
-window.verifyTextModule = function() {
-    const module = database[currentPath];
-    let allCorrect = true; let localScore = 0;
-    if (currentPath === "B2_Abstraction") {
-        const inputs = document.querySelectorAll('.text-mod-input');
-        inputs.forEach(input => {
-            const idx = parseInt(input.dataset.idx);
-            const userAnswer = input.value.trim().toUpperCase().replace(/\s+/g, ' ');
-            const correctAnswer = module.answers[idx].toUpperCase().replace(/\s+/g, ' ');
-            if (userAnswer === correctAnswer) { input.style.borderColor = "var(--success)"; input.style.backgroundColor = "#d4edda"; localScore++; }
-            else { input.style.borderColor = "var(--danger)"; input.style.backgroundColor = "#f8d7da"; allCorrect = false; }
-        });
-    } else if (currentPath === "B2_WordBank") {
-        const spaces = document.querySelectorAll('.word-bank-space');
-        spaces.forEach(space => {
-            const idx = parseInt(space.dataset.idx);
-            const userVal = space.classList.contains('filled') ? space.innerText.trim().toUpperCase() : "";
-            const correctVal = module.answers[idx].toUpperCase();
-            if (userVal === correctVal) { space.style.borderColor = "var(--success)"; space.style.backgroundColor = "#d4edda"; localScore++; }
-            else { space.style.borderColor = "var(--danger)"; space.style.backgroundColor = "#f8d7da"; allCorrect = false; }
-        });
-    }
-    score = localScore;
-    document.getElementById('final-score-display').innerText = `Module finished! Score: ${score} / ${module.answers.length}`;
-    if (allCorrect) { setTimeout(() => { showScreen('screen-results'); }, 1000); }
-    else { alert(`Exercise validated. Score: ${score}/${module.answers.length}. Check highlighted positions.`); }
-}
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log("Sistema cargado y listo.");
     });
 </script>
 </body>
