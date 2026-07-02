@@ -163,10 +163,10 @@
         <button class="main-btn" style="background:#7f8c8d" onclick="goBackToList()">Back to Modules</button>
     </div>
 
-    <div id="screen-results" class="container hidden">
-        <h2 id="final-score-display"></h2>
-        <button class="main-btn" onclick="goBackToList()">Back to Modules</button>
-    </div>
+   <div id="screen-results" class="container hidden">
+    <h2 id="final-score-display"></h2>
+    <button class="main-btn" onclick="goBackFromResults()">Back</button>
+</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -524,33 +524,39 @@ window.restartDiagnosticFlow = function() {
     showScreen('screen-branch');
 }
 
-window.goBackToList = function() { showQuizzes(); }
+window.goBackFromResults = function() {
+    if (currentPath === 'diagnostic') {
+        restartDiagnosticFlow();
+    } else {
+        showQuizzes();
+    }
+}
 
 window.launchModule = function(moduleKey) {
-        currentPath = moduleKey;
-        currentQuestionIndex = 0;
-        score = 0;
-        activeBankWord = null;
-        if (moduleKey.includes('MC') || moduleKey.includes('Stones') || moduleKey.includes('Writing')) {
-            loadQuestion();
-            showScreen('screen-quiz');
-        } else if (moduleKey.includes('Reading')) {
-            loadReadingQuestion();
-            showScreen('screen-reading');
-        } else if (moduleKey.includes('Memory')) {
-            initMemoryModule();
-            showScreen('screen-memory');
-        } else if (moduleKey.includes('Matching')) {
-            initMatchingModule();
-            showScreen('screen-matching');
-        } else if (moduleKey.includes('Crossword')) {
-            renderCrossword();
-            showScreen('screen-crossword');
-        } else {
-            initTextModule();
-            showScreen('screen-text-module');
-        }
+    currentPath = moduleKey;
+    currentQuestionIndex = 0;
+    score = 0;
+    activeBankWord = null;
+    if (moduleKey.includes('MC') || moduleKey.includes('Stones') || moduleKey.includes('Writing')) {
+        loadQuestion();
+        showScreen('screen-quiz');
+    } else if (moduleKey.includes('Reading')) {
+        loadReadingQuestion();
+        showScreen('screen-reading');
+    } else if (moduleKey.includes('Memory')) {
+        initMemoryModule();
+        showScreen('screen-memory');
+    } else if (moduleKey.includes('Matching')) {
+        initMatchingModule();
+        showScreen('screen-matching');
+    } else if (moduleKey.includes('Crossword')) {
+        renderCrossword();
+        showScreen('screen-crossword');
+    } else {
+        initTextModule();
+        showScreen('screen-text-module');
     }
+}
 
 window.loadQuestion = function() {
         const questions = database[currentPath];
