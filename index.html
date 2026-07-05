@@ -421,7 +421,7 @@
         if (target) target.classList.remove('hidden');
     };
 
-    window.login = function() {
+  function login() {
         if (document.getElementById('student-name').value.trim()) {
             showScreen('screen-branch');
         }
@@ -938,14 +938,17 @@
         else { alert(`Exercise validated. Score: ${score}/${module.answers.length}. Check highlighted positions.`); }
     };
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const loginBtn = document.getElementById('btn-login');
-        if (loginBtn) {
-            loginBtn.addEventListener('click', () => {
-                window.login();
-            });
-        }
-    });
+const btn = document.getElementById('btn-login');
+    if (btn) {
+        btn.addEventListener('click', login);
+    }
+
+    const input = document.getElementById('student-name');
+    if (input) {
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') login();
+        });
+    }
 </script>
 </body>
 </html>
