@@ -879,4 +879,73 @@
             spaces.forEach(sp => { if(sp.innerText === word) isUsed = true; });
             let activeClass = (activeBankWord && activeBankWord.word === word) ? ' active-select' : '';
             let usedClass = isUsed ? ' used' : '';
-            return `<button class="word-item${activeClass}${usedClass}" onclick="
+            return `<button class="word-item${activeClass}${usedClass}" onclick="selectBankWord('${word}', ${index})">${word}</button>`;
+        }).join('');
+    };
+
+    window.selectBankWord = function(word, index) {
+        if (activeBankWord && activeBankWord.word === word) { activeBankWord = null; }
+        else { activeBankWord = { word, index }; }
+        renderWordBankGroup();
+    };
+
+    window.handleSpaceClick = function(spaceIdx) {
+        const spaceElement = document.getElementById(`wb-space-${spaceIdx}`);
+        if (spaceElement.classList.contains('filled')) {
+            spaceElement.innerText = `word ${spaceIdx + 1}`;
+            spaceElement.classList.remove('filled');
+            spaceElement.style.borderColor = "#ccc";
+            spaceElement.style.backgroundColor = "#fffcf0";
+            activeBankWord = null;
+            renderWordBankGroup();
+            return;
+        }
+        if (activeBankWord) {
+            spaceElement.innerText = activeBankWord.word;
+            spaceElement.classList.add('filled');
+            spaceElement.style.borderColor = "var(--secondary)";
+            spaceElement.style.backgroundColor = "#eef7fe";
+            activeBankWord = null;
+            renderWordBankGroup();
+        }
+    };
+
+    window.verifyTextModule = function() {
+        const module = database[currentPath];
+        let allCorrect = true; let localScore = 0;
+        if (currentPath === "B2_Abstraction") {
+            const inputs = document.querySelectorAll('.text-mod-input');
+            inputs.forEach(input => {
+                const idx = parseInt(input.dataset.idx);
+                const userAnswer = input.value.trim().toUpperCase().replace(/\s+/g, ' ');
+                const correctAnswer = module.answers[idx].toUpperCase().replace(/\s+/g, ' ');
+                if (userAnswer === correctAnswer) { input.style.borderColor = "var(--success)"; input.style.backgroundColor = "#d4edda"; localScore++; }
+                else { input.style.borderColor = "var(--danger)"; input.style.backgroundColor = "#f8d7da"; allCorrect = false; }
+            });
+        } else if (currentPath === "B2_WordBank") {
+            const spaces = document.querySelectorAll('.word-bank-space');
+            spaces.forEach(space => {
+                const idx = parseInt(space.dataset.idx);
+                const userVal = space.classList.contains('filled') ? space.innerText.trim().toUpperCase() : "";
+                const correctVal = module.answers[idx].toUpperCase();
+                if (userVal === correctVal) { space.style.borderColor = "var(--success)"; space.style.backgroundColor = "#d4edda"; localScore++; }
+                else { space.style.borderColor = "var(--danger)"; space.style.backgroundColor = "#f8d7da"; allCorrect = false; }
+            });
+        }
+        score = localScore;
+        document.getElementById('final-score-display').innerText = `Module finished! Score: ${score} / ${module.answers.length}`;
+        if (allCorrect) { setTimeout(() => { showScreen('screen-results'); }, 1000); }
+        else { alert(`Exercise validated. Score: ${score}/${module.answers.length}. Check highlighted positions.`); }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const loginBtn = document.getElementById('btn-login');
+        if (loginBtn) {
+            loginBtn.addEventListener('click', () => {
+                window.login();
+            });
+        }
+    });
+</script>
+</body>
+</html>
