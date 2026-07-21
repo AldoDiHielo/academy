@@ -520,20 +520,22 @@
         container.innerHTML = "";
         document.getElementById('lvl-title').innerText = `${selectedLevelCode} Modules`;
         let activeCount = 0;
+        
         Object.keys(database).forEach(key => {
-            if (key.startsWith(selectedLevelCode)) {
-                const tags = database._tags_metadata[key] || [];
-                if (tags.includes(selectedPath)) {
+            if (key.startsWith(selectedLevelCode) && key !== "_tags_metadata") {
+                const tags = database._tags_metadata && database._tags_metadata[key] ? database._tags_metadata[key] : ['GP', 'MP'];
+                if (tags.includes(selectedPath) || selectedPath === "") {
                     activeCount++;
                     const card = document.createElement('div');
                     card.className = 'level-card';
-                    card.innerHTML = `<h3>${key.replace(`${selectedLevelCode}_`, " ").replace("_", " ")}</h3>`;
+                    card.innerHTML = `<h3>${key.replace(`${selectedLevelCode}_`, "").replace("_", " ")}</h3>`;
                     card.onclick = () => launchModule(key);
                     container.appendChild(card);
                 }
             }
         });
-        const placeholdersNeeded = 20 - activeCount;
+
+        const placeholdersNeeded = Math.max(0, 20 - activeCount);
         for (let i = 1; i <= placeholdersNeeded; i++) {
             const emptyCard = document.createElement('div');
             emptyCard.className = 'level-card upcoming';
