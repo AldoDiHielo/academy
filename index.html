@@ -413,9 +413,8 @@
                 "B2_WordBank": ["MP"],
                 "B2_Crossword": ["GP", "MP"]
             }
-    }
-        };
-
+        }
+    };
 
     window.showScreen = function(screenId) {
         document.querySelectorAll('.container').forEach(s => s.classList.add('hidden'));
@@ -424,11 +423,11 @@
     };
 
     window.login = function() {
-        if (document.getElementById('student-name').value.trim()) {
+        const nameInput = document.getElementById('student-name');
+        if (nameInput && nameInput.value.trim()) {
             showScreen('screen-branch');
         }
     };
-
 
     window.setPath = function(path) {
         selectedPath = path === 'General' ? 'GP' : 'MP';
